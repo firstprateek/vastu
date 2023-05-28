@@ -31,3 +31,18 @@ import HamburgerBtn from 'hamburger-btn';
 </body>
 </html>
 ```
+
+```js
+/**
+ * HamburgerButton widget: <hamburger-btn></hamburger-btn>.
+ * 
+ * This widget is a hamburger button that changes into a cross button upon click.
+ * 
+ * @property hidden {Boolean}. If false then button is hidden.
+ * @property open {Boolean}. If true then the stripes change into a cross.
+ * 
+ * @fires click - Indicates when the button is clicked. The open property is modified when button is clicked.
+ * 
+ * @cssproperty --hamburger-stripe-color - This variable controls the color of the stripes
+ */
+```
