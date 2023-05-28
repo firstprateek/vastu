@@ -41,7 +41,7 @@ import HamburgerBtn from 'hamburger-btn';
  * @property hidden {Boolean}. If false then button is hidden.
  * @property open {Boolean}. If true then the stripes change into a cross.
  * 
- * @fires click - Indicates when the button is clicked. The open property is modified when button is clicked.
+ * @fires click - Indicates when the button is clicked. The open property is toggled when button is clicked.
  * 
  * @cssproperty --hamburger-stripe-color - This variable controls the color of the stripes
  */
