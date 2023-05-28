@@ -1,17 +1,32 @@
-# wepack-starter-template
+# hamburger-btn
 
-A minimal starter project for building frontend applications, bundled using Webpack 5.
+A webcomponent for a hamburger menu buttond developed using [LIT](https://lit.dev/)
 
-## Getting started
+## Live Demo
 
-Entry point is src/index.js. Built content is stored under dist/.
+[Demo]()
 
-To build your project
+## Installation
+
 ```bash
-npm run build
+npm install hamburger-btn --save
 ```
 
-To launch dev server
-```bash
-npm run dev
+## Usage
+
+```js
+    import HamburgerBtn from 'hamburger-btn';
+```
+
+```jsx
+<!DOCTYPE html>
+<head>
+    <script src="./index.js"></script>
+</head>
+<body>
+    <main>
+        <hamburger-btn></hamburger-btn>
+    </main>
+</body>
+</html>
 ```
