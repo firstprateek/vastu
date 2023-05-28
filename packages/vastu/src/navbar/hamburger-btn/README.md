@@ -15,6 +15,7 @@ npm install hamburger-btn --save
 ## Usage
 
 ```js
+// In index.js
 import HamburgerBtn from 'hamburger-btn';
 ```
 
