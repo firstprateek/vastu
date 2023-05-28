@@ -1,15 +1,26 @@
 {
   "name": "hamburger-btn",
   "version": "1.0.0",
-  "description": "",
+  "description": "A light weight webcomponent for a hamburger menu button",
   "main": "index.js",
   "scripts": {
     "build": "webpack",
     "dev": "webpack serve"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:firstprateek/hamburger-btn.git"
+  },
+  "keywords": [
+    "hamburger menu", 
+    "hamburger button", 
+    "hamburger menu button", 
+    "navigation button", 
+    "lit"
+  ],
+  "author": "firstprateek",
   "license": "ISC",
+  "homepage": "https://github.com/firstprateek/hamburger-btn",
   "devDependencies": {
     "@babel/core": "^7.22.1",
     "@babel/preset-env": "^7.22.2",
