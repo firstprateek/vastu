@@ -1,6 +1,6 @@
 # hamburger-btn
 
-A webcomponent for a hamburger menu buttond developed using [LIT](https://lit.dev/)
+A webcomponent for a hamburger menu button developed using [LIT](https://lit.dev/)
 
 ## Live Demo
 
