@@ -14,6 +14,7 @@ body {
 #stage form {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  /* Buttons line up with the input boxes, not with the labels above them. */
+  align-items: flex-end;
   gap: 12px;
 }
