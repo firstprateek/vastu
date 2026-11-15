@@ -1,0 +1,82 @@
+---
+import Base from '../layouts/Base.astro';
+import { components, slug, title } from '../lib/manifest';
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="Vastu" description="A small design system of Lit web components that agents can use and test.">
+  <h1>Vastu</h1>
+  <p class="lede">
+    A small design system of web components, built with Lit. Every promise it makes, from its API and keyboard
+    behaviour to its theming hooks and usage guidance, is written once in a machine-readable manifest. Docs, agent
+    tools and tests are all generated from that one description.
+  </p>
+  <p>
+    The name comes from Vastu Shastra, the ancient Indian science of space, layout and proportion. This site shows the
+    first brand, <strong>Lekha</strong>. Switch between light, dark and high-contrast modes at the top of the page.
+  </p>
+
+  <h2>Components</h2>
+  <ul class="cards">
+    {
+      components.map((c) => (
+        <li>
+          <a href={`${base}components/${slug(c.tagName)}/`}>
+            <strong>{title(c.tagName)}</strong>
+            <code>&lt;{c.tagName}&gt;</code>
+          </a>
+          <p>{c.summary}</p>
+          <div class="preview" set:html={c['x-examples'][0].code} />
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Status</h2>
+  <p>
+    Milestone M0: one component, with every check in place. These checks run on every change: contract tests generated
+    from the manifest, axe accessibility checks in every mode, keyboard tests, visual regression at phone and desktop
+    widths, size budgets, and a strict Content Security Policy with Trusted Types. They run in Chromium, Firefox and WebKit.
+    Read the <a href="https://github.com/firstprateek/vastu/blob/main/docs/design.md">design document</a> for what comes next.
+  </p>
+</Base>
+
+<script>
+  import '@firstprateek/vastu/button';
+</script>
+
+<style>
+  .lede {
+    font-size: 1.2rem;
+  }
+  .cards {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  .cards li {
+    border: 1px solid var(--va-color-border-subtle);
+    border-radius: var(--va-radius-surface);
+    padding: 16px;
+  }
+  .cards a {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family: var(--va-font-family-ui);
+  }
+  .cards p {
+    margin: 8px 0 12px;
+    color: var(--va-color-text-muted);
+    font-size: 0.95rem;
+  }
+</style>

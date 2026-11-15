@@ -293,3 +293,20 @@ M0 is deliberately one component with every check in place. Adding the next seve
 4. **Screen readers:** VoiceOver on macOS and iOS for phase 1. Add NVDA on Windows before `1.0.0` if a Windows machine or VM is available.
 
 Still open: the final name of the `lekha` brand, and the `vastu` brand's look (decided in M1).
+
+## 14. Implementation notes from M0
+
+Choices made while building M0, and where they differ from the plan above:
+
+- **TypeScript 5.9, not 7.** The manifest analyzer and typescript-eslint don't support TypeScript 7 yet.
+- **No decorators.** Components declare reactive properties with Lit's `static properties` and `declare` fields. The analyzer reads them directly, and there is no decorator-compiler mismatch to manage.
+- **Union types are written inline on properties** (`variant: 'primary' | 'secondary' | …`), not as aliases. The manifest, and any agent reading it, then sees the allowed values. Aliases are exported for TypeScript users as `VaButton['variant']`.
+- **Machine-checkable JSDoc tags** feed the manifest plugin: `@keyboard Key | action | description`, `@cssprop-applies --var part[:hover] property`, `@event-trigger event | click`, `@a11y-*` and `@guidance-*`. The build fails when any is missing, so a component can't ship half-described.
+- **"Documented" means listed with a description.** The analyzer lists every public member, so the reverse contract check requires a description, not just a listing. A mutation check confirmed this: adding an undocumented method and breaking a CSS hook each fail the suite.
+- **`va-button` defaults to `type="button"`,** unlike the native `<button>`, so it never submits a form by accident. This is a deliberate exception to "copy native controls".
+- **The high-contrast mode is black on white.** A dark high-contrast variant can follow if it's needed. Windows High Contrast is handled separately through `forced-colors`.
+- **Every browser test runs under the strict CSP and Trusted Types,** not only the security tests. A shared fixture also fails any test that logs an error or an unexpected Vastu warning, so the examples stay clean.
+- **Visual baselines are made only in CI's Linux Playwright image,** by a manually run workflow that commits them. Local runs on macOS would not match pixel for pixel.
+- **Tab-order checks skip on macOS WebKit,** which only tabs to buttons when a system setting is on. CI runs WebKit on Linux, where they run.
+- **The render benchmark (Tachometer) is deferred to M1.** M0 has size budgets only.
+

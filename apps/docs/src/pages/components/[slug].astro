@@ -1,0 +1,258 @@
+---
+// One page per component, generated entirely from custom-elements.json.
+import { Code } from 'astro:components';
+import Base from '../../layouts/Base.astro';
+import { components, inline, slug, title } from '../../lib/manifest';
+
+export function getStaticPaths() {
+  return components.map((c) => ({ params: { slug: slug(c.tagName) }, props: { c } }));
+}
+
+const { c } = Astro.props as { c: any };
+const name = title(c.tagName);
+const g = c['x-guidance'] ?? {};
+const a11y = c['x-a11y'] ?? {};
+const fields = (c.members ?? []).filter((m: any) => m.kind === 'field');
+const attrFor = (field: string) => (c.attributes ?? []).find((a: any) => a.fieldName === field)?.name;
+---
+
+<Base title={name} description={c.summary}>
+  <h1>{name} <code class="tag">&lt;{c.tagName}&gt;</code></h1>
+  <p class="lede">{c.summary}</p>
+
+  <section class="guidance" aria-labelledby="when">
+    <h2 id="when">When to use it</h2>
+    <dl>
+      <dt>Use it</dt>
+      <dd set:html={inline(g.use)} />
+      <dt>Don't use it</dt>
+      <dd set:html={inline(g.avoid)} />
+      {g.instead && <dt>Use instead</dt>}
+      {g.instead && <dd set:html={inline(g.instead)} />}
+    </dl>
+  </section>
+
+  <h2>Examples</h2>
+  {
+    c['x-examples'].map((ex: any) => (
+      <section class="example" aria-label={ex.title}>
+        <h3>{ex.title}</h3>
+        <p>{ex.description}</p>
+        <div class="demo" set:html={ex.code} />
+        <Code code={ex.code} lang="html" theme="github-dark-high-contrast" wrap />
+      </section>
+    ))
+  }
+
+  <h2>Install and import</h2>
+  <Code code={`npm install @firstprateek/vastu @firstprateek/vastu-tokens`} lang="sh" theme="github-dark-high-contrast" />
+  <Code
+    code={`import '@firstprateek/vastu-tokens/lekha.css'; // once per page\nimport '@firstprateek/vastu/${slug(c.tagName)}';`}
+    lang="js"
+    theme="github-dark-high-contrast"
+  />
+
+  <h2>API</h2>
+  <h3>Attributes and properties</h3>
+  <div class="table" tabindex="0" role="region" aria-label="Attributes and properties">
+    <table>
+      <thead><tr><th>Attribute</th><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+      <tbody>
+        {
+          fields.map((f: any) => (
+            <tr>
+              <td>{attrFor(f.name) ? <code>{attrFor(f.name)}</code> : '—'}</td>
+              <td><code>{f.name}</code>{f.readonly && ' (read-only)'}</td>
+              <td><code>{f.type?.text}</code></td>
+              <td>{f.default ? <code>{f.default}</code> : '—'}</td>
+              <td set:html={inline(f.description)} />
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+
+  {
+    c.events?.length > 0 && (
+      <>
+        <h3>Events</h3>
+        <div class="table" tabindex="0" role="region" aria-label="Events">
+          <table>
+            <thead><tr><th>Event</th><th>Description</th></tr></thead>
+            <tbody>{c.events.map((e: any) => <tr><td><code>{e.name}</code></td><td set:html={inline(e.description)} /></tr>)}</tbody>
+          </table>
+        </div>
+      </>
+    )
+  }
+
+  <h3>Slots</h3>
+  <div class="table" tabindex="0" role="region" aria-label="Slots">
+    <table>
+      <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+      <tbody>{c.slots.map((s: any) => <tr><td>{s.name ? <code>{s.name}</code> : '(default)'}</td><td set:html={inline(s.description)} /></tr>)}</tbody>
+    </table>
+  </div>
+
+  <h3>Styling</h3>
+  <p>Components read the brand's tokens. To adjust one component, set its custom properties or style its parts.</p>
+  <div class="table" tabindex="0" role="region" aria-label="Custom properties">
+    <table>
+      <thead><tr><th>Custom property</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        {c.cssProperties.map((p: any) => <tr><td><code>{p.name}</code></td><td><code>{p.syntax ?? p.type?.text}</code></td><td set:html={inline(p.description)} /></tr>)}
+      </tbody>
+    </table>
+  </div>
+  <div class="table" tabindex="0" role="region" aria-label="Parts">
+    <table>
+      <thead><tr><th>Part</th><th>Description</th></tr></thead>
+      <tbody>{c.cssParts.map((p: any) => <tr><td><code>::part({p.name})</code></td><td set:html={inline(p.description)} /></tr>)}</tbody>
+    </table>
+  </div>
+
+  <h2>Accessibility</h2>
+  <dl>
+    <dt>Role</dt>
+    <dd><code>{a11y.role}</code></dd>
+    <dt>Accessible name</dt>
+    <dd set:html={inline(a11y.name)} />
+    {a11y.notes?.map((n: string) => <><dt>Note</dt><dd set:html={inline(n)} /></>)}
+  </dl>
+  <h3>Keyboard</h3>
+  <div class="table" tabindex="0" role="region" aria-label="Keyboard">
+    <table>
+      <thead><tr><th>Key</th><th>Does</th></tr></thead>
+      <tbody>{c['x-keyboard'].map((k: any) => <tr><td><kbd>{k.key}</kbd></td><td>{k.description}</td></tr>)}</tbody>
+    </table>
+  </div>
+  <p class="note">
+    Every row on this page is checked by contract tests generated from the same manifest, in Chromium, Firefox and WebKit.
+    <a href="https://github.com/firstprateek/vastu/blob/main/packages/vastu/custom-elements.json">Read the manifest</a>.
+  </p>
+</Base>
+
+<script>
+  // Registers every component the live examples use. Add each new component here (M1).
+  import '@firstprateek/vastu/button';
+</script>
+
+<style>
+  .tag {
+    font-size: 0.6em;
+    color: var(--va-color-text-muted);
+    font-weight: normal;
+    margin-left: 8px;
+  }
+  .lede {
+    font-size: 1.2rem;
+    color: var(--va-color-text-muted);
+  }
+  dl {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 6px 16px;
+    margin: 0;
+  }
+  dt {
+    font-family: var(--va-font-family-ui);
+    font-size: var(--va-font-size-sm);
+    font-weight: var(--va-font-weight-medium);
+    color: var(--va-color-text-muted);
+    padding-top: 3px;
+  }
+  dd {
+    margin: 0;
+  }
+  @media (max-width: 480px) {
+    dl {
+      grid-template-columns: 1fr;
+    }
+    dd {
+      margin-bottom: 8px;
+    }
+  }
+  .example {
+    margin: 0 0 32px;
+  }
+  .example h3 {
+    margin-bottom: 4px;
+  }
+  .example p {
+    margin-top: 0;
+    color: var(--va-color-text-muted);
+  }
+  .demo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 16px;
+    border: 1px solid var(--va-color-border-subtle);
+    border-bottom: none;
+    border-radius: var(--va-radius-surface) var(--va-radius-surface) 0 0;
+    font-family: var(--va-font-family-ui);
+  }
+  .demo :global(form) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  .demo :global(input) {
+    font: inherit;
+    margin-left: 6px;
+    padding: 6px 8px;
+    min-height: 40px;
+    border: 1px solid var(--va-color-border-control);
+    border-radius: var(--va-radius-control);
+    background: var(--va-color-surface-default);
+    color: var(--va-color-text-default);
+  }
+  .example :global(pre) {
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: 0 0 var(--va-radius-surface) var(--va-radius-surface);
+    font-size: 0.85rem;
+  }
+  :global(pre) {
+    padding: 12px 16px;
+    border-radius: var(--va-radius-surface);
+    font-size: 0.85rem;
+  }
+  .table {
+    overflow-x: auto;
+    /* Focusable so keyboard users can scroll a wide table on a phone. */
+    margin-bottom: 16px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: var(--va-font-family-ui);
+    font-size: var(--va-font-size-sm);
+  }
+  th,
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--va-color-border-subtle);
+  }
+  th {
+    color: var(--va-color-text-muted);
+    font-weight: var(--va-font-weight-medium);
+  }
+  kbd {
+    font-family: var(--va-font-family-mono);
+    font-size: 0.85em;
+    border: 1px solid var(--va-color-border-control);
+    border-radius: var(--va-radius-control);
+    padding: 1px 5px;
+  }
+  .note {
+    font-family: var(--va-font-family-ui);
+    font-size: var(--va-font-size-sm);
+    color: var(--va-color-text-muted);
+  }
+</style>
