@@ -1,0 +1,280 @@
+# Vastu: a design system that agents can use and test
+
+Design document, draft of 2026-11-15. Build from this once it is agreed.
+
+## 1. What it is
+
+Vastu is a small design system of web components built with [Lit](https://lit.dev/). The name comes from Vastu Shastra, the ancient Indian science of space, layout and proportion.
+
+It has one difference from the many design systems that already exist. **Every promise it makes is machine-readable and machine-checked.** The API, the keyboard behaviour, the theming hooks, the accessibility notes and the usage guidance all live in one manifest. That manifest feeds three readers:
+
+- **Docs** for people.
+- **Tools** for agents: an MCP server, `llms.txt` and a markup validator.
+- **Tests** that fail when the code stops doing what the manifest says.
+
+An agent asked to build a page with Vastu can find the right component, use it correctly and check its own work. An eval measures how well that goes.
+
+Principles, in priority order when they conflict:
+
+1. **Accessible by default.** A component is not done until it meets WCAG 2.2 AA with a keyboard and a screen reader.
+2. **Documented means tested.** Anything public that the manifest describes has a test generated from that description. Anything public that the manifest leaves out fails CI.
+3. **Boring, consistent APIs.** Names and events copy the native HTML elements. An agent, or a person, who has used one Vastu component can guess the next one.
+4. **Small.** Lit is the only runtime dependency. Every entry point has a size budget.
+5. **Themeable through tokens only.** Components read design tokens and never hard-code colours, spacing or type.
+
+## 2. Goals, non-goals and phases
+
+The owner's order of priority decides the trade-offs. **First a portfolio piece, deep rather than wide. Then a system the owner's own apps actually use.**
+
+| Phase | Goal | Done when |
+| --- | --- | --- |
+| 1. Portfolio | Eight components with the full treatment, the agent layer and the eval. | Docs are live, packages are on npm, and a write-up of the eval results is published. |
+| 2. Widgets | The five 2023 widgets are rebuilt as Vastu components (section 11). | Old packages are deprecated with pointers to the new ones. |
+| 3. Adoption | Vastu is used in the owner's apps, one app at a time. | Each adopted app ships with Vastu and the gaps it exposed are fixed. |
+
+Non-goals for phase 1:
+
+- Breadth. No data grid, date picker or rich-text editor.
+- Framework wrappers. React, Vue and Svelte use the custom elements directly, with generated types (section 6).
+- A Figma library. Tokens are the shared source; a Figma export can come later.
+- Server-side rendering. Lit SSR is possible but adds complexity that phase 1 doesn't need.
+
+## 3. Scope: the first eight components
+
+Each component was chosen because it exercises a different hard pattern. The point is that the system proves it can handle every one.
+
+| Component | Element | The hard pattern it proves |
+| --- | --- | --- |
+| Button | `<va-button>` | Form association (`ElementInternals`), variants, loading and disabled states |
+| Text field | `<va-text-field>` | Labels, help and error text wired with ARIA, native-style validation |
+| Checkbox | `<va-checkbox>` | Form value, indeterminate state |
+| Switch | `<va-switch>` | `role="switch"`, form value (replaces the 2023 `switch` widget) |
+| Dialog | `<va-dialog>` | Modal on the native `<dialog>`: top layer, focus trap and return, Escape |
+| Menu | `<va-menu>` | Menu-button pattern: popover API, anchor positioning, arrow-key navigation, typeahead |
+| Tabs | `<va-tabs>` | Roving tabindex, manual and automatic activation |
+| Toast | `<va-toast>` | Live regions, timing that respects WCAG 2.2.1 |
+
+Each follows its pattern from the W3C [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/) (APG). The keyboard table from that pattern is copied into the manifest and tested (section 8).
+
+## 4. API conventions
+
+These rules are what make the system predictable, for agents above all. A lint check enforces them where it can.
+
+- **Element names** are `va-` plus a noun: `va-text-field`, not `va-input-text`.
+- **Attributes** are lower-case, hyphenated forms of camelCase properties: `helpText` ↔ `help-text`. Booleans are present-or-absent, as in HTML: `disabled`, never `disabled="false"`.
+- **Values and events copy native controls.** Form controls have `name`, `value`, `disabled`, `required` and `form`. They fire `input` while the value changes and `change` when it is committed. Read the new value from `event.target.value`; there is no custom `detail` payload.
+- **Component events** that have no native equivalent are named `va-` plus a verb: `va-open`, `va-close`. They bubble and are composed. Events fired before something happens can be cancelled with `preventDefault()`: `va-close` on a dialog, for example.
+- **Content goes in slots.** Text and icons are slotted, not passed in attributes, apart from short labels such as `label` on a text field.
+- **Styling goes through component tokens and parts.** Each component documents its CSS custom properties (`--va-button-radius`) and CSS parts (`::part(control)`). Nothing else is a styling API.
+- **No global side effects** apart from defining the element. Defining an element twice is a no-op, not an error.
+
+## 5. Tokens and theming
+
+Tokens are written in the W3C Design Tokens Community Group (DTCG) format, version 2025.10, and built with Style Dictionary into:
+
+- CSS custom properties.
+- A JSON file.
+- TypeScript types, so an agent or editor can complete token names.
+
+Three tiers:
+
+1. **Reference tokens:** the raw palette and scales (`color.teal.600`, `space.4`). Components never use them directly.
+2. **System tokens:** what a value is for (`color.surface`, `color.text.muted`, `color.accent`, `radius.control`, `space.inline.md`). Themes switch these.
+3. **Component tokens:** one per styling hook (`--va-button-bg`), defaulting to a system token.
+
+**Themes:** light, dark and high-contrast.
+
+- They are chosen by `data-va-theme` on any ancestor and follow `prefers-color-scheme` when none is set.
+- `forced-colors` (Windows High Contrast) is handled per component with system colours.
+- All motion respects `prefers-reduced-motion`.
+
+**A CI check computes contrast for every text and background pair in every theme.** A text pair that falls below 4.5:1 fails the build. A large text or UI pair below 3:1 fails too.
+
+## 6. Architecture
+
+**Monorepo.** It uses pnpm workspaces and lives in the public repo `firstprateek/vastu`.
+
+| Package | Contents |
+| --- | --- |
+| `@firstprateek/vastu-tokens` | DTCG sources and built CSS, JSON and TS |
+| `@firstprateek/vastu` | All components, one entry point per component: `@firstprateek/vastu/button` |
+| `@firstprateek/vastu-mcp` | The MCP server (section 7) |
+| `@firstprateek/vastu-lint` | The markup validator, as a library and a CLI |
+
+Components ship as one package with subpath exports instead of one package per component. A single version means no version-skew bugs between components. It also means one changelog, and imports are still tree-shakeable. Shared code (focus helpers, form association, dev-mode warnings) lives in an internal `core/` folder, not a separate package.
+
+**Each component is:**
+
+- A Lit 3 element with Shadow DOM, written in TypeScript with full JSDoc.
+- Form controls use `ElementInternals` and `static formAssociated = true`, so they work in a plain `<form>`.
+
+**Types for frameworks.** Each component registers itself in `HTMLElementTagNameMap`, and the build generates JSX typings for React 19 (which supports custom elements natively), Vue and Svelte from the manifest. So `<va-button variant="…">` type-checks in all three without wrappers.
+
+**Browser support:** the last two versions of Chrome, Edge, Firefox and Safari. The menu uses the popover API and CSS anchor positioning, with a small fallback while anchor positioning is not everywhere. The fallback is removed when it is.
+
+## 7. The agent layer
+
+This is the showcase. Everything in it is generated from one source.
+
+**The manifest.** `custom-elements.json` is generated from the TypeScript and JSDoc with the Custom Elements Manifest analyzer. It is the standard format that editors and Storybook already read. A plugin adds Vastu fields to each component:
+
+- `x-keyboard`: the keyboard table (key → behaviour).
+- `x-a11y`: role, required labelling, and what a screen reader announces.
+- `x-guidance`: when to use this component, when not to, and which component to use instead.
+- `x-examples`: short, correct usage snippets. These are the same files the docs and tests use.
+
+**`llms.txt` and `llms-full.txt`.** These are generated from the manifest at the docs site root. The short file indexes the components. The full file has every API, example and piece of guidance in one Markdown document.
+
+**MCP server (`vastu-mcp`).** Run with `npx @firstprateek/vastu-mcp`. Tools:
+
+- `list_components()`: names, one-line purpose.
+- `get_component(name)`: full API, keyboard table, guidance, examples.
+- `find_component(intent)`: maps "a yes/no setting" to `va-switch`, with the reason and the alternatives considered.
+- `get_tokens(category?)`: system tokens with their light, dark and high-contrast values.
+- `validate_markup(html)`: runs `vastu-lint` and returns problems with fixes (below).
+
+**The validator (`vastu-lint`).** It checks HTML or Lit templates against the manifest:
+
+- Unknown elements and attributes.
+- Wrong value types.
+- Missing required labels.
+- Native controls used where a Vastu one exists.
+- Raw colours where a token exists.
+
+Every message says what is wrong, why and the exact fix, for example: ``va-dialog has no accessible name. Add label="…" or aria-labelledby="<id of a heading>"``. The same messages appear in the browser console in development builds and are stripped from production builds, the way Lit's own dev mode works.
+
+## 8. Testing
+
+Browser tests use Playwright Test against Chromium, Firefox and WebKit. Node-only code (tokens, manifest plugin, validator, MCP server) uses Vitest. Every check below runs in CI on each pull request, apart from the agent eval.
+
+**Contract tests, generated from the manifest.** For each component, a generator reads the manifest and writes tests that check:
+
+- Every attribute sets its property, with the declared type, and reflects if declared.
+- Every event fires with the declared shape. A small `trigger` recipe per event in the examples says how to cause it.
+- Every CSS custom property changes the computed style of the part it claims to.
+- Every slot renders its content, and every part exists.
+- Every row of the keyboard table does what it says.
+
+The check also runs in reverse. A public property, attribute or event on the class that the manifest doesn't describe fails the build as "undocumented API". That keeps the manifest, and so the docs and the agent tools, honest.
+
+**Accessibility.**
+
+- axe-core runs on every example in every theme.
+- Focus-order tests run for dialog, menu and tabs.
+- A target-size check enforces 24 by 24 CSS pixels minimum (WCAG 2.2).
+- A manual VoiceOver checklist per component is ticked before each release, because screen-reader output can't be fully automated.
+
+**Visual regression.**
+
+- Playwright screenshots of every example × theme × width (390 and 1280 pixels).
+- Run in the official Playwright Docker image so the pixels match across machines.
+- Baselines are committed.
+
+**Performance.**
+
+- `size-limit` budgets per entry point fail CI when exceeded. The starting budget is 6 kB gzipped per component on top of Lit and the shared core; it is tightened after the first components land.
+- A render benchmark (1,000 instances of each component, with Tachometer) is compared against `main` on each pull request.
+
+**Security.**
+
+- A lint rule bans `innerHTML`, `unsafeHTML` and `unsafeStatic`.
+- A test page runs every example under a strict Content Security Policy with `require-trusted-types-for 'script'`. Any CSP or Trusted Types violation report fails the test.
+- Runtime dependencies: Lit only.
+- npm releases use trusted publishing from GitHub Actions (OIDC), so every package carries a provenance attestation. It also removes the manual browser approval for each publish.
+- Dependabot and `npm audit` run in CI.
+
+**Agent eval.** This answers the question the whole system is built around: can an agent build correct pages with it? The test set is about 12 tasks with clear checks, such as:
+
+- "A sign-up form with name, email, a terms checkbox and a submit button that shows an error under an invalid email."
+- "A settings page with tabs and a confirm dialog before deleting."
+
+Each task runs with an agent (Claude through the Agent SDK) in a clean project. It runs in two setups: with the Vastu MCP server, and with only the npm package and its README. The output is scored automatically:
+
+| Check | How |
+| --- | --- |
+| It renders without console errors | Playwright |
+| It's valid Vastu | `vastu-lint` reports nothing |
+| It's accessible | axe reports nothing; keyboard checks pass |
+| It uses tokens | No raw colours or pixel spacing in its styles |
+| It does the task | Task-specific Playwright assertions |
+
+The eval reports pass rates per task, per check and per setup, with tokens used and time taken. It runs on demand and before each release, not on every pull request, because it costs money. The results, including failures and what changed because of them, become the published write-up.
+
+## 9. Docs site
+
+The docs site is an Astro site in `apps/docs`, deployed to GitHub Pages at `firstprateek.github.io/vastu/`. Astro matches the owner's personal site, and it keeps the docs light where Storybook would add weight.
+
+- Component pages are generated from the manifest: API tables, keyboard table, guidance, and live examples from the `x-examples` files.
+- There is a token page per theme and a theme switcher on every page.
+- `llms.txt` and `llms-full.txt` are served from the site root.
+- The same example files drive the docs, the contract tests, the visual tests and the agent eval's reference answers. **One source, four uses.**
+
+## 10. Repo layout and releases
+
+```
+vastu/
+  docs/design.md            this document
+  packages/
+    tokens/                 DTCG sources, Style Dictionary config
+    vastu/                  components: src/<component>/, src/core/
+    mcp/                    MCP server
+    lint/                   validator + CLI
+  apps/docs/                Astro docs site
+  tests/
+    contract/               generator + generated specs
+    a11y/ visual/ perf/ security/
+    eval/                   tasks, runner, scoring, results/
+  .github/workflows/        ci.yml, release.yml, eval.yml
+```
+
+**Releases.**
+
+- Releases use Changesets: every pull request that changes a package adds a changeset, and merging the release PR publishes.
+- Versions stay at `0.x` through phase 1, so the API can still change. `1.0.0` ships when phase 1 is done and the API is frozen.
+- Commits use the GitHub noreply author. `main` is protected once CI is green, so changes land through pull requests.
+
+## 11. The 2023 widgets (phase 2)
+
+The owner asked for this. If it's the industry standard and efficient, move the five widget repos into this monorepo and keep publishing them under their old npm names as a breaking release. Otherwise, rebuild them inside Vastu.
+
+**Decision: rebuild inside Vastu, publish under the Vastu names, deprecate the old packages.** This is the standard path when standalone components join a namespaced system. Material Web did it when it moved its `mwc-*` packages into `@material/web`. Keeping the old names isn't efficient here, for four reasons:
+
+- **Mixed names.** The old names don't follow the system's naming (`minimal-navbar`, `hamburger-btn`, `@firstprateek/switch`). Two naming schemes in one system defeat the consistency rule that agents depend on.
+- **Separate versions.** Five extra packages, each with its own version, would undo the one-version decision in section 6.
+- **Doubled release work.** Each would need a changelog, a release and a deprecation story of its own.
+- **Nothing gained.** The old packages have almost no downloads, so there is little to protect.
+
+What happens to each:
+
+| 2023 widget | Becomes | Note |
+| --- | --- | --- |
+| `switch` | `va-switch` | Already in phase 1 (section 3) |
+| `hamburger-btn` | Part of `va-menu` and `va-navbar` | A menu trigger, not a component of its own |
+| `minimal-navbar` | `va-navbar` | |
+| `poll-widget` | `va-poll` | |
+| `bar-chart` | `va-bar-chart` | Keeps D3; budgeted separately because of its size |
+
+**History is kept.** Each widget's history is imported into its folder with `git subtree add`, so the original commits stay reachable in Vastu. Then the code is rewritten on Vastu's base. After the new component ships:
+
+- **npm:** `npm deprecate` is run on each old package with a one-line pointer: "Moved to @firstprateek/vastu/navbar: <docs link>". Old versions keep installing, so nothing that depends on them breaks.
+- **GitHub:** each old repo gets a README pointer, and then it is archived. The demo URLs keep working while the personal site still links them, and the site's project page is updated to point to Vastu.
+
+## 12. Milestones
+
+| Milestone | Contents | Proves |
+| --- | --- | --- |
+| **M0: foundation** | Repo, tokens with three themes, `va-button`, manifest plugin, contract-test generator, a11y, visual, size, CSP tests, CI, docs site with one page | The whole pipeline works end to end on one component. **This is the first milestone.** |
+| M1: components | The other seven components | The patterns hold up |
+| M2: agent layer | `vastu-lint`, `vastu-mcp`, `llms.txt`, eval with 12 tasks, first results | The headline claim |
+| M3: release | Trusted publishing, `1.0.0`, eval write-up on the personal site | Phase 1 done |
+| M4: widgets | Section 11 | Phase 2 done |
+| M5+: adoption | The personal site first (it already uses Astro), then Check-in, Sparring, i.inc | Phase 3 |
+
+M0 is deliberately one component with every check in place. Adding the next seven is then repetition, and any gap in the pipeline shows up on the first component, when it is cheap to fix.
+
+## 13. Open questions
+
+1. **Brand look.** Is the accent colour, type scale and radius a fresh identity, or a continuation of the personal site's look? Tokens make either easy, but the reference palette has to be chosen in M0.
+2. **Eval models.** Claude only, or also one other model, to show the system isn't tuned to one agent? The second adds cost and credentials.
+3. **Docs domain.** Is `firstprateek.github.io/vastu/` enough, or will it get its own domain later?
+4. **Manual screen-reader passes.** Is VoiceOver on macOS and iOS enough for phase 1, or is NVDA on Windows needed too?
