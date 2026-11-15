@@ -51,6 +51,7 @@ let nextId = 1;
  * @guidance-avoid For anything the user must act on or read in full, or for form validation errors.
  * @guidance-instead `va-dialog` for decisions; `va-text-field`'s `error` for field errors.
  *
+ * @command --show | Shows the sending button's `value` as a message; its `data-variant` sets the look.
  * @fires va-close - When a message closes. `event.detail.reason` is `timeout`, `dismiss`, `escape` or `method`.
  * @event-trigger va-close | press Escape | open
  */

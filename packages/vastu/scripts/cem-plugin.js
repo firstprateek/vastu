@@ -1,6 +1,8 @@
 // Adds Vastu fields to each component in custom-elements.json:
 //   x-keyboard   [{ key, action, description }]   from @keyboard Key | action | description
-//   x-a11y       { role, name, notes[] }          from @a11y-role, @a11y-name, @a11y-note
+//   x-a11y       { role, name, nameFrom[], notes[] } from @a11y-role, @a11y-name, @a11y-name-from, @a11y-note
+//   x-replaces   "css selector"                    from @replaces (native elements to use this instead of)
+//   x-commands   [{ name, description }]           from @command --name | description
 //   x-guidance   { use, avoid, instead }          from @guidance-use, @guidance-avoid, @guidance-instead
 //   events[].x-trigger      "click" | "press Key"           from @event-trigger event | how
 //   cssProperties[].x-applies { part, state?, property } from @cssprop-applies --var part[:hover] property
@@ -51,6 +53,15 @@ export function vastuManifestPlugin() {
           x.items = text;
         } else if (name === 'a11y-role') x.a11y.role = text;
         else if (name === 'a11y-name') x.a11y.name = text;
+        // Machine-readable: where the accessible name may come from ("text" = slotted text, or attribute names).
+        else if (name === 'a11y-name-from') x.a11y.nameFrom = text.split(',').map((t) => t.trim());
+        // Native elements this component should be used instead of, as CSS selectors (for vastu-lint).
+        else if (name === 'replaces') x.replaces = text;
+        // Commands the element accepts from a commandfor/command button: "--name | description".
+        else if (name === 'command') {
+          const [command, description] = text.split('|').map((t) => t.trim());
+          (x.commands ??= []).push({ name: command, description });
+        }
         else if (name === 'a11y-note') x.a11y.notes.push(text);
         else if (name === 'guidance-use') x.guidance.use = text;
         else if (name === 'guidance-avoid') x.guidance.avoid = text;
@@ -101,6 +112,13 @@ export function vastuManifestPlugin() {
           }
           decl['x-a11y'] = x.a11y;
           decl['x-guidance'] = x.guidance;
+          if (x.replaces) decl['x-replaces'] = x.replaces;
+          if (x.commands) decl['x-commands'] = x.commands;
+          for (const source of x.a11y.nameFrom ?? []) {
+            if (source !== 'text' && !(decl.attributes ?? []).some((attr) => attr.name === source)) {
+              throw new Error(`${where}: @a11y-name-from names "${source}", which is not an attribute.`);
+            }
+          }
           for (const prop of decl.cssProperties ?? []) {
             if (!x.applies[prop.name]) throw new Error(`${where}: ${prop.name} has no @cssprop-applies line, so it can't be contract-tested.`);
             prop['x-applies'] = x.applies[prop.name];

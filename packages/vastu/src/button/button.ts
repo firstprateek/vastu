@@ -38,6 +38,8 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @keyboard Tab | focus-next | Moves focus to the next control. A disabled button is skipped.
  *
  * @a11y-role button
+ * @a11y-name-from text, label
+ * @replaces button
  * @a11y-name The slotted text, or the `label` attribute. A button with only an icon must have `label`.
  * @a11y-note `loading` keeps the button focusable, sets `aria-disabled` and `aria-busy`, and adds "Loading" to its name.
  *

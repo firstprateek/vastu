@@ -1,0 +1,23 @@
+{
+  "name": "@firstprateek/vastu-lint",
+  "version": "0.0.0",
+  "description": "Checks HTML that uses Vastu components against the component manifest, with a fix for every problem",
+  "type": "module",
+  "exports": {
+    ".": { "types": "./src/index.d.ts", "default": "./src/index.js" }
+  },
+  "bin": { "vastu-lint": "./bin/vastu-lint.js" },
+  "files": ["src", "bin", "data"],
+  "scripts": { "build": "node scripts/copy-data.js" },
+  "repository": { "type": "git", "url": "git+https://github.com/firstprateek/vastu.git", "directory": "packages/lint" },
+  "license": "ISC",
+  "dependencies": {
+    "css-select": "^7.0.0",
+    "domutils": "^4.0.2",
+    "htmlparser2": "^12.0.0"
+  },
+  "devDependencies": {
+    "@firstprateek/vastu": "workspace:*",
+    "@firstprateek/vastu-tokens": "workspace:*"
+  }
+}

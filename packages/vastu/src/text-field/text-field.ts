@@ -32,6 +32,8 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @keyboard Tab | focus-next | Moves focus to the next control.
  *
  * @a11y-role textbox
+ * @a11y-name-from label
+ * @replaces input:not([type]), input[type="text"], input[type="email"], input[type="password"], input[type="search"], input[type="tel"], input[type="url"]
  * @a11y-name The `label` attribute, shown above the field. Every text field needs one.
  * @a11y-note Help text and the error message are linked with `aria-describedby`; the error also sets `aria-invalid`.
  * @a11y-note Errors appear after the user leaves the field or submits the form, not while they type.

@@ -29,6 +29,8 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @keyboard Tab | focus-next | Moves focus to the next control.
  *
  * @a11y-role switch
+ * @a11y-name-from text, label
+ * @replaces [role="switch"]
  * @a11y-name The slotted label text, or the `label` attribute when there is no visible label.
  * @a11y-note The state is announced as on or off, not checked or unchecked.
  *

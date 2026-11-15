@@ -28,6 +28,8 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @keyboard Tab | focus-next | Moves focus to the next control.
  *
  * @a11y-role checkbox
+ * @a11y-name-from text, label
+ * @replaces input[type="checkbox"]
  * @a11y-name The slotted label text, or the `label` attribute when there is no visible label.
  * @a11y-note `indeterminate` is announced as "mixed", for a box that stands for a partly selected group.
  *

@@ -384,6 +384,10 @@
               "`loading` keeps the button focusable, sets `aria-disabled` and `aria-busy`, and adds \"Loading\" to its name."
             ],
             "role": "button",
+            "nameFrom": [
+              "text",
+              "label"
+            ],
             "name": "The slotted text, or the `label` attribute. A button with only an icon must have `label`."
           },
           "x-guidance": {
@@ -391,6 +395,7 @@
             "avoid": "For navigation to another page or URL.",
             "instead": "A link (`<a href>`) for navigation."
           },
+          "x-replaces": "button",
           "x-examples": [
             {
               "title": "Variants",
@@ -420,7 +425,7 @@
               "title": "In a form",
               "description": "type=\"submit\" submits the form with name=value; the default type=\"button\" never submits.",
               "path": "src/button/examples/5-form.html",
-              "code": "<form>\n  <label>Email <input name=\"email\" type=\"email\" value=\"ada@example.com\"></label>\n  <va-button type=\"submit\" name=\"intent\" value=\"subscribe\">Subscribe</va-button>\n  <va-button type=\"reset\" variant=\"secondary\">Reset</va-button>\n</form>"
+              "code": "<form>\n  <va-text-field label=\"Email\" name=\"email\" type=\"email\" value=\"ada@example.com\"></va-text-field>\n  <va-button type=\"submit\" name=\"intent\" value=\"subscribe\">Subscribe</va-button>\n  <va-button type=\"reset\" variant=\"secondary\">Reset</va-button>\n</form>"
             }
           ]
         }
@@ -794,6 +799,10 @@
               "`indeterminate` is announced as \"mixed\", for a box that stands for a partly selected group."
             ],
             "role": "checkbox",
+            "nameFrom": [
+              "text",
+              "label"
+            ],
             "name": "The slotted label text, or the `label` attribute when there is no visible label."
           },
           "x-guidance": {
@@ -801,6 +810,7 @@
             "avoid": "For a setting that should apply immediately.",
             "instead": "`va-switch` for settings that take effect immediately."
           },
+          "x-replaces": "input[type=\"checkbox\"]",
           "x-examples": [
             {
               "title": "Options",
@@ -1227,6 +1237,10 @@
               "On open, focus goes to the first element with `autofocus`, else the first focusable control in the content, else the close button."
             ],
             "role": "dialog",
+            "nameFrom": [
+              "heading",
+              "label"
+            ],
             "name": "The `heading`, or `label` when there is no visible heading."
           },
           "x-guidance": {
@@ -1234,6 +1248,17 @@
             "avoid": "For information that doesn't need a response, or for long, multi-step flows.",
             "instead": "`va-toast` for confirmations that need no response; a full page for long flows."
           },
+          "x-replaces": "dialog",
+          "x-commands": [
+            {
+              "name": "--show",
+              "description": "Opens the dialog."
+            },
+            {
+              "name": "--close",
+              "description": "Closes the dialog (fires `va-close` first)."
+            }
+          ],
           "x-examples": [
             {
               "title": "Confirm a destructive action",
@@ -1493,6 +1518,9 @@
               "Typing a letter moves to the next item that starts with it."
             ],
             "role": "menu",
+            "nameFrom": [
+              "label"
+            ],
             "name": "The `label`, which is also the button's text."
           },
           "x-guidance": {
@@ -1500,6 +1528,7 @@
             "avoid": "For navigation, for choosing a value in a form, or for one or two actions.",
             "instead": "Links for navigation; a select or radio group for form values; plain buttons for one or two actions."
           },
+          "x-replaces": "[role=\"menu\"]",
           "x-examples": [
             {
               "title": "Actions on an item",
@@ -1862,6 +1891,10 @@
               "The state is announced as on or off, not checked or unchecked."
             ],
             "role": "switch",
+            "nameFrom": [
+              "text",
+              "label"
+            ],
             "name": "The slotted label text, or the `label` attribute when there is no visible label."
           },
           "x-guidance": {
@@ -1869,6 +1902,7 @@
             "avoid": "For a choice that is only applied when a form is submitted, or for agreeing to terms.",
             "instead": "`va-checkbox` for choices submitted with a form."
           },
+          "x-replaces": "[role=\"switch\"]",
           "x-examples": [
             {
               "title": "Settings",
@@ -2089,6 +2123,9 @@
               "Only the selected tab is in the Tab order (roving tabindex); arrow keys move between tabs."
             ],
             "role": "tablist",
+            "nameFrom": [
+              "label"
+            ],
             "name": "The `label` attribute, such as \"Account settings\"."
           },
           "x-guidance": {
@@ -2096,6 +2133,7 @@
             "avoid": "For navigation between pages, for steps in a sequence, or for more than about 6 tabs.",
             "instead": "Links for navigation; a stepper for sequences; a list or menu for many options."
           },
+          "x-replaces": "[role=\"tablist\"]",
           "x-examples": [
             {
               "title": "Settings sections",
@@ -2642,6 +2680,9 @@
               "Errors appear after the user leaves the field or submits the form, not while they type."
             ],
             "role": "textbox",
+            "nameFrom": [
+              "label"
+            ],
             "name": "The `label` attribute, shown above the field. Every text field needs one."
           },
           "x-guidance": {
@@ -2649,6 +2690,7 @@
             "avoid": "For long text, or for picking from a fixed set of options.",
             "instead": "A textarea for long text; a select or radio group for fixed options."
           },
+          "x-replaces": "input:not([type]), input[type=\"text\"], input[type=\"email\"], input[type=\"password\"], input[type=\"search\"], input[type=\"tel\"], input[type=\"url\"]",
           "x-examples": [
             {
               "title": "Label, help and placeholder",
@@ -2881,6 +2923,12 @@
             "avoid": "For anything the user must act on or read in full, or for form validation errors.",
             "instead": "`va-dialog` for decisions; `va-text-field`'s `error` for field errors."
           },
+          "x-commands": [
+            {
+              "name": "--show",
+              "description": "Shows the sending button's `value` as a message; its `data-variant` sets the look."
+            }
+          ],
           "x-examples": [
             {
               "title": "Status messages",

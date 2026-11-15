@@ -33,6 +33,8 @@ export type DialogCloseReason = 'escape' | 'close-button' | 'command' | 'method'
  * @keyboard open: Escape | closes | Closes the dialog and returns focus to the element that opened it.
  *
  * @a11y-role dialog
+ * @a11y-name-from heading, label
+ * @replaces dialog
  * @a11y-name The `heading`, or `label` when there is no visible heading.
  * @a11y-note The page behind is inert while the dialog is open, so focus and screen readers stay inside it.
  * @a11y-note On open, focus goes to the first element with `autofocus`, else the first focusable control in the content, else the close button.
@@ -41,6 +43,8 @@ export type DialogCloseReason = 'escape' | 'close-button' | 'command' | 'method'
  * @guidance-avoid For information that doesn't need a response, or for long, multi-step flows.
  * @guidance-instead `va-toast` for confirmations that need no response; a full page for long flows.
  *
+ * @command --show | Opens the dialog.
+ * @command --close | Closes the dialog (fires `va-close` first).
  * @fires va-open - After the dialog opens.
  * @fires va-close - Before the dialog closes. Cancel it with `preventDefault()` to keep the dialog open. `event.detail.reason` is `escape`, `close-button`, `command` or `method`.
  * @event-trigger va-open | call show

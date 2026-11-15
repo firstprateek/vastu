@@ -32,6 +32,8 @@ let nextId = 0;
  * @keyboard items: Tab | focus-next | Moves focus from the tabs into the selected panel.
  *
  * @a11y-role tablist
+ * @a11y-name-from label
+ * @replaces [role="tablist"]
  * @a11y-name The `label` attribute, such as "Account settings".
  * @a11y-note Each tab gets `role="tab"`, `aria-selected` and `aria-controls`; each panel gets `role="tabpanel"` and `aria-labelledby`.
  * @a11y-note Only the selected tab is in the Tab order (roving tabindex); arrow keys move between tabs.

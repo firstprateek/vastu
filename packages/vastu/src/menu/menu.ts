@@ -33,6 +33,8 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @keyboard open: Escape | closes | Closes the menu and returns focus to the button.
  *
  * @a11y-role menu
+ * @a11y-name-from label
+ * @replaces [role="menu"]
  * @a11y-name The `label`, which is also the button's text.
  * @a11y-note The button has `aria-haspopup="menu"` and `aria-expanded`. Items get `role="menuitem"`.
  * @a11y-note Typing a letter moves to the next item that starts with it.
