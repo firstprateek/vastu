@@ -1127,14 +1127,14 @@
             },
             {
               "kind": "field",
-              "name": "dismissible",
+              "name": "hideCloseButton",
               "privacy": "public",
               "type": {
                 "text": "boolean"
               },
-              "description": "Shows a close button in the header. Escape always closes the dialog.",
-              "default": "true",
-              "attribute": "dismissible",
+              "description": "Hides the close button in the header, for a dialog that needs an explicit choice. Escape still closes it.",
+              "default": "false",
+              "attribute": "hide-close-button",
               "reflects": true
             },
             {
@@ -1207,13 +1207,13 @@
               "fieldName": "label"
             },
             {
-              "name": "dismissible",
+              "name": "hide-close-button",
               "type": {
                 "text": "boolean"
               },
-              "description": "Shows a close button in the header. Escape always closes the dialog.",
-              "default": "true",
-              "fieldName": "dismissible"
+              "description": "Hides the close button in the header, for a dialog that needs an explicit choice. Escape still closes it.",
+              "default": "false",
+              "fieldName": "hideCloseButton"
             }
           ],
           "superclass": {

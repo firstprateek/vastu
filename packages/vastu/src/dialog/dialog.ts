@@ -55,7 +55,7 @@ export class VaDialog extends LitElement {
     open: { type: Boolean, reflect: true },
     heading: {},
     label: {},
-    dismissible: { type: Boolean, reflect: true },
+    hideCloseButton: { type: Boolean, reflect: true, attribute: 'hide-close-button' },
   };
 
   /** Whether the dialog is open. Prefer `show()` and `close()`, or `command="--show"` on a `va-button`. */
@@ -64,8 +64,8 @@ export class VaDialog extends LitElement {
   declare heading: string;
   /** Accessible name, when there is no visible heading. */
   declare label: string;
-  /** Shows a close button in the header. Escape always closes the dialog. */
-  declare dismissible: boolean;
+  /** Hides the close button in the header, for a dialog that needs an explicit choice. Escape still closes it. */
+  declare hideCloseButton: boolean;
 
   #returnFocus: HTMLElement | null = null;
 
@@ -74,7 +74,7 @@ export class VaDialog extends LitElement {
     this.open = false;
     this.heading = '';
     this.label = '';
-    this.dismissible = true;
+    this.hideCloseButton = false;
     this.addEventListener('command', this.#onCommand as EventListener);
   }
 
@@ -166,7 +166,7 @@ export class VaDialog extends LitElement {
       >
         <div part="header" class="header">
           ${this.heading ? html`<h2 part="heading" id="heading" class="heading">${this.heading}</h2>` : html`<span part="heading" class="heading"></span>`}
-          ${this.dismissible
+          ${!this.hideCloseButton
             ? html`<button part="close" class="close" type="button" aria-label="Close" @click=${() => this.#requestClose('close-button')}>
                 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" /></svg>
               </button>`

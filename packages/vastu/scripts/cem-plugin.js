@@ -114,6 +114,13 @@ export function vastuManifestPlugin() {
           decl['x-guidance'] = x.guidance;
           if (x.replaces) decl['x-replaces'] = x.replaces;
           if (x.commands) decl['x-commands'] = x.commands;
+          // An HTML boolean attribute can only turn something on, so a boolean that defaults to true
+          // could never be turned off from markup (and dismissible="false" would still mean true).
+          for (const attr of decl.attributes ?? []) {
+            if (attr.type?.text === 'boolean' && attr.default === 'true') {
+              throw new Error(`${where}: boolean attribute "${attr.name}" defaults to true, so markup can't turn it off. Invert it (e.g. hide-…, no-…) so it defaults to false.`);
+            }
+          }
           for (const source of x.a11y.nameFrom ?? []) {
             if (source !== 'text' && !(decl.attributes ?? []).some((attr) => attr.name === source)) {
               throw new Error(`${where}: @a11y-name-from names "${source}", which is not an attribute.`);
