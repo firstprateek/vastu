@@ -1,0 +1,17 @@
+{
+  "$description": "Foreground/background pairs checked in every brand and mode. min 4.5 for text, 3 for large text and UI boundaries (WCAG 2.2 1.4.3, 1.4.11).",
+  "pairs": [
+    { "fg": "color.text.default", "bg": "color.surface.default", "min": 4.5 },
+    { "fg": "color.text.default", "bg": "color.surface.subtle", "min": 4.5 },
+    { "fg": "color.text.muted", "bg": "color.surface.default", "min": 4.5 },
+    { "fg": "color.text.muted", "bg": "color.surface.subtle", "min": 4.5 },
+    { "fg": "color.text.on-accent", "bg": "color.accent.default", "min": 4.5 },
+    { "fg": "color.text.on-accent", "bg": "color.accent.hover", "min": 4.5 },
+    { "fg": "color.text.on-danger", "bg": "color.danger.default", "min": 4.5 },
+    { "fg": "color.text.on-danger", "bg": "color.danger.hover", "min": 4.5 },
+    { "fg": "color.accent.default", "bg": "color.surface.default", "min": 4.5 },
+    { "fg": "color.danger.default", "bg": "color.surface.default", "min": 4.5 },
+    { "fg": "color.border.control", "bg": "color.surface.default", "min": 3 },
+    { "fg": "color.focus", "bg": "color.surface.default", "min": 3 }
+  ]
+}

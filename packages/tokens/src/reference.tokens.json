@@ -1,0 +1,25 @@
+{
+  "$description": "Reference tokens: raw palettes and scales. Components never use these directly; brands map them to system tokens.",
+  "color": {
+    "$type": "color",
+    "paper": { "50": { "$value": "#fdfcfa" }, "100": { "$value": "#f4f2ee" }, "200": { "$value": "#e2dfd8" }, "500": { "$value": "#8a847c" }, "600": { "$value": "#6b6660" }, "900": { "$value": "#1f1d1a" } },
+    "night": { "50": { "$value": "#e4e1db" }, "400": { "$value": "#99958d" }, "500": { "$value": "#76736c" }, "700": { "$value": "#2c2b29" }, "800": { "$value": "#1e1f22" }, "900": { "$value": "#17181a" } },
+    "teal": { "200": { "$value": "#9fd3e2" }, "300": { "$value": "#7fb0be" }, "400": { "$value": "#93c0cc" }, "600": { "$value": "#35697c" }, "700": { "$value": "#2b5666" }, "800": { "$value": "#1d4a5a" }, "950": { "$value": "#0f1c20" } },
+    "brick": { "300": { "$value": "#e8998b" }, "400": { "$value": "#efada0" }, "600": { "$value": "#a23b2a" }, "700": { "$value": "#872f21" } },
+    "white": { "$value": "#ffffff" },
+    "black": { "$value": "#000000" }
+  },
+  "dimension": {
+    "$type": "dimension",
+    "0": { "$value": { "value": 0, "unit": "px" } },
+    "1": { "$value": { "value": 0.25, "unit": "rem" } },
+    "2": { "$value": { "value": 0.5, "unit": "rem" } },
+    "3": { "$value": { "value": 0.75, "unit": "rem" } },
+    "4": { "$value": { "value": 1, "unit": "rem" } },
+    "5": { "$value": { "value": 1.25, "unit": "rem" } },
+    "6": { "$value": { "value": 1.5, "unit": "rem" } },
+    "8": { "$value": { "value": 2, "unit": "rem" } },
+    "10": { "$value": { "value": 2.5, "unit": "rem" } },
+    "12": { "$value": { "value": 3, "unit": "rem" } }
+  }
+}

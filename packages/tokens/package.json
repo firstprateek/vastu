@@ -1,0 +1,18 @@
+{
+  "name": "@firstprateek/vastu-tokens",
+  "version": "0.0.0",
+  "description": "Design tokens for Vastu: DTCG sources and built CSS, JSON and TypeScript, per brand and mode",
+  "type": "module",
+  "exports": {
+    "./lekha.css": "./dist/lekha.css",
+    "./lekha.json": "./dist/lekha.json",
+    "./tokens.json": "./dist/tokens.json",
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+  },
+  "files": ["dist", "src"],
+  "sideEffects": ["*.css"],
+  "scripts": { "build": "node build.js" },
+  "repository": { "type": "git", "url": "git+https://github.com/firstprateek/vastu.git", "directory": "packages/tokens" },
+  "license": "ISC",
+  "devDependencies": { "style-dictionary": "^5.8.0" }
+}

@@ -1,0 +1,12 @@
+{
+  "$description": "Lekha brand, dark mode.",
+  "color": {
+    "$type": "color",
+    "surface": { "default": { "$value": "{color.night.900}" }, "subtle": { "$value": "{color.night.800}" } },
+    "text": { "default": { "$value": "{color.night.50}" }, "muted": { "$value": "{color.night.400}" }, "on-accent": { "$value": "{color.teal.950}" }, "on-danger": { "$value": "{color.teal.950}" } },
+    "border": { "subtle": { "$value": "{color.night.700}" }, "control": { "$value": "{color.night.500}" } },
+    "accent": { "default": { "$value": "{color.teal.300}" }, "hover": { "$value": "{color.teal.400}" } },
+    "danger": { "default": { "$value": "{color.brick.300}" }, "hover": { "$value": "{color.brick.400}" } },
+    "focus": { "$value": "{color.teal.300}" }
+  }
+}
