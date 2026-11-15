@@ -16,9 +16,6 @@ A simple, responsive navigation bar, built as a web component with [Lit](https:/
 npm install minimal-navbar
 ```
 
-> Version 1.0.0 on npm is missing its entry file, so `import 'minimal-navbar'` fails with it.
-> Until 1.0.1 is published, install from GitHub instead: `npm install github:firstprateek/minimal-navbar`.
-
 ## Usage
 
 Import the package once (with a bundler such as Vite or webpack) to register the `<minimal-navbar>` element:
