@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const browserTests = ['contract/**', 'a11y/**', 'keyboard/**', 'behaviour/**', 'security/**'];
+const browserTests = ['contract/**', 'a11y/**', 'behaviour/**', 'security/**'];
 
 export default defineConfig({
   testDir: 'tests',

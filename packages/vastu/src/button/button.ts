@@ -136,7 +136,12 @@ export class VaButton extends LitElement {
     }
   };
 
-  #onSlotChange = (): void => {
+  override firstUpdated(): void {
+    // Wait a frame so children parsed after the upgrade are in place before checking the name.
+    requestAnimationFrame(() => this.#checkName());
+  }
+
+  #checkName = (): void => {
     const text = this.textContent?.trim() ?? '';
     if (!text && !this.label) {
       devWarn(
@@ -147,6 +152,13 @@ export class VaButton extends LitElement {
     }
   };
 
+  /** While loading, the name gains ", loading"; otherwise only an explicit label overrides the text. */
+  #ariaLabel(): string | undefined {
+    const name = this.label || this.textContent?.trim() || '';
+    if (this.loading) return name ? `${name}, loading` : 'Loading';
+    return this.label || undefined;
+  }
+
   override render() {
     return html`
       <button
@@ -156,13 +168,11 @@ export class VaButton extends LitElement {
         ?disabled=${this.disabled}
         aria-disabled=${this.loading ? 'true' : nothing}
         aria-busy=${this.loading ? 'true' : nothing}
-        aria-label=${this.label ? (this.loading ? `${this.label}, loading` : this.label) : nothing}
+        aria-label=${this.#ariaLabel() ?? nothing}
       >
         <slot name="start"></slot>
-        <span part="label" class="label"><slot @slotchange=${this.#onSlotChange}></slot></span>
-        ${this.loading
-          ? html`<span class="spinner" aria-hidden="true"></span><span class="visually-hidden">, loading</span>`
-          : nothing}
+        <span part="label" class="label"><slot @slotchange=${this.#checkName}></slot></span>
+        ${this.loading ? html`<span class="spinner" aria-hidden="true"></span>` : nothing}
         <slot name="end"></slot>
       </button>
     `;
@@ -265,15 +275,6 @@ export class VaButton extends LitElement {
         to {
           transform: rotate(1turn);
         }
-      }
-
-      .visually-hidden {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-        clip-path: inset(50%);
-        white-space: nowrap;
       }
 
       @media (prefers-reduced-motion: reduce) {

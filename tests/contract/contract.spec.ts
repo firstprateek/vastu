@@ -89,17 +89,22 @@ for (const c of components) {
     for (const slot of c.slots ?? []) {
       const label = slot.name ? `slot "${slot.name}"` : 'default slot';
       test(`${label} renders its content`, async ({ page }) => {
-        await mount(page, tag, '');
-        const assigned = await page.evaluate(async (name) => {
-          const el = document.querySelector('#subject') as any;
+        const assigned = await page.evaluate(async ({ tag, name }) => {
+          // Build the element with its content before connecting it, as markup would.
+          const el = document.createElement(tag) as any;
           const child = document.createElement('span');
           child.textContent = 'slotted';
-          if (name) child.slot = name;
+          if (name) {
+            child.slot = name;
+            el.textContent = 'Contract';
+          }
           el.append(child);
+          el.id = 'subject';
+          document.querySelector('#stage')!.replaceChildren(el);
           await el.updateComplete;
           const slotEl = el.shadowRoot.querySelector(name ? `slot[name="${name}"]` : 'slot:not([name])');
           return !!slotEl && slotEl.assignedNodes().includes(child);
-        }, slot.name);
+        }, { tag, name: slot.name });
         expect(assigned).toBe(true);
       });
     }
@@ -136,7 +141,11 @@ for (const c of components) {
     }
 
     for (const row of c['x-keyboard'] ?? []) {
-      test(`keyboard ${row.key}: ${row.action}`, async ({ page }) => {
+      test(`keyboard ${row.key}: ${row.action}`, async ({ page, browserName }) => {
+        test.skip(
+          row.key === 'Tab' && browserName === 'webkit' && process.platform === 'darwin',
+          "macOS WebKit only tabs to buttons when the system's keyboard-navigation setting is on; CI runs WebKit on Linux."
+        );
         await mount(page, tag);
         await page.evaluate(() => {
           const before = document.createElement('button');
@@ -151,8 +160,12 @@ for (const c of components) {
           (window as any).__clicks = 0;
           subject.addEventListener('click', () => (window as any).__clicks++);
         });
-        await page.locator('#before').focus();
-        await page.keyboard.press('Tab');
+        if (row.key === 'Tab') {
+          await page.locator('#before').focus();
+          await page.keyboard.press('Tab');
+        } else {
+          await page.locator('#subject').focus();
+        }
         await expect(page.locator('#subject')).toBeFocused();
         const key = row.key === 'Space' ? ' ' : row.key;
         await page.keyboard.press(key === ' ' ? 'Space' : key);

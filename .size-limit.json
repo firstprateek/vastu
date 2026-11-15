@@ -1,0 +1,13 @@
+[
+  {
+    "name": "va-button (production, on top of Lit)",
+    "path": "packages/vastu/dist/prod/button/index.js",
+    "ignore": ["lit"],
+    "limit": "3 kB"
+  },
+  {
+    "name": "va-button with Lit",
+    "path": "packages/vastu/dist/prod/button/index.js",
+    "limit": "9 kB"
+  }
+]

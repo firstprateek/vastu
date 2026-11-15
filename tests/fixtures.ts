@@ -13,6 +13,8 @@ export const MODES = ['light', 'dark', 'high-contrast'] as const;
 type Fixtures = {
   /** Vastu dev warnings this test expects; any other warning fails it. */
   expectedWarnings: RegExp[];
+  /** Console errors this test provokes on purpose; any other error fails it. */
+  expectedErrors: RegExp[];
   guard: void;
   open: (query: string) => Promise<void>;
 };
@@ -24,13 +26,14 @@ type Fixtures = {
  */
 export const test = base.extend<Fixtures>({
   expectedWarnings: [[], { option: true }],
+  expectedErrors: [[], { option: true }],
   guard: [
-    async ({ page, expectedWarnings }, use) => {
+    async ({ page, expectedWarnings, expectedErrors }, use) => {
       const problems: string[] = [];
       page.on('pageerror', (e) => problems.push(`page error: ${e.message}`));
       page.on('console', (m) => {
         const text = m.text();
-        if (m.type() === 'error') problems.push(`console error: ${text}`);
+        if (m.type() === 'error' && !expectedErrors.some((r) => r.test(text))) problems.push(`console error: ${text}`);
         if (m.type() === 'warning' && text.startsWith('<va-') && !expectedWarnings.some((r) => r.test(text))) {
           problems.push(`unexpected Vastu warning: ${text}`);
         }

@@ -15,9 +15,17 @@ export function devWarn(tag: string, problem: string, fix: string): void {
   console.warn(message);
 }
 
-/** Warns once per page if no Vastu brand stylesheet is loaded. */
+/**
+ * Warns once per page if no Vastu brand stylesheet is loaded. Waits for the page's load event,
+ * so a stylesheet that is still downloading doesn't cause a false warning.
+ */
 export function checkTokensLoaded(host: HTMLElement): void {
   if (!DEV_MODE) return;
+  if (document.readyState !== 'complete') {
+    window.addEventListener('load', () => checkTokensLoaded(host), { once: true });
+    return;
+  }
+  if (!host.isConnected) return;
   const value = getComputedStyle(host).getPropertyValue('--va-color-accent-default');
   if (!value.trim()) {
     devWarn(
