@@ -1,6 +1,8 @@
 // Generates llms.txt (an index) and llms-full.txt (everything) from the manifest.
 // See https://llmstxt.org. Agents get the same facts as the docs and the MCP server.
 import { components, slug } from './manifest';
+import vastu from '@firstprateek/vastu-tokens/vastu.json';
+import catalogue from '@firstprateek/vastu-tokens/tokens.json';
 
 const SITE = 'https://firstprateek.github.io/vastu';
 
@@ -24,6 +26,22 @@ Rules that keep pages correct:
 - Check your HTML with \`npx @firstprateek/vastu-lint page.html\`, or the \`validate_markup\` tool of the MCP server (\`npx @firstprateek/vastu-mcp\`), and fix every problem.
 `;
 
+// Every system token with its value in the default brand's light mode, so agents never have to guess names.
+function tokensSection(): string {
+  const light = (vastu as any).modes.light as Record<string, string>;
+  const rows = Object.entries(catalogue as Record<string, any>).map(
+    ([path, t]) => `| \`var(${t.cssVar})\` | ${light[path] ?? ''} | ${t.description || path.replace(/\./g, ' ')} |`
+  );
+  return `## Design tokens
+
+Use only these names in your CSS; any other \`--va-…\` name has no value. Values are the vastu brand's light mode; brands and modes change the values, never the names.
+
+| Token | Light value | Use |
+| --- | --- | --- |
+${rows.join('\n')}
+`;
+}
+
 export function llmsIndex(): string {
   return `# Vastu
 
@@ -36,7 +54,7 @@ ${components.map((c) => `- [${c.tagName}](${SITE}/components/${slug(c.tagName)}/
 
 ## Optional
 
-- [Everything in one file](${SITE}/llms-full.txt): every component's API, guidance and examples.
+- [Everything in one file](${SITE}/llms-full.txt): every component's API, guidance and examples, and every design token.
 - [Component manifest (JSON)](https://github.com/firstprateek/vastu/blob/main/packages/vastu/custom-elements.json)
 `;
 }
@@ -83,5 +101,6 @@ ${(c['x-examples'] ?? []).map((e: any) => `#### ${e.title}\n\n${e.description}\n
 > Every Vastu component's API, accessibility requirements, usage guidance and examples, generated from the component manifest.
 
 ${setup}
+${tokensSection()}
 ${sections.join('\n')}`;
 }

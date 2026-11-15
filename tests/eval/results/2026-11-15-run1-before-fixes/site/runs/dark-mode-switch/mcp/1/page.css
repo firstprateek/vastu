@@ -1,0 +1,27 @@
+html,
+body {
+  background: var(--va-color-surface-default);
+  color: var(--va-color-text-default);
+  font-family: var(--va-font-family-ui);
+}
+
+.appearance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-gap-md);
+  max-inline-size: 40rem;
+  padding: var(--va-space-inline-lg);
+}
+
+.appearance h1 {
+  margin: 0;
+  font-family: var(--va-font-family-reading);
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+}
+
+.intro {
+  margin: 0 0 var(--va-space-inline-sm);
+  color: var(--va-color-text-muted);
+  font-size: var(--va-font-size-sm);
+}

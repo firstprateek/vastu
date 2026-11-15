@@ -1,0 +1,11 @@
+.product-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--va-space-3, 0.75rem);
+  max-inline-size: 40rem;
+}
+
+.product-search__field {
+  flex: 1 1 16rem;
+}

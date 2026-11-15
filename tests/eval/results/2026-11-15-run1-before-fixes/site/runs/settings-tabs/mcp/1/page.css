@@ -1,0 +1,56 @@
+.settings {
+  max-inline-size: 40rem;
+  margin-inline: auto;
+  padding: calc(var(--va-space-inline-lg) * 2) var(--va-space-inline-lg);
+  font-family: var(--va-font-family-ui);
+  color: var(--va-color-text-default);
+}
+
+.settings h1 {
+  font-family: var(--va-font-family-reading);
+  font-weight: var(--va-font-weight-bold);
+  margin: 0;
+}
+
+.settings__header {
+  margin-block-end: var(--va-space-inline-lg);
+}
+
+.settings__intro,
+.settings__lead {
+  color: var(--va-color-text-muted);
+  margin: var(--va-space-inline-xs) 0 0;
+}
+
+.settings__panel {
+  padding-block: var(--va-space-inline-lg);
+}
+
+.settings__form {
+  display: grid;
+  gap: var(--va-space-inline-lg);
+  margin-block-start: var(--va-space-inline-lg);
+}
+
+.settings__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--va-space-inline-sm);
+}
+
+.settings__list {
+  list-style: none;
+  margin: var(--va-space-inline-lg) 0 0;
+  padding: 0;
+  border: 1px solid var(--va-color-border-subtle);
+  border-radius: var(--va-radius-surface);
+  background: var(--va-color-surface-subtle);
+}
+
+.settings__list > li {
+  padding: var(--va-space-inline-md) var(--va-space-inline-lg);
+}
+
+.settings__list > li + li {
+  border-block-start: 1px solid var(--va-color-border-subtle);
+}

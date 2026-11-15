@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-va-brand="vastu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>icon-toolbar</title>
+    <link rel="stylesheet" href="/assets/vastu.css">
+    <link rel="stylesheet" href="/assets/base.css">
+    <link rel="stylesheet" href="page.css">
+    <script type="module" src="/assets/vastu.js"></script>
+    <script type="module" src="page.js"></script>
+  </head>
+  <body>
+    <main>
+<h1>Text formatting</h1>
+<p id="editor-help">Select some text in the editor, then choose a format.</p>
+
+<div class="editor">
+  <div class="format-toolbar" role="group" aria-label="Text formatting">
+    <va-button variant="ghost" size="sm" label="Bold" data-command="bold">
+      <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5h6a3.5 3.5 0 0 1 0 7H7z"/><path d="M7 12h7a3.5 3.5 0 0 1 0 7H7z"/></svg>
+    </va-button>
+    <va-button variant="ghost" size="sm" label="Italic" data-command="italic">
+      <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4h8"/><path d="M6 20h8"/><path d="M14 4l-4 16"/></svg>
+    </va-button>
+    <va-button variant="ghost" size="sm" label="Underline" data-command="underline">
+      <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v7a5 5 0 0 0 10 0V4"/><path d="M5 20h14"/></svg>
+    </va-button>
+  </div>
+
+  <div class="editor-content" id="editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Document" aria-describedby="editor-help">
+    <p>The quick brown fox jumps over the lazy dog. Select any part of this sentence and make it bold, italic or underlined.</p>
+  </div>
+</div>
+
+    </main>
+  </body>
+</html>

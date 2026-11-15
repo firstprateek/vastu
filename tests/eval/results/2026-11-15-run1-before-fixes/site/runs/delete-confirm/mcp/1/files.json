@@ -1,0 +1,4 @@
+{
+  "html": "<va-button variant=\"danger\" commandfor=\"delete-dialog\" command=\"--show\">Delete project</va-button>\n<va-dialog id=\"delete-dialog\" heading=\"Delete project?\">\n  <p>This project and all of its files will be permanently deleted for everyone. You can't undo this.</p>\n  <va-button slot=\"footer\" variant=\"secondary\" commandfor=\"delete-dialog\" command=\"--close\">Cancel</va-button>\n  <va-button slot=\"footer\" variant=\"danger\" id=\"confirm-delete\">Delete</va-button>\n</va-dialog>\n<p id=\"delete-status\" role=\"status\"></p>\n",
+  "js": "const dialog = document.getElementById('delete-dialog');\nconst confirmButton = document.getElementById('confirm-delete');\nconst status = document.getElementById('delete-status');\n\nconfirmButton.addEventListener('click', () => {\n  // Replace with the real delete request.\n  dialog.close();\n  status.textContent = 'Project deleted.';\n});\n"
+}

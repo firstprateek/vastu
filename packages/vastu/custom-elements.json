@@ -2708,7 +2708,7 @@
               "title": "Custom error, read-only and disabled",
               "description": "Set error to show a message from your own validation, such as a server check.",
               "path": "src/text-field/examples/3-states.html",
-              "code": "<va-text-field label=\"Coupon code\" value=\"SPRING\" error=\"This code has expired.\"></va-text-field>\n<va-text-field label=\"Account ID\" value=\"ACC-20817\" readonly></va-text-field>\n<va-text-field label=\"Company\" disabled></va-text-field>"
+              "code": "<va-text-field label=\"Coupon code\" value=\"SPRING\" error=\"This code has expired.\"></va-text-field>\n<va-text-field label=\"Account ID\" value=\"ACC-20817\" readonly></va-text-field>\n<va-text-field label=\"Company\" disabled help-text=\"Only an admin can change this.\"></va-text-field>"
             }
           ]
         }

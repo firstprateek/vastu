@@ -130,6 +130,7 @@ export class VaCheckbox extends FormControl {
           ?disabled=${this.disabled}
           ?required=${this.required}
           aria-label=${this.label || nothing}
+          aria-labelledby=${this.label ? nothing : 'label'}
           aria-describedby="description"
           @input=${this.#stopNative}
           @change=${this.#onChange}
@@ -139,7 +140,7 @@ export class VaCheckbox extends FormControl {
         </span>
         </span>
         <span class="text">
-          <span part="label" class="label"><slot></slot></span>
+          <span part="label" id="label" class="label"><slot></slot></span>
           <span id="description" class="description"><slot name="description"></slot></span>
         </span>
       </label>

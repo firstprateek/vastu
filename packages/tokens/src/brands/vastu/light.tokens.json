@@ -4,52 +4,65 @@
     "$type": "color",
     "surface": {
       "default": {
-        "$value": "{color.sandstone.50}"
+        "$value": "{color.sandstone.50}",
+        "$description": "Page and component background"
       },
       "subtle": {
-        "$value": "{color.sandstone.100}"
+        "$value": "{color.sandstone.100}",
+        "$description": "Hover backgrounds, read-only fields, quiet panels"
       }
     },
     "text": {
       "default": {
-        "$value": "{color.indigo.950}"
+        "$value": "{color.indigo.950}",
+        "$description": "Body text and headings"
       },
       "muted": {
-        "$value": "{color.dusk.ink}"
+        "$value": "{color.dusk.ink}",
+        "$description": "Secondary text: help text, captions, metadata"
       },
       "on-accent": {
-        "$value": "{color.white}"
+        "$value": "{color.white}",
+        "$description": "Text and icons on an accent background"
       },
       "on-danger": {
-        "$value": "{color.white}"
+        "$value": "{color.white}",
+        "$description": "Text and icons on a danger background"
       }
     },
     "border": {
       "subtle": {
-        "$value": "{color.sandstone.200}"
+        "$value": "{color.sandstone.200}",
+        "$description": "Dividers, card and panel borders"
       },
       "control": {
-        "$value": "{color.sandstone.500}"
+        "$value": "{color.sandstone.500}",
+        "$description": "Borders of inputs and secondary buttons"
       }
     },
     "accent": {
       "default": {
-        "$value": "{color.indigo.800}"
+        "$value": "{color.indigo.800}",
+        "$description": "Primary actions, links, selected and checked states"
       },
       "hover": {
-        "$value": "{color.indigo.850}"
+        "$value": "{color.indigo.850}",
+        "$description": "Hover state of accent backgrounds"
       }
     },
     "danger": {
       "default": {
-        "$value": "{color.terracotta.600}"
+        "$value": "{color.terracotta.600}",
+        "$description": "Destructive actions and error text"
       },
       "hover": {
-        "$value": "{color.terracotta.700}"
+        "$value": "{color.terracotta.700}",
+        "$description": "Hover state of danger backgrounds"
       }
     },
     "focus": {
-      "$value": "{color.indigo.800}"
+      "$value": "{color.indigo.800}",
+      "$description": "Keyboard focus ring"
     }
   }
 }

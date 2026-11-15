@@ -1,0 +1,20 @@
+.sign-in {
+  max-inline-size: 24rem;
+  margin-inline: auto;
+  padding-block: var(--va-space-8, 2rem);
+  padding-inline: var(--va-space-4, 1rem);
+}
+
+.sign-in h1 {
+  margin-block: 0 var(--va-space-6, 1.5rem);
+}
+
+.sign-in__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-4, 1rem);
+}
+
+.sign-in__form va-button {
+  align-self: flex-start;
+}

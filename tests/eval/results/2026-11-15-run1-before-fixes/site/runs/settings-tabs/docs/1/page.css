@@ -1,0 +1,47 @@
+.settings {
+  max-inline-size: 44rem;
+  margin-inline: auto;
+  padding: var(--va-space-6, 1.5rem) var(--va-space-4, 1rem);
+}
+
+.settings__header {
+  margin-block-end: var(--va-space-6, 1.5rem);
+}
+
+.settings__header h1 {
+  margin: 0 0 var(--va-space-2, 0.5rem);
+}
+
+.settings__intro,
+.settings__lead {
+  margin: 0;
+  color: var(--va-color-text-muted, inherit);
+}
+
+.settings__panel {
+  padding-block: var(--va-space-4, 1rem);
+}
+
+.settings__panel h2 {
+  margin: 0 0 var(--va-space-1, 0.25rem);
+}
+
+.settings__fields,
+.settings__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-4, 1rem);
+  margin-block-start: var(--va-space-5, 1.25rem);
+}
+
+.settings__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-block-start: var(--va-space-6, 1.5rem);
+}
+
+.settings__status {
+  min-block-size: 1.5em;
+  margin-block: var(--va-space-4, 1rem) 0;
+  color: var(--va-color-text-muted, inherit);
+}

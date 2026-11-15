@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" data-va-brand="vastu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>settings-tabs</title>
+    <link rel="stylesheet" href="/assets/vastu.css">
+    <link rel="stylesheet" href="/assets/base.css">
+    <link rel="stylesheet" href="page.css">
+    <script type="module" src="/assets/vastu.js"></script>
+    <script type="module" src="page.js"></script>
+  </head>
+  <body>
+    <main>
+<div class="settings">
+  <header class="settings__header">
+    <h1>Settings</h1>
+    <p class="settings__intro">Manage your profile, how we contact you and who can see your information.</p>
+  </header>
+
+  <va-tabs label="Settings sections">
+    <button slot="tab">Profile</button>
+    <button slot="tab">Notifications</button>
+    <button slot="tab">Privacy</button>
+
+    <div slot="panel" class="settings__panel">
+      <p class="settings__lead">This is how you appear to other people.</p>
+      <form id="profile-form" class="settings__form" novalidate>
+        <va-text-field label="Full name" name="name" autocomplete="name" required></va-text-field>
+        <va-text-field label="Email address" name="email" type="email" autocomplete="email" required
+          help-text="We use this to sign you in and to send you updates."></va-text-field>
+        <va-text-field label="Job title" name="title" autocomplete="organization-title"></va-text-field>
+        <div class="settings__actions">
+          <va-button type="submit">Save profile</va-button>
+          <va-button type="reset" variant="secondary">Reset</va-button>
+        </div>
+      </form>
+    </div>
+
+    <div slot="panel" class="settings__panel">
+      <p class="settings__lead">Changes apply straight away.</p>
+      <ul class="settings__list">
+        <li>
+          <va-switch data-setting="email-updates" data-label="Email updates" checked>
+            Email updates
+            <span slot="description">News and product updates sent to your email address.</span>
+          </va-switch>
+        </li>
+        <li>
+          <va-switch data-setting="push-notifications" data-label="Push notifications">
+            Push notifications
+            <span slot="description">Alerts on this device when something needs your attention.</span>
+          </va-switch>
+        </li>
+      </ul>
+    </div>
+
+    <div slot="panel" class="settings__panel">
+      <p class="settings__lead">Changes apply straight away.</p>
+      <ul class="settings__list">
+        <li>
+          <va-switch data-setting="public-profile" data-label="Public profile" checked>
+            Public profile
+            <span slot="description">Anyone can see your name and job title.</span>
+          </va-switch>
+        </li>
+        <li>
+          <va-switch data-setting="usage-data" data-label="Share usage data">
+            Share usage data
+            <span slot="description">Helps us improve the product. We never sell your data.</span>
+          </va-switch>
+        </li>
+      </ul>
+    </div>
+  </va-tabs>
+
+  <va-toast id="toaster" label="Settings messages"></va-toast>
+</div>
+
+    </main>
+  </body>
+</html>

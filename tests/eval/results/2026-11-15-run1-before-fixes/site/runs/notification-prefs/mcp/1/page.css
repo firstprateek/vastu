@@ -1,0 +1,57 @@
+.prefs {
+  max-inline-size: 36rem;
+  margin-inline: auto;
+  padding: var(--va-space-inline-lg);
+  font-family: var(--va-font-family-ui);
+  color: var(--va-color-text-default);
+}
+
+.prefs h1 {
+  margin: 0 0 var(--va-space-inline-sm);
+  font-family: var(--va-font-family-reading);
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+}
+
+.prefs-intro {
+  margin: 0 0 var(--va-space-inline-lg);
+  font-size: var(--va-font-size-sm);
+  color: var(--va-color-text-muted);
+}
+
+.prefs-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-inline-lg);
+}
+
+.prefs-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-inline-md);
+  margin: 0;
+  padding: var(--va-space-inline-lg);
+  background: var(--va-color-surface-subtle);
+  border: 1px solid var(--va-color-border-subtle);
+  border-radius: var(--va-radius-surface);
+}
+
+.prefs-group legend {
+  padding-inline: var(--va-space-inline-xs);
+  font-size: var(--va-font-size-md);
+  font-weight: var(--va-font-weight-medium);
+}
+
+.prefs-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--va-space-inline-md);
+}
+
+.prefs-status {
+  margin: 0;
+  margin-inline-end: auto;
+  font-size: var(--va-font-size-sm);
+  color: var(--va-color-text-muted);
+}

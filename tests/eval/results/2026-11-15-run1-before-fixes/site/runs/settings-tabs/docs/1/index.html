@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-va-brand="vastu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>settings-tabs</title>
+    <link rel="stylesheet" href="/assets/vastu.css">
+    <link rel="stylesheet" href="/assets/base.css">
+    <link rel="stylesheet" href="page.css">
+    <script type="module" src="/assets/vastu.js"></script>
+    <script type="module" src="page.js"></script>
+  </head>
+  <body>
+    <main>
+<div class="settings">
+  <header class="settings__header">
+    <h1>Settings</h1>
+    <p class="settings__intro">Manage your profile, how we contact you and who can see your activity.</p>
+  </header>
+
+  <va-tabs label="Settings sections">
+    <button slot="tab">Profile</button>
+    <button slot="tab">Notifications</button>
+    <button slot="tab">Privacy</button>
+
+    <div slot="panel" class="settings__panel">
+      <h2 id="profile-heading">Profile</h2>
+      <p class="settings__lead">Your name and contact details, as other people see them.</p>
+      <div class="settings__fields">
+        <va-text-field label="Full name" name="name" autocomplete="name" value="Ada Lovelace"></va-text-field>
+        <va-text-field label="Email address" name="email" type="email" autocomplete="email" value="ada@example.com" help-text="We send account messages to this address."></va-text-field>
+        <va-text-field label="Username" name="username" autocomplete="username" value="ada99" help-text="Letters and numbers only, 3 to 20 characters." minlength="3" maxlength="20" pattern="[A-Za-z0-9]+"></va-text-field>
+      </div>
+      <div class="settings__actions">
+        <va-button commandfor="settings-toast" command="--show" value="Profile saved" data-variant="success">Save profile</va-button>
+      </div>
+    </div>
+
+    <div slot="panel" class="settings__panel">
+      <h2 id="notifications-heading">Notifications</h2>
+      <p class="settings__lead">Changes apply straight away.</p>
+      <div class="settings__list">
+        <va-switch id="email-updates" name="email-updates" checked>
+          Email updates
+          <span slot="description">News about your account and product changes, sent to your email address.</span>
+        </va-switch>
+        <va-switch id="push-notifications" name="push-notifications">
+          Push notifications
+          <span slot="description">Alerts on this device when something needs your attention.</span>
+        </va-switch>
+      </div>
+      <p id="notifications-status" class="settings__status" role="status"></p>
+    </div>
+
+    <div slot="panel" class="settings__panel">
+      <h2 id="privacy-heading">Privacy</h2>
+      <p class="settings__lead">Choose what other people can see. Changes apply straight away.</p>
+      <div class="settings__list">
+        <va-switch id="public-profile" name="public-profile" checked>
+          Public profile
+          <span slot="description">Anyone can see your name and username.</span>
+        </va-switch>
+        <va-switch id="activity-status" name="activity-status">
+          Show when I'm online
+          <span slot="description">People you work with can see when you're active.</span>
+        </va-switch>
+      </div>
+      <p id="privacy-status" class="settings__status" role="status"></p>
+    </div>
+  </va-tabs>
+
+  <va-toast id="settings-toast"></va-toast>
+</div>
+
+    </main>
+  </body>
+</html>

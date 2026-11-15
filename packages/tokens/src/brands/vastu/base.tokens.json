@@ -96,24 +96,30 @@
     "$type": "dimension",
     "inline": {
       "xs": {
-        "$value": "{dimension.1}"
+        "$value": "{dimension.1}",
+        "$description": "Space: extra small (4px), e.g. between an icon and its text"
       },
       "sm": {
-        "$value": "{dimension.2}"
+        "$value": "{dimension.2}",
+        "$description": "Space: small (8px), e.g. gaps in a tight row"
       },
       "md": {
-        "$value": "{dimension.3}"
+        "$value": "{dimension.3}",
+        "$description": "Space: medium (12px), e.g. padding inside a control"
       },
       "lg": {
-        "$value": "{dimension.5}"
+        "$value": "{dimension.5}",
+        "$description": "Space: large (20px), e.g. between form fields or sections"
       }
     },
     "gap": {
       "sm": {
-        "$value": "{dimension.1}"
+        "$value": "{dimension.1}",
+        "$description": "Gap between closely related items (4px)"
       },
       "md": {
-        "$value": "{dimension.2}"
+        "$value": "{dimension.2}",
+        "$description": "Gap between items in a row or list (8px)"
       }
     }
   },

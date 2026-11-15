@@ -1,0 +1,35 @@
+.signup {
+  box-sizing: border-box;
+  max-width: 28rem;
+  margin-inline: auto;
+  margin-block: var(--va-space-inline-lg);
+  padding: var(--va-space-inline-lg);
+  background: var(--va-color-surface-default);
+  color: var(--va-color-text-default);
+  border: 1px solid var(--va-color-border-subtle);
+  border-radius: var(--va-radius-surface);
+  font-family: var(--va-font-family-ui);
+}
+
+.signup h1 {
+  margin: 0;
+  font-family: var(--va-font-family-reading);
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+}
+
+.signup-intro {
+  margin-block: var(--va-space-inline-xs) var(--va-space-inline-lg);
+  color: var(--va-color-text-muted);
+  font-size: var(--va-font-size-sm);
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-inline-lg);
+}
+
+.signup-form va-button {
+  align-self: stretch;
+}

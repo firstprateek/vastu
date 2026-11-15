@@ -56,6 +56,13 @@ test.describe('va-checkbox', () => {
     await expect(page.getByRole('checkbox', { name: 'Select all (some selected)' })).toBeChecked({ indeterminate: true });
   });
 
+  test('help text in the description slot is the description, not part of the name', async ({ page, open }) => {
+    await open('c=checkbox&e=1-options');
+    const box = page.getByRole('checkbox', { name: 'Send me a copy', exact: true });
+    await expect(box).toBeVisible();
+    await expect(box).toHaveAccessibleDescription("We'll email it to the address on your account.");
+  });
+
   test('toggling clears indeterminate', async ({ page, open }) => {
     await open('c=checkbox&e=1-options');
     const box = page.getByRole('checkbox', { name: 'Select all (some selected)' });

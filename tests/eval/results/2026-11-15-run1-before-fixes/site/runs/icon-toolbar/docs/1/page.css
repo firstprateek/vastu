@@ -1,0 +1,29 @@
+.editor {
+  max-inline-size: 40rem;
+  border: 1px solid var(--va-color-border, currentColor);
+  border-radius: var(--va-radius-md, 0.5rem);
+  overflow: hidden;
+}
+
+.format-toolbar {
+  display: flex;
+  gap: var(--va-space-1, 0.25rem);
+  padding: var(--va-space-2, 0.5rem);
+  border-block-end: 1px solid var(--va-color-border, currentColor);
+}
+
+.format-toolbar svg {
+  display: block;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+
+.editor-content {
+  min-block-size: 8rem;
+  padding: var(--va-space-3, 0.75rem) var(--va-space-4, 1rem);
+}
+
+.editor-content:focus-visible {
+  outline: 2px solid var(--va-color-focus, Highlight);
+  outline-offset: -2px;
+}

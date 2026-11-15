@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" data-va-brand="vastu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>row-actions</title>
+    <link rel="stylesheet" href="/assets/vastu.css">
+    <link rel="stylesheet" href="/assets/base.css">
+    <link rel="stylesheet" href="page.css">
+    <script type="module" src="/assets/vastu.js"></script>
+    <script type="module" src="page.js"></script>
+  </head>
+  <body>
+    <main>
+<section class="files" aria-labelledby="files-heading">
+  <h1 id="files-heading" class="files__heading" tabindex="-1">Files</h1>
+
+  <ul class="files__list" id="file-list">
+    <li class="file" data-file="report.pdf">
+      <div class="file__info">
+        <span class="file__name">report.pdf</span>
+        <span class="file__meta">PDF document · 2.4 MB</span>
+      </div>
+      <va-menu label="Actions for report.pdf" variant="ghost" placement="bottom-end">
+        <button value="rename">Rename</button>
+        <button value="download">Download</button>
+        <button value="delete">Delete</button>
+      </va-menu>
+    </li>
+    <li class="file" data-file="photo.png">
+      <div class="file__info">
+        <span class="file__name">photo.png</span>
+        <span class="file__meta">PNG image · 1.1 MB</span>
+      </div>
+      <va-menu label="Actions for photo.png" variant="ghost" placement="bottom-end">
+        <button value="rename">Rename</button>
+        <button value="download">Download</button>
+        <button value="delete">Delete</button>
+      </va-menu>
+    </li>
+    <li class="file" data-file="notes.txt">
+      <div class="file__info">
+        <span class="file__name">notes.txt</span>
+        <span class="file__meta">Text file · 4 KB</span>
+      </div>
+      <va-menu label="Actions for notes.txt" variant="ghost" placement="bottom-end">
+        <button value="rename">Rename</button>
+        <button value="download">Download</button>
+        <button value="delete">Delete</button>
+      </va-menu>
+    </li>
+  </ul>
+
+  <p class="files__empty" id="files-empty" hidden>No files left.</p>
+</section>
+
+<va-dialog id="rename-dialog" heading="Rename file">
+  <form id="rename-form" novalidate>
+    <va-text-field id="rename-field" label="File name" required></va-text-field>
+  </form>
+  <va-button slot="footer" variant="secondary" commandfor="rename-dialog" command="--close">Cancel</va-button>
+  <va-button slot="footer" id="rename-save">Save</va-button>
+</va-dialog>
+
+<va-dialog id="delete-dialog" heading="Delete this file?">
+  <p id="delete-message">This file will be deleted. You can't undo this.</p>
+  <va-button slot="footer" variant="secondary" commandfor="delete-dialog" command="--close">Cancel</va-button>
+  <va-button slot="footer" variant="danger" id="delete-confirm">Delete</va-button>
+</va-dialog>
+
+<va-toast id="toaster"></va-toast>
+
+    </main>
+  </body>
+</html>

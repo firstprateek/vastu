@@ -1,0 +1,57 @@
+.newsletter {
+  max-inline-size: 36rem;
+  margin-inline: auto;
+  padding: var(--va-space-inline-lg);
+  font-family: var(--va-font-family-ui);
+}
+
+.newsletter h1 {
+  margin-block: 0 var(--va-space-inline-lg);
+  font-family: var(--va-font-family-reading);
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+}
+
+/* Field and button side by side. Items align to the top so the help text
+   can sit under the field while the button lines up with the input box. */
+.newsletter__form {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--va-space-inline-sm);
+}
+
+.newsletter__email {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.newsletter__submit {
+  flex: none;
+  /* Push the button down past the field's label so it sits level with the
+     input. page.js measures the real offset; this is the fallback. */
+  margin-block-start: var(
+    --newsletter-label-offset,
+    calc(var(--va-font-size-sm) * 1.5 + var(--va-space-gap-sm))
+  );
+}
+
+.newsletter__status {
+  margin-block: var(--va-space-inline-md) 0;
+  font-size: var(--va-font-size-sm);
+}
+
+.newsletter__status:empty {
+  display: none;
+}
+
+/* On narrow screens, stack the button under the field. */
+@media (max-width: 24rem) {
+  .newsletter__form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .newsletter__submit {
+    margin-block-start: 0;
+  }
+}

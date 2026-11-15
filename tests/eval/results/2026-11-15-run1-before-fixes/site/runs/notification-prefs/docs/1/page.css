@@ -1,0 +1,31 @@
+.prefs-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-6, 1.5rem);
+  max-inline-size: 32rem;
+}
+
+.prefs-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-4, 1rem);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.prefs-group legend {
+  padding: 0;
+  margin-block-end: var(--va-space-3, 0.75rem);
+  font-weight: var(--va-font-weight-semibold, 600);
+}
+
+.prefs-status {
+  margin: 0;
+  color: var(--va-color-text-muted, inherit);
+}
+
+.prefs-actions {
+  display: flex;
+  gap: var(--va-space-3, 0.75rem);
+}

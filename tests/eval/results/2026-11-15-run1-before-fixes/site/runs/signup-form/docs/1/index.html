@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-va-brand="vastu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>signup-form</title>
+    <link rel="stylesheet" href="/assets/vastu.css">
+    <link rel="stylesheet" href="/assets/base.css">
+    <link rel="stylesheet" href="page.css">
+    <script type="module" src="/assets/vastu.js"></script>
+    
+  </head>
+  <body>
+    <main>
+<section class="signup" aria-labelledby="signup-heading">
+  <h1 id="signup-heading">Create your account</h1>
+  <p class="signup-intro">All fields are required.</p>
+
+  <form class="signup-form" method="post">
+    <va-text-field
+      label="Full name"
+      name="name"
+      autocomplete="name"
+      required></va-text-field>
+
+    <va-text-field
+      label="Email address"
+      name="email"
+      type="email"
+      autocomplete="email"
+      required></va-text-field>
+
+    <va-text-field
+      label="Password"
+      name="password"
+      type="password"
+      autocomplete="new-password"
+      minlength="8"
+      help-text="At least 8 characters."
+      required></va-text-field>
+
+    <va-checkbox name="terms" value="accepted" required>
+      I agree to the terms of service
+    </va-checkbox>
+
+    <div class="signup-actions">
+      <va-button type="submit">Create account</va-button>
+    </div>
+  </form>
+</section>
+
+    </main>
+  </body>
+</html>

@@ -1,0 +1,974 @@
+{
+  "agent": "claude-code",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "setups": [
+    "docs",
+    "mcp"
+  ],
+  "runs": [
+    {
+      "task": "signup-form",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": false,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-space-8 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-space-2 is not a Vastu token or component property, so it has no value.",
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-5 is not a Vastu token or component property, so it has no value.",
+          "--va-space-2 is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 4,
+        "output": 1596,
+        "cacheRead": 30907,
+        "cacheWrite": 2212,
+        "turns": 3
+      },
+      "cost": 0.0558134,
+      "stopReason": "success",
+      "seconds": 19.772,
+      "toolCalls": [
+        "Write",
+        "Write"
+      ]
+    },
+    {
+      "task": "signup-form",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 10,
+        "output": 2112,
+        "cacheRead": 46832,
+        "cacheWrite": 13803,
+        "turns": 10
+      },
+      "cost": 0.1620704,
+      "stopReason": "success",
+      "seconds": 25.014,
+      "toolCalls": [
+        "list_components",
+        "get_component",
+        "get_component",
+        "get_component",
+        "get_tokens",
+        "get_tokens",
+        "Write",
+        "Write",
+        "validate_markup"
+      ]
+    },
+    {
+      "task": "settings-tabs",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": false,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-2 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-space-1 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-space-5 is not a Vastu token or component property, so it has no value.",
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 8,
+        "output": 5448,
+        "cacheRead": 72144,
+        "cacheWrite": 7824,
+        "turns": 11
+      },
+      "cost": 0.18601279999999998,
+      "stopReason": "success",
+      "seconds": 55.643,
+      "toolCalls": [
+        "Write",
+        "Write",
+        "Write",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Edit",
+        "Read"
+      ]
+    },
+    {
+      "task": "settings-tabs",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 16,
+        "output": 7651,
+        "cacheRead": 120490,
+        "cacheWrite": 22131,
+        "turns": 19
+      },
+      "cost": 0.35423,
+      "stopReason": "success",
+      "seconds": 79.341,
+      "toolCalls": [
+        "list_components",
+        "get_component",
+        "get_component",
+        "get_component",
+        "get_component",
+        "get_component",
+        "get_tokens",
+        "get_tokens",
+        "get_tokens",
+        "get_tokens",
+        "Write",
+        "Write",
+        "Write",
+        "Write",
+        "Edit",
+        "Edit",
+        "Edit",
+        "validate_markup"
+      ]
+    },
+    {
+      "task": "delete-confirm",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": false,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-space-3 is not a Vastu token or component property, so it has no value.",
+          "--va-space-6 is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 6,
+        "output": 2078,
+        "cacheRead": 48848,
+        "cacheWrite": 2735,
+        "turns": 5
+      },
+      "cost": 0.0732336,
+      "stopReason": "success",
+      "seconds": 25.592,
+      "toolCalls": [
+        "Write",
+        "Write",
+        "Write",
+        "Edit"
+      ]
+    },
+    {
+      "task": "delete-confirm",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 10,
+        "output": 1587,
+        "cacheRead": 37971,
+        "cacheWrite": 7308,
+        "turns": 7
+      },
+      "cost": 0.0978382,
+      "stopReason": "success",
+      "seconds": 22.353,
+      "toolCalls": [
+        "find_component",
+        "get_component",
+        "get_component",
+        "validate_markup",
+        "Write",
+        "Write"
+      ]
+    },
+    {
+      "task": "row-actions",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": false,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-color-border is not a Vastu token or component property, so it has no value.",
+          "--va-radius-md is not a Vastu token or component property, so it has no value.",
+          "--va-space-3 is not a Vastu token or component property, so it has no value.",
+          "--va-space-3 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-color-border is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 8,
+        "output": 6344,
+        "cacheRead": 72485,
+        "cacheWrite": 7069,
+        "turns": 5
+      },
+      "cost": 0.197961,
+      "stopReason": "success",
+      "seconds": 63.845,
+      "toolCalls": [
+        "Write",
+        "Write",
+        "Write",
+        "Edit"
+      ]
+    },
+    {
+      "task": "row-actions",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": false
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "task": "expect(locator).toBeVisible() failed  Locator: getByText('report.pdf') Expected: visible",
+        "renders": []
+      },
+      "usage": {
+        "input": 16,
+        "output": 7973,
+        "cacheRead": 112034,
+        "cacheWrite": 23071,
+        "turns": 14
+      },
+      "cost": 0.36649879999999996,
+      "stopReason": "success",
+      "seconds": 79.053,
+      "toolCalls": [
+        "find_component",
+        "list_components",
+        "get_component",
+        "get_component",
+        "get_component",
+        "get_component",
+        "get_component",
+        "validate_markup",
+        "get_tokens",
+        "Write",
+        "Write",
+        "Write",
+        "validate_markup"
+      ]
+    },
+    {
+      "task": "save-toast",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 4,
+        "output": 498,
+        "cacheRead": 30885,
+        "cacheWrite": 1206,
+        "turns": 2
+      },
+      "cost": 0.025801,
+      "stopReason": "success",
+      "seconds": 10.206,
+      "toolCalls": [
+        "Write"
+      ]
+    },
+    {
+      "task": "save-toast",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 10,
+        "output": 863,
+        "cacheRead": 36617,
+        "cacheWrite": 6292,
+        "turns": 6
+      },
+      "cost": 0.0749594,
+      "stopReason": "success",
+      "seconds": 16.576,
+      "toolCalls": [
+        "find_component",
+        "get_component",
+        "get_component",
+        "validate_markup",
+        "Write"
+      ]
+    },
+    {
+      "task": "newsletter",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": false,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-space-3 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 4,
+        "output": 2939,
+        "cacheRead": 30894,
+        "cacheWrite": 3578,
+        "turns": 4
+      },
+      "cost": 0.0935988,
+      "stopReason": "success",
+      "seconds": 32.97,
+      "toolCalls": [
+        "Write",
+        "Write",
+        "Write"
+      ]
+    },
+    {
+      "task": "newsletter",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 14,
+        "output": 3691,
+        "cacheRead": 71136,
+        "cacheWrite": 13152,
+        "turns": 12
+      },
+      "cost": 0.1933192,
+      "stopReason": "success",
+      "seconds": 42.597,
+      "toolCalls": [
+        "find_component",
+        "get_component",
+        "get_component",
+        "get_tokens",
+        "get_tokens",
+        "find_component",
+        "get_component",
+        "Write",
+        "Write",
+        "Write",
+        "validate_markup"
+      ]
+    },
+    {
+      "task": "dark-mode-switch",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 4,
+        "output": 2136,
+        "cacheRead": 30891,
+        "cacheWrite": 2864,
+        "turns": 4
+      },
+      "cost": 0.07182619999999999,
+      "stopReason": "success",
+      "seconds": 24.137,
+      "toolCalls": [
+        "Write",
+        "Write",
+        "Write"
+      ]
+    },
+    {
+      "task": "dark-mode-switch",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 12,
+        "output": 2564,
+        "cacheRead": 48939,
+        "cacheWrite": 8570,
+        "turns": 12
+      },
+      "cost": 0.1296758,
+      "stopReason": "success",
+      "seconds": 32.974,
+      "toolCalls": [
+        "list_components",
+        "find_component",
+        "get_component",
+        "get_tokens",
+        "get_tokens",
+        "get_tokens",
+        "Write",
+        "Write",
+        "Write",
+        "validate_markup",
+        "Edit"
+      ]
+    },
+    {
+      "task": "notification-prefs",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": false,
+        "task": false
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-space-3 is not a Vastu token or component property, so it has no value.",
+          "--va-font-weight-semibold is not a Vastu token or component property, so it has no value.",
+          "--va-space-3 is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [],
+        "task": "expect(locator).toBeChecked() failed  Locator: getByRole('checkbox', { name: /^email$/i }) Expected: checked",
+        "renders": []
+      },
+      "usage": {
+        "input": 8,
+        "output": 3295,
+        "cacheRead": 67663,
+        "cacheWrite": 4549,
+        "turns": 8
+      },
+      "cost": 0.1158566,
+      "stopReason": "success",
+      "seconds": 38.662,
+      "toolCalls": [
+        "Write",
+        "Write",
+        "Write",
+        "Edit",
+        "Write",
+        "Edit",
+        "Edit"
+      ]
+    },
+    {
+      "task": "notification-prefs",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": false
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "task": "expect(locator).toBeChecked() failed  Locator: getByRole('checkbox', { name: /^email$/i }) Expected: checked",
+        "renders": []
+      },
+      "usage": {
+        "input": 22,
+        "output": 5709,
+        "cacheRead": 150631,
+        "cacheWrite": 17109,
+        "turns": 19
+      },
+      "cost": 0.2812662000000001,
+      "stopReason": "success",
+      "seconds": 69.218,
+      "toolCalls": [
+        "find_component",
+        "list_components",
+        "get_component",
+        "get_component",
+        "get_component",
+        "get_tokens",
+        "get_tokens",
+        "get_tokens",
+        "get_tokens",
+        "validate_markup",
+        "Write",
+        "Write",
+        "Write",
+        "Edit",
+        "Edit",
+        "Write",
+        "Read",
+        "validate_markup"
+      ]
+    },
+    {
+      "task": "icon-toolbar",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": false,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-color-border is not a Vastu token or component property, so it has no value.",
+          "--va-radius-md is not a Vastu token or component property, so it has no value.",
+          "--va-space-1 is not a Vastu token or component property, so it has no value.",
+          "--va-space-2 is not a Vastu token or component property, so it has no value.",
+          "--va-color-border is not a Vastu token or component property, so it has no value.",
+          "--va-space-3 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 4,
+        "output": 3750,
+        "cacheRead": 30905,
+        "cacheWrite": 4349,
+        "turns": 4
+      },
+      "cost": 0.11598900000000001,
+      "stopReason": "success",
+      "seconds": 38.756,
+      "toolCalls": [
+        "Write",
+        "Write",
+        "Write"
+      ]
+    },
+    {
+      "task": "icon-toolbar",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 12,
+        "output": 2909,
+        "cacheRead": 51901,
+        "cacheWrite": 9666,
+        "turns": 11
+      },
+      "cost": 0.14593620000000002,
+      "stopReason": "success",
+      "seconds": 33.189,
+      "toolCalls": [
+        "find_component",
+        "list_components",
+        "get_component",
+        "Write",
+        "get_tokens",
+        "get_tokens",
+        "get_tokens",
+        "Edit",
+        "Write",
+        "validate_markup"
+      ]
+    },
+    {
+      "task": "product-search",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": false,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-space-3 is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 4,
+        "output": 1287,
+        "cacheRead": 30884,
+        "cacheWrite": 2003,
+        "turns": 3
+      },
+      "cost": 0.0479568,
+      "stopReason": "success",
+      "seconds": 17.816,
+      "toolCalls": [
+        "Write",
+        "Write"
+      ]
+    },
+    {
+      "task": "product-search",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 12,
+        "output": 1082,
+        "cacheRead": 52423,
+        "cacheWrite": 7923,
+        "turns": 8
+      },
+      "cost": 0.09555659999999999,
+      "stopReason": "success",
+      "seconds": 18.284,
+      "toolCalls": [
+        "find_component",
+        "get_component",
+        "get_component",
+        "get_tokens",
+        "validate_markup",
+        "Write",
+        "Write"
+      ]
+    },
+    {
+      "task": "sign-in-error",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": false,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-space-8 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value.",
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 4,
+        "output": 1588,
+        "cacheRead": 30903,
+        "cacheWrite": 2433,
+        "turns": 4
+      },
+      "cost": 0.0574206,
+      "stopReason": "success",
+      "seconds": 18.388,
+      "toolCalls": [
+        "Write",
+        "Write",
+        "Write"
+      ]
+    },
+    {
+      "task": "sign-in-error",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 14,
+        "output": 2397,
+        "cacheRead": 69276,
+        "cacheWrite": 11841,
+        "turns": 12
+      },
+      "cost": 0.1565792,
+      "stopReason": "success",
+      "seconds": 29.556,
+      "toolCalls": [
+        "list_components",
+        "get_component",
+        "get_component",
+        "get_tokens",
+        "get_tokens",
+        "get_tokens",
+        "get_tokens",
+        "Write",
+        "Write",
+        "Write",
+        "validate_markup"
+      ]
+    },
+    {
+      "task": "button-states",
+      "setup": "docs",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": false,
+        "tokens": false,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-color-border is not a Vastu token or component property, so it has no value.",
+          "--va-space-3 is not a Vastu token or component property, so it has no value.",
+          "--va-space-2 is not a Vastu token or component property, so it has no value.",
+          "--va-space-6 is not a Vastu token or component property, so it has no value.",
+          "--va-space-2 is not a Vastu token or component property, so it has no value.",
+          "--va-color-border is not a Vastu token or component property, so it has no value.",
+          "--va-space-4 is not a Vastu token or component property, so it has no value."
+        ],
+        "axe": [
+          "color-contrast: Elements must meet minimum color contrast ratio thresholds"
+        ],
+        "renders": []
+      },
+      "usage": {
+        "input": 4,
+        "output": 2464,
+        "cacheRead": 30896,
+        "cacheWrite": 3153,
+        "turns": 3
+      },
+      "cost": 0.0806992,
+      "stopReason": "success",
+      "seconds": 30.967,
+      "toolCalls": [
+        "Write",
+        "Write"
+      ]
+    },
+    {
+      "task": "button-states",
+      "setup": "mcp",
+      "run": 1,
+      "checks": {
+        "renders": true,
+        "lint": true,
+        "axe": true,
+        "tokens": true,
+        "task": true
+      },
+      "notes": {
+        "lint": [],
+        "tokens": [],
+        "axe": [],
+        "renders": []
+      },
+      "usage": {
+        "input": 10,
+        "output": 1516,
+        "cacheRead": 37420,
+        "cacheWrite": 6433,
+        "turns": 7
+      },
+      "cost": 0.089308,
+      "stopReason": "success",
+      "seconds": 20.226,
+      "toolCalls": [
+        "get_component",
+        "get_tokens",
+        "get_tokens",
+        "validate_markup",
+        "Write",
+        "Write"
+      ]
+    }
+  ]
+}

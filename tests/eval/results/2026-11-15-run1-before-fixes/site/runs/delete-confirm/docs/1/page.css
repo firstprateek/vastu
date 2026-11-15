@@ -1,0 +1,12 @@
+.project-danger {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--va-space-3, 0.75rem);
+  padding: var(--va-space-6, 1.5rem);
+}
+
+.project-danger h1,
+.project-danger p {
+  margin: 0;
+}

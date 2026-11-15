@@ -1,0 +1,60 @@
+.files {
+  max-inline-size: 40rem;
+  margin-inline: auto;
+  padding: var(--va-space-6, 1.5rem) var(--va-space-4, 1rem);
+}
+
+.files h1 {
+  margin-block: 0 var(--va-space-4, 1rem);
+}
+
+.files h1:focus {
+  outline: none;
+}
+
+.file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--va-color-border, currentColor);
+  border-radius: var(--va-radius-md, 0.5rem);
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: var(--va-space-3, 0.75rem);
+  padding: var(--va-space-3, 0.75rem) var(--va-space-4, 1rem);
+}
+
+.file-row + .file-row {
+  border-block-start: 1px solid var(--va-color-border, currentColor);
+}
+
+.file-icon {
+  flex: none;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  color: var(--va-color-text-muted, currentColor);
+}
+
+.file-info {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-name {
+  font-weight: var(--va-font-weight-medium, 500);
+  overflow-wrap: anywhere;
+}
+
+.file-meta {
+  font-size: var(--va-font-size-sm, 0.875rem);
+  color: var(--va-color-text-muted, inherit);
+}
+
+.empty {
+  color: var(--va-color-text-muted, inherit);
+}

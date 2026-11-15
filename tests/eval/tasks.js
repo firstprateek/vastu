@@ -115,7 +115,7 @@ export const tasks = [
       css: '.files { list-style: none; padding: 0; display: grid; gap: var(--va-space-inline-sm); max-width: 28rem; } .files li { display: flex; justify-content: space-between; align-items: center; }',
     },
     async check(page) {
-      for (const file of ['report.pdf', 'photo.png', 'notes.txt']) await expect(page.getByText(file)).toBeVisible();
+      for (const file of ['report.pdf', 'photo.png', 'notes.txt']) await expect(page.getByText(file, { exact: true })).toBeVisible();
       const menus = page.getByRole('button', { name: /actions/i });
       await expect(menus).toHaveCount(3);
       await menus.first().click();

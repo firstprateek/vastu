@@ -1,0 +1,3 @@
+{
+  "html": "<va-button commandfor=\"toaster\" command=\"--show\" value=\"Changes saved\" data-variant=\"success\">Save changes</va-button>\n<va-toast id=\"toaster\"></va-toast>\n"
+}

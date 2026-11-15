@@ -1,0 +1,38 @@
+.newsletter {
+  max-inline-size: 36rem;
+  margin-inline: auto;
+  padding: var(--va-space-6, 1.5rem) var(--va-space-4, 1rem);
+}
+
+.newsletter h1 {
+  margin-block: 0 var(--va-space-4, 1rem);
+}
+
+/* Field and button side by side; the button lines up with the input box,
+   not with the label above it or the help text below it. */
+.newsletter-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--va-space-3, 0.75rem);
+}
+
+.newsletter-email {
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+}
+
+.newsletter-submit {
+  flex: 0 0 auto;
+  /* Fallback offset for the label height; page.js measures the exact value. */
+  margin-block-start: var(--newsletter-field-offset, 1.75rem);
+  --va-button-height: var(--newsletter-field-height, var(--va-text-field-height, 2.5rem));
+}
+
+.newsletter-status:empty {
+  display: none;
+}
+
+.newsletter-status {
+  margin-block: var(--va-space-4, 1rem) 0;
+}

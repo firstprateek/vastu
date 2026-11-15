@@ -265,8 +265,12 @@ export class VaTextField extends FormControl {
       flex: none;
       color: var(--va-color-text-muted);
     }
-    :host([disabled]) {
+    /* Only the box fades: the label and help text (often saying why it's disabled) stay readable. */
+    :host([disabled]) .field {
       opacity: 0.5;
+    }
+    :host([disabled]) .label {
+      color: var(--va-color-text-muted);
     }
     :host([readonly]) .field {
       background-color: var(--va-color-surface-subtle);
