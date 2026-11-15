@@ -1,11 +1,13 @@
 # poll-widget
 
+[![Open the live demo](https://img.shields.io/badge/Live_demo-Open_%E2%86%92-b93a2f?style=for-the-badge)](https://firstprateek.github.io/poll-widget/)
+
 [![CI](https://github.com/firstprateek/poll-widget/actions/workflows/ci.yml/badge.svg)](https://github.com/firstprateek/poll-widget/actions/workflows/ci.yml)
 
 An embeddable, themeable poll, built as a web component with [Lit](https://lit.dev/).
 Pick an option and the bars animate to show the results.
 
-**[Live demo](https://firstprateek.github.io/poll-widget/)**
+### [▶ Try the live demo](https://firstprateek.github.io/poll-widget/)
 
 ## Install
 
