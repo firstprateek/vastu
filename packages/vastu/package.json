@@ -39,6 +39,11 @@
       "development": "./dist/dev/text-field/index.js",
       "default": "./dist/prod/text-field/index.js"
     },
+    "./toast": {
+      "types": "./dist/dev/toast/index.d.ts",
+      "development": "./dist/dev/toast/index.js",
+      "default": "./dist/prod/toast/index.js"
+    },
     "./all": {
       "types": "./dist/dev/all.d.ts",
       "development": "./dist/dev/all.js",

@@ -39,7 +39,8 @@ async function focusedItemIndex(page: Page, selector: string): Promise<number> {
 
 async function openSubject(page: Page): Promise<void> {
   await page.locator('#subject').evaluate(async (el: any) => {
-    if (typeof el.show === 'function') el.show();
+    // Components that show content (va-toast) take a message; others ignore the argument.
+    if (typeof el.show === 'function') el.show('Contract');
     else el.open = true;
     await el.updateComplete;
   });
@@ -95,7 +96,10 @@ for (const c of components) {
     for (const event of c.events ?? []) {
       const { how, setup } = event['x-trigger'];
       test(`event ${event.name} fires on ${how}${setup ? ` (when ${setup})` : ''}`, async ({ page }) => {
-        if (setup === 'open') await openSubject(page);
+        if (setup === 'open') {
+          await openSubject(page);
+          if (items) await page.locator('#subject').locator(items).first().focus();
+        }
         await page.locator('#subject').evaluate((el, name) => {
           (window as any).__fired = 0;
           el.addEventListener(name, () => (window as any).__fired++);
@@ -155,6 +159,9 @@ for (const c of components) {
 
     for (const part of c.cssParts ?? []) {
       test(`part ${part.name} exists`, async ({ page }) => {
+        const partCount = () => page.locator('#subject').evaluate((el, name) => el.shadowRoot!.querySelectorAll(`[part~="${name}"]`).length, part.name);
+        // Some parts (a toast's messages) only exist while the component is open.
+        if ((await partCount()) === 0 && (await page.locator('#subject').evaluate((el: any) => 'open' in el))) await openSubject(page);
         const count = await page.locator('#subject').evaluate(
           (el, name) => el.shadowRoot!.querySelectorAll(`[part~="${name}"]`).length,
           part.name

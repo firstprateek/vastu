@@ -2065,6 +2065,233 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/tabs/tabs.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Tabs that switch between panels of related content, following the WAI-ARIA tabs pattern.",
+          "name": "VaTabs",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Colour of the line under the row of tabs.",
+              "name": "--va-tabs-border",
+              "x-applies": {
+                "part": "tablist",
+                "property": "border-bottom-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Colour of the selected tab's underline.",
+              "name": "--va-tabs-indicator",
+              "x-applies": {
+                "light": "[aria-selected=\"true\"]",
+                "property": "border-bottom-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Text colour of tabs that aren't selected.",
+              "name": "--va-tabs-text",
+              "x-applies": {
+                "light": "[aria-selected=\"false\"]",
+                "property": "color"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The row of tabs.",
+              "name": "tablist"
+            },
+            {
+              "description": "The wrapper around the panels.",
+              "name": "panels"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The tabs, as `<button slot=\"tab\">` elements, in order.",
+              "name": "tab"
+            },
+            {
+              "description": "The panels, as elements with `slot=\"panel\"`, in the same order as the tabs.",
+              "name": "panel"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "selected",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "description": "The index of the selected tab, from 0.",
+              "default": "0",
+              "attribute": "selected",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "activation",
+              "privacy": "public",
+              "type": {
+                "text": "'automatic' | 'manual'"
+              },
+              "description": "`automatic` selects a tab as soon as it gets focus; `manual` waits for Enter or Space.",
+              "default": "'automatic'",
+              "attribute": "activation",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name of the row of tabs.",
+              "default": "''",
+              "attribute": "label"
+            }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "Event"
+              },
+              "description": "When the user selects a different tab. Read `event.target.selected`.",
+              "x-trigger": {
+                "how": "click-item 2"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "selected",
+              "type": {
+                "text": "number"
+              },
+              "description": "The index of the selected tab, from 0.",
+              "default": "0",
+              "fieldName": "selected"
+            },
+            {
+              "name": "activation",
+              "type": {
+                "text": "'automatic' | 'manual'"
+              },
+              "description": "`automatic` selects a tab as soon as it gets focus; `manual` waits for Enter or Space.",
+              "default": "'automatic'",
+              "fieldName": "activation"
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name of the row of tabs.",
+              "default": "''",
+              "fieldName": "label"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "va-tabs",
+          "customElement": true,
+          "summary": "Switches between panels of related content in the same place on the page.",
+          "x-keyboard": [
+            {
+              "context": "items",
+              "key": "ArrowRight",
+              "action": "next",
+              "description": "Moves to the next tab, wrapping round. Selects it unless `activation=\"manual\"`."
+            },
+            {
+              "context": "items",
+              "key": "ArrowLeft",
+              "action": "previous",
+              "description": "Moves to the previous tab, wrapping round."
+            },
+            {
+              "context": "items",
+              "key": "Home",
+              "action": "first",
+              "description": "Moves to the first tab."
+            },
+            {
+              "context": "items",
+              "key": "End",
+              "action": "last",
+              "description": "Moves to the last tab."
+            },
+            {
+              "context": "items",
+              "key": "Enter",
+              "action": "activates",
+              "description": "Selects the focused tab (needed when `activation=\"manual\"`)."
+            },
+            {
+              "context": "items",
+              "key": "Tab",
+              "action": "focus-next",
+              "description": "Moves focus from the tabs into the selected panel."
+            }
+          ],
+          "x-keyboard-items": "[slot=\"tab\"]",
+          "x-a11y": {
+            "notes": [
+              "Each tab gets `role=\"tab\"`, `aria-selected` and `aria-controls`; each panel gets `role=\"tabpanel\"` and `aria-labelledby`.",
+              "Only the selected tab is in the Tab order (roving tabindex); arrow keys move between tabs."
+            ],
+            "role": "tablist",
+            "name": "The `label` attribute, such as \"Account settings\"."
+          },
+          "x-guidance": {
+            "use": "To switch between a few views of related content in one place, such as sections of a settings page.",
+            "avoid": "For navigation between pages, for steps in a sequence, or for more than about 6 tabs.",
+            "instead": "Links for navigation; a stepper for sequences; a list or menu for many options."
+          },
+          "x-examples": [
+            {
+              "title": "Settings sections",
+              "description": "Tabs are buttons in the tab slot; panels follow in the same order. Arrow keys move between tabs.",
+              "path": "src/tabs/examples/1-settings.html",
+              "code": "<va-tabs label=\"Account settings\">\n  <button slot=\"tab\">Profile</button>\n  <button slot=\"tab\">Notifications</button>\n  <button slot=\"tab\">Billing</button>\n  <div slot=\"panel\"><p>Your name, photo and bio.</p></div>\n  <div slot=\"panel\"><p>Choose what we email you about.</p></div>\n  <div slot=\"panel\"><p>Plan, invoices and payment method.</p></div>\n</va-tabs>"
+            },
+            {
+              "title": "Manual activation",
+              "description": "With activation=\"manual\", arrow keys only move focus; Enter or Space selects. Use it when showing a panel is slow.",
+              "path": "src/tabs/examples/2-manual.html",
+              "code": "<va-tabs label=\"Reports\" activation=\"manual\" selected=\"1\">\n  <button slot=\"tab\">Daily</button>\n  <button slot=\"tab\">Weekly</button>\n  <button slot=\"tab\">Monthly</button>\n  <div slot=\"panel\"><p>Today's numbers.</p></div>\n  <div slot=\"panel\"><p>This week's numbers.</p></div>\n  <div slot=\"panel\"><p>This month's numbers.</p></div>\n</va-tabs>"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VaTabs",
+          "declaration": {
+            "name": "VaTabs",
+            "module": "src/tabs/tabs.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/text-field/text-field.ts",
       "declarations": [
         {
@@ -2624,91 +2851,75 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/tabs/tabs.ts",
+      "path": "src/toast/toast.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Tabs that switch between panels of related content, following the WAI-ARIA tabs pattern.",
-          "name": "VaTabs",
+          "description": "A region for short, non-blocking status messages (\"toasts\"). Place one per page and call `show()`,\nor point a `va-button` at it with `command=\"--show\"`; the button's `value` is the message.",
+          "name": "VaToast",
           "cssProperties": [
             {
               "type": {
                 "text": "<color>"
               },
-              "description": "Colour of the line under the row of tabs.",
-              "name": "--va-tabs-border",
+              "description": "Background colour of a message.",
+              "name": "--va-toast-bg",
               "x-applies": {
-                "part": "tablist",
-                "property": "border-bottom-color"
+                "part": "toast",
+                "state": "open",
+                "property": "background-color"
               }
             },
             {
               "type": {
                 "text": "<color>"
               },
-              "description": "Colour of the selected tab's underline.",
-              "name": "--va-tabs-indicator",
+              "description": "Text colour of a message.",
+              "name": "--va-toast-fg",
               "x-applies": {
-                "light": "[aria-selected=\"true\"]",
-                "property": "border-bottom-color"
-              }
-            },
-            {
-              "type": {
-                "text": "<color>"
-              },
-              "description": "Text colour of tabs that aren't selected.",
-              "name": "--va-tabs-text",
-              "x-applies": {
-                "light": "[aria-selected=\"false\"]",
+                "part": "toast",
+                "state": "open",
                 "property": "color"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Corner radius of a message.",
+              "name": "--va-toast-radius",
+              "x-applies": {
+                "part": "toast",
+                "state": "open",
+                "property": "border-top-left-radius"
               }
             }
           ],
           "cssParts": [
             {
-              "description": "The row of tabs.",
-              "name": "tablist"
+              "description": "The fixed area the toasts appear in.",
+              "name": "region"
             },
             {
-              "description": "The wrapper around the panels.",
-              "name": "panels"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The tabs, as `<button slot=\"tab\">` elements, in order.",
-              "name": "tab"
+              "description": "Each message.",
+              "name": "toast"
             },
             {
-              "description": "The panels, as elements with `slot=\"panel\"`, in the same order as the tabs.",
-              "name": "panel"
+              "description": "Each message's dismiss button.",
+              "name": "dismiss"
             }
           ],
           "members": [
             {
               "kind": "field",
-              "name": "selected",
+              "name": "duration",
               "privacy": "public",
               "type": {
                 "text": "number"
               },
-              "description": "The index of the selected tab, from 0.",
-              "default": "0",
-              "attribute": "selected",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "activation",
-              "privacy": "public",
-              "type": {
-                "text": "'automatic' | 'manual'"
-              },
-              "description": "`automatic` selects a tab as soon as it gets focus; `manual` waits for Enter or Space.",
-              "default": "'automatic'",
-              "attribute": "activation",
-              "reflects": true
+              "description": "Milliseconds before an info or success message closes by itself. Errors stay until dismissed.",
+              "default": "5000",
+              "attribute": "duration"
             },
             {
               "kind": "field",
@@ -2717,49 +2928,94 @@
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name of the row of tabs.",
-              "default": "''",
+              "description": "Accessible name of the region.",
+              "default": "'Notifications'",
               "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "True while at least one message is showing.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "show",
+              "return": {
+                "type": {
+                  "text": "number"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "message",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "options",
+                  "default": "{}",
+                  "type": {
+                    "text": "{ variant?: ToastVariant; duration?: number }"
+                  }
+                }
+              ],
+              "description": "Shows a message and returns its id. `variant` defaults to `info`; errors stay until dismissed."
+            },
+            {
+              "kind": "method",
+              "name": "dismiss",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "id",
+                  "optional": true,
+                  "type": {
+                    "text": "number"
+                  }
+                }
+              ],
+              "description": "Closes one message by id, or every message when no id is given."
             }
           ],
           "events": [
             {
-              "name": "change",
+              "name": "va-close",
               "type": {
-                "text": "Event"
+                "text": "CustomEvent"
               },
-              "description": "When the user selects a different tab. Read `event.target.selected`.",
+              "description": "When a message closes. `event.detail.reason` is `timeout`, `dismiss`, `escape` or `method`.",
               "x-trigger": {
-                "how": "click-item 2"
+                "how": "press Escape",
+                "setup": "open"
               }
             }
           ],
           "attributes": [
             {
-              "name": "selected",
+              "name": "duration",
               "type": {
                 "text": "number"
               },
-              "description": "The index of the selected tab, from 0.",
-              "default": "0",
-              "fieldName": "selected"
-            },
-            {
-              "name": "activation",
-              "type": {
-                "text": "'automatic' | 'manual'"
-              },
-              "description": "`automatic` selects a tab as soon as it gets focus; `manual` waits for Enter or Space.",
-              "default": "'automatic'",
-              "fieldName": "activation"
+              "description": "Milliseconds before an info or success message closes by itself. Errors stay until dismissed.",
+              "default": "5000",
+              "fieldName": "duration"
             },
             {
               "name": "label",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name of the row of tabs.",
-              "default": "''",
+              "description": "Accessible name of the region.",
+              "default": "'Notifications'",
               "fieldName": "label"
             }
           ],
@@ -2767,84 +3023,60 @@
             "name": "LitElement",
             "package": "lit"
           },
-          "tagName": "va-tabs",
+          "tagName": "va-toast",
           "customElement": true,
-          "summary": "Switches between panels of related content in the same place on the page.",
+          "summary": "Shows short status messages, such as \"Changes saved\", without interrupting the user.",
           "x-keyboard": [
             {
-              "context": "items",
-              "key": "ArrowRight",
-              "action": "next",
-              "description": "Moves to the next tab, wrapping round. Selects it unless `activation=\"manual\"`."
-            },
-            {
-              "context": "items",
-              "key": "ArrowLeft",
-              "action": "previous",
-              "description": "Moves to the previous tab, wrapping round."
-            },
-            {
-              "context": "items",
-              "key": "Home",
-              "action": "first",
-              "description": "Moves to the first tab."
-            },
-            {
-              "context": "items",
-              "key": "End",
-              "action": "last",
-              "description": "Moves to the last tab."
-            },
-            {
-              "context": "items",
-              "key": "Enter",
-              "action": "activates",
-              "description": "Selects the focused tab (needed when `activation=\"manual\"`)."
-            },
-            {
-              "context": "items",
-              "key": "Tab",
-              "action": "focus-next",
-              "description": "Moves focus from the tabs into the selected panel."
+              "context": "open",
+              "key": "Escape",
+              "action": "closes",
+              "description": "Dismisses the message that has focus."
             }
           ],
-          "x-keyboard-items": "[slot=\"tab\"]",
+          "x-keyboard-items": "[part~=\"dismiss\"]",
           "x-a11y": {
             "notes": [
-              "Each tab gets `role=\"tab\"`, `aria-selected` and `aria-controls`; each panel gets `role=\"tabpanel\"` and `aria-labelledby`.",
-              "Only the selected tab is in the Tab order (roving tabindex); arrow keys move between tabs."
+              "Info and success messages are announced politely; errors use `role=\"alert\"` and are announced at once.",
+              "Messages pause their timer while hovered or focused, and errors stay until dismissed (WCAG 2.2.1)."
             ],
-            "role": "tablist",
-            "name": "The `label` attribute, such as \"Account settings\"."
+            "role": "status",
+            "name": "The `label` attribute, \"Notifications\" by default."
           },
           "x-guidance": {
-            "use": "To switch between a few views of related content in one place, such as sections of a settings page.",
-            "avoid": "For navigation between pages, for steps in a sequence, or for more than about 6 tabs.",
-            "instead": "Links for navigation; a stepper for sequences; a list or menu for many options."
+            "use": "To confirm that something happened, such as \"Changes saved\" or \"Link copied\", or to report a background failure.",
+            "avoid": "For anything the user must act on or read in full, or for form validation errors.",
+            "instead": "`va-dialog` for decisions; `va-text-field`'s `error` for field errors."
           },
           "x-examples": [
             {
-              "title": "Settings sections",
-              "description": "Tabs are buttons in the tab slot; panels follow in the same order. Arrow keys move between tabs.",
-              "path": "src/tabs/examples/1-settings.html",
-              "code": "<va-tabs label=\"Account settings\">\n  <button slot=\"tab\">Profile</button>\n  <button slot=\"tab\">Notifications</button>\n  <button slot=\"tab\">Billing</button>\n  <div slot=\"panel\"><p>Your name, photo and bio.</p></div>\n  <div slot=\"panel\"><p>Choose what we email you about.</p></div>\n  <div slot=\"panel\"><p>Plan, invoices and payment method.</p></div>\n</va-tabs>"
-            },
-            {
-              "title": "Manual activation",
-              "description": "With activation=\"manual\", arrow keys only move focus; Enter or Space selects. Use it when showing a panel is slow.",
-              "path": "src/tabs/examples/2-manual.html",
-              "code": "<va-tabs label=\"Reports\" activation=\"manual\" selected=\"1\">\n  <button slot=\"tab\">Daily</button>\n  <button slot=\"tab\">Weekly</button>\n  <button slot=\"tab\">Monthly</button>\n  <div slot=\"panel\"><p>Today's numbers.</p></div>\n  <div slot=\"panel\"><p>This week's numbers.</p></div>\n  <div slot=\"panel\"><p>This month's numbers.</p></div>\n</va-tabs>"
+              "title": "Status messages",
+              "description": "Place one va-toast per page. A va-button with commandfor and command=\"--show\" sends its value as the message; data-variant sets the look.",
+              "path": "src/toast/examples/1-status.html",
+              "code": "<va-button commandfor=\"toaster\" command=\"--show\" value=\"Changes saved\" data-variant=\"success\">Save</va-button>\n<va-button variant=\"secondary\" commandfor=\"toaster\" command=\"--show\" value=\"Link copied\">Copy link</va-button>\n<va-button variant=\"danger\" commandfor=\"toaster\" command=\"--show\" value=\"Couldn't sync. Check your connection.\" data-variant=\"error\">Simulate an error</va-button>\n<va-toast id=\"toaster\"></va-toast>"
             }
           ]
+        },
+        {
+          "kind": "variable",
+          "name": "variant"
+        },
+        {
+          "kind": "variable",
+          "name": "duration"
+        },
+        {
+          "kind": "variable",
+          "name": "message"
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "VaTabs",
+          "name": "VaToast",
           "declaration": {
-            "name": "VaTabs",
-            "module": "src/tabs/tabs.ts"
+            "name": "VaToast",
+            "module": "src/toast/toast.ts"
           }
         }
       ]

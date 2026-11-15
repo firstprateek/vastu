@@ -6,3 +6,4 @@ export * from './menu/index.js';
 export * from './switch/index.js';
 export * from './tabs/index.js';
 export * from './text-field/index.js';
+export * from './toast/index.js';

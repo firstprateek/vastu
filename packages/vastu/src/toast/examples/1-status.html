@@ -1,0 +1,6 @@
+<!-- title: Status messages
+     description: Place one va-toast per page. A va-button with commandfor and command="--show" sends its value as the message; data-variant sets the look. -->
+<va-button commandfor="toaster" command="--show" value="Changes saved" data-variant="success">Save</va-button>
+<va-button variant="secondary" commandfor="toaster" command="--show" value="Link copied">Copy link</va-button>
+<va-button variant="danger" commandfor="toaster" command="--show" value="Couldn't sync. Check your connection." data-variant="error">Simulate an error</va-button>
+<va-toast id="toaster"></va-toast>
