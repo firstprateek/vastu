@@ -1,11 +1,13 @@
 # hamburger-btn
 
+[![Open the live demo](https://img.shields.io/badge/Live_demo-Open_%E2%86%92-b93a2f?style=for-the-badge)](https://firstprateek.github.io/hamburger-btn/)
+
 [![CI](https://github.com/firstprateek/hamburger-btn/actions/workflows/ci.yml/badge.svg)](https://github.com/firstprateek/hamburger-btn/actions/workflows/ci.yml)
 
 A lightweight hamburger menu button, built as a web component with [Lit](https://lit.dev/).
 Its three stripes turn into a cross when the button is open.
 
-**[Live demo](https://firstprateek.github.io/hamburger-btn/)**
+### [▶ Try the live demo](https://firstprateek.github.io/hamburger-btn/)
 
 ## Install
 
