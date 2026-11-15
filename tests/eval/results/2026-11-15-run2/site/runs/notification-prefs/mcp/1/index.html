@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-va-brand="vastu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>notification-prefs</title>
+    <link rel="stylesheet" href="/assets/vastu.css">
+    <link rel="stylesheet" href="/assets/base.css">
+    <link rel="stylesheet" href="page.css">
+    <script type="module" src="/assets/vastu.js"></script>
+    <script type="module" src="page.js"></script>
+  </head>
+  <body>
+    <main>
+<h1 class="prefs-title">Notification preferences</h1>
+
+<form id="notification-prefs" class="prefs-form">
+  <fieldset class="prefs-group">
+    <legend class="prefs-legend">Notify me by</legend>
+    <p class="prefs-hint">Choose how you'd like to hear from us.</p>
+
+    <va-checkbox name="channels" value="email" checked>Email</va-checkbox>
+    <va-checkbox name="channels" value="sms">SMS</va-checkbox>
+    <va-checkbox name="channels" value="push">Push</va-checkbox>
+  </fieldset>
+
+  <div class="prefs-actions">
+    <va-button type="submit">Save preferences</va-button>
+  </div>
+</form>
+
+<va-toast id="prefs-toast"></va-toast>
+
+    </main>
+  </body>
+</html>

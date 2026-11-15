@@ -324,3 +324,11 @@ Choices made while building M0, and where they differ from the plan above:
 - **Accessibility and visual tests run on every brand:** 2 brands × 3 modes, plus 2 widths for screenshots. The contrast check covers every pair in both brands.
 - **Still deferred:** the render benchmark (Tachometer).
 
+## 16. Implementation notes from M2
+
+- **vastu-lint** checks HTML against the manifest with a fix for every problem. Every documented example must lint clean, and that check caught one of the button examples using a native `<input>`. The manifest gained machine-readable fields for it: `x-a11y.nameFrom`, `x-replaces` and `x-commands`.
+- **Boolean attributes must default to false.** HTML can only turn a boolean attribute on. `va-dialog`'s `dismissible` (default true) became `hide-close-button`, and the manifest build now rejects any boolean that defaults to true.
+- **vastu-mcp's `find_component` is deterministic.** It ranks components by keyword, with no model call, so it is free, fast and testable: eight plain-language intents map to the right component in the unit tests.
+- **The eval drives Claude Code itself** (`claude -p`) by default, not the Claude API, so it runs on a Claude subscription. Each run is isolated: an empty folder outside any project, project settings only, auto-memory off, and only Read, Write and Edit (plus the vastu MCP server). An isolation check before the first run confirmed the agent saw no machine-specific instructions. `--agent api` keeps a Claude API Tool Runner version.
+- **Results:** see [`tests/eval/FINDINGS.md`](../tests/eval/FINDINGS.md). Run 1 found three Vastu defects and a gap in the docs. After the fixes, both setups pass all 12 tasks on Opus 5.5. The next eval work is harder tasks, smaller models and repeats.
+

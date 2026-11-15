@@ -1,0 +1,42 @@
+.prefs-title {
+  margin: 0 0 var(--va-space-inline-lg);
+  font-family: var(--va-font-family-reading);
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+  color: var(--va-color-text-default);
+}
+
+.prefs-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-inline-lg);
+  max-inline-size: 32rem;
+  font-family: var(--va-font-family-ui);
+  color: var(--va-color-text-default);
+}
+
+.prefs-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-gap-md);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.prefs-legend {
+  padding: 0;
+  font-size: var(--va-font-size-md);
+  font-weight: var(--va-font-weight-medium);
+}
+
+.prefs-hint {
+  margin: 0 0 var(--va-space-gap-sm);
+  font-size: var(--va-font-size-sm);
+  color: var(--va-color-text-muted);
+}
+
+.prefs-actions {
+  display: flex;
+  gap: var(--va-space-inline-sm);
+}

@@ -1,0 +1,36 @@
+.checkout-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--va-space-inline-lg);
+  padding: var(--va-space-inline-lg);
+  background: var(--va-color-surface-subtle);
+  border-block-start: 1px solid var(--va-color-border-subtle);
+  color: var(--va-color-text-default);
+}
+
+.checkout-total {
+  display: grid;
+  gap: var(--va-space-gap-sm);
+}
+
+.checkout-total-label,
+.checkout-status {
+  color: var(--va-color-text-muted);
+}
+
+.checkout-total-amount {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.checkout-status {
+  margin: 0;
+}
+
+.checkout-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--va-space-gap-md);
+}

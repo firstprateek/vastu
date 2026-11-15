@@ -1,0 +1,18 @@
+.product-search-title {
+  margin: 0 0 var(--va-space-inline-lg);
+  font-family: var(--va-font-family-reading);
+  font-weight: var(--va-font-weight-bold);
+  color: var(--va-color-text-default);
+}
+
+.product-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--va-space-inline-sm);
+  max-width: 40rem;
+}
+
+.product-search-field {
+  flex: 1 1 16rem;
+}

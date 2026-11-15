@@ -1,0 +1,49 @@
+.newsletter {
+  max-inline-size: 36rem;
+  padding: var(--va-space-inline-lg);
+  border: 1px solid var(--va-color-border-subtle);
+  border-radius: var(--va-radius-surface);
+  background: var(--va-color-surface-default);
+  color: var(--va-color-text-default);
+  font-family: var(--va-font-family-ui);
+}
+
+.newsletter h2 {
+  margin: 0 0 var(--va-space-inline-md);
+  font-family: var(--va-font-family-reading);
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+}
+
+/* Field and button side by side; wraps on narrow screens. */
+.newsletter-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--va-space-inline-sm);
+}
+
+.newsletter-email {
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+}
+
+/* Line the button up with the input box, not the label above it.
+   The fallback approximates the label's height; page.js measures it exactly. */
+.newsletter-submit {
+  flex: none;
+  margin-block-start: var(
+    --newsletter-field-offset,
+    calc(var(--va-font-size-sm) * 1.5 + var(--va-space-gap-sm))
+  );
+}
+
+.newsletter-status {
+  margin: var(--va-space-inline-md) 0 0;
+  font-size: var(--va-font-size-sm);
+  color: var(--va-color-text-muted);
+}
+
+.newsletter-status:empty {
+  display: none;
+}

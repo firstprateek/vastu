@@ -1,0 +1,47 @@
+.settings {
+  max-inline-size: 40rem;
+  margin-inline: auto;
+  padding: var(--va-space-inline-lg);
+  font-family: var(--va-font-family-ui);
+  color: var(--va-color-text-default);
+}
+
+.settings h1,
+.settings h2 {
+  font-family: var(--va-font-family-reading);
+  font-weight: var(--va-font-weight-bold);
+  margin: 0;
+}
+
+.settings h2 {
+  font-size: var(--va-font-size-lg);
+}
+
+.settings__header {
+  margin-block-end: var(--va-space-inline-lg);
+}
+
+.settings__intro,
+.settings__lead {
+  color: var(--va-color-text-muted);
+  font-size: var(--va-font-size-sm);
+  margin: var(--va-space-inline-xs) 0 0;
+}
+
+.settings__panel {
+  padding-block: var(--va-space-inline-lg);
+}
+
+.settings__form,
+.settings__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-inline-lg);
+  margin-block-start: var(--va-space-inline-lg);
+}
+
+.settings__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--va-space-gap-md);
+}

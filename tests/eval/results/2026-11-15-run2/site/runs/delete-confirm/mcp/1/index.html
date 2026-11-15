@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en" data-va-brand="vastu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>delete-confirm</title>
+    <link rel="stylesheet" href="/assets/vastu.css">
+    <link rel="stylesheet" href="/assets/base.css">
+    <link rel="stylesheet" href="page.css">
+    <script type="module" src="/assets/vastu.js"></script>
+    <script type="module" src="page.js"></script>
+  </head>
+  <body>
+    <main>
+<va-button variant="danger" commandfor="delete-project-dialog" command="--show">Delete project</va-button>
+<p id="delete-status" class="delete-status" role="status"></p>
+<va-dialog id="delete-project-dialog" heading="Delete project?">
+  <p>This project and all of its files will be permanently deleted for everyone. You can't undo this.</p>
+  <va-button slot="footer" variant="secondary" commandfor="delete-project-dialog" command="--close">Cancel</va-button>
+  <va-button slot="footer" variant="danger" id="confirm-delete">Delete</va-button>
+</va-dialog>
+
+    </main>
+  </body>
+</html>

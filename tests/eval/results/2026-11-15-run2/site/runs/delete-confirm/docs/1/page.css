@@ -1,0 +1,22 @@
+.danger-zone {
+  max-inline-size: 40rem;
+  padding: var(--va-space-inline-lg);
+  border: 1px solid var(--va-color-border-subtle);
+  border-radius: var(--va-radius-surface);
+  background: var(--va-color-surface-default);
+  color: var(--va-color-text-default);
+  font-family: var(--va-font-family-ui);
+}
+
+.danger-zone h2 {
+  margin: 0 0 var(--va-space-inline-xs);
+  font-family: var(--va-font-family-reading);
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+}
+
+.danger-zone p {
+  margin: 0 0 var(--va-space-inline-md);
+  color: var(--va-color-text-muted);
+  font-size: var(--va-font-size-sm);
+}

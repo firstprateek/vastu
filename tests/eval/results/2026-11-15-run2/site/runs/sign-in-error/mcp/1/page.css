@@ -1,0 +1,28 @@
+.sign-in {
+  box-sizing: border-box;
+  max-width: 24rem;
+  margin: calc(var(--va-space-inline-lg) * 3) auto;
+  padding: calc(var(--va-space-inline-lg) * 1.5);
+  background: var(--va-color-surface-default);
+  border: 1px solid var(--va-color-border-subtle);
+  border-radius: var(--va-radius-surface);
+  color: var(--va-color-text-default);
+  font-family: var(--va-font-family-ui);
+}
+
+.sign-in h1 {
+  margin: 0 0 var(--va-space-inline-lg);
+  font-family: var(--va-font-family-reading);
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+}
+
+.sign-in__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--va-space-inline-lg);
+}
+
+.sign-in__form va-button {
+  align-self: stretch;
+}

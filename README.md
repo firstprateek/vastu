@@ -8,7 +8,9 @@ Every promise a component makes is written once, in a machine-readable manifest:
 
 **[Docs and live examples](https://firstprateek.github.io/vastu/)** · **[Design document](docs/design.md)**
 
-> Status: milestone M1. Eight components: button, checkbox, switch, text field, tabs, dialog, menu and toast. Not on npm yet.
+> Status: milestone M2. Eight components (button, checkbox, switch, text field, tabs, dialog, menu, toast), plus the agent layer: a markup validator, an MCP server, `llms.txt`, and an eval in which Claude Code builds pages with Vastu. Not on npm yet.
+>
+> **[What the agent eval found](tests/eval/FINDINGS.md)**: three defects and a docs gap, which 1,000+ component tests had missed.
 
 ## What runs on every change
 
@@ -30,9 +32,18 @@ Browser tests run in Chromium, Firefox and WebKit.
 ```
 packages/tokens   @firstprateek/vastu-tokens: DTCG tokens → CSS, JSON, TS (brands "vastu" and "lekha", 3 modes each)
 packages/vastu    @firstprateek/vastu: components, manifest plugin, dev and prod builds
+packages/lint     @firstprateek/vastu-lint: markup validator (library and CLI)
+packages/mcp      @firstprateek/vastu-mcp: MCP server for agents
 apps/docs         Astro docs site, generated from the manifest
 tests/            harness (strict CSP), contract, behaviour, a11y, security, visual
+tests/eval        the agent eval: tasks, runner, results
 ```
+
+## For agents
+
+- [`llms.txt`](https://firstprateek.github.io/vastu/llms.txt) and [`llms-full.txt`](https://firstprateek.github.io/vastu/llms-full.txt): setup rules, every component and every token
+- MCP server: `claude mcp add vastu -- npx @firstprateek/vastu-mcp` (once published), with `list_components`, `find_component`, `get_component`, `get_tokens` and `validate_markup`
+- Validator: `npx @firstprateek/vastu-lint page.html`
 
 ## Development
 

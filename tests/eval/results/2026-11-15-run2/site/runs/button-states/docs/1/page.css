@@ -1,0 +1,92 @@
+.checkout-title {
+  font-family: var(--va-font-family-reading);
+  font-weight: var(--va-font-weight-bold);
+  color: var(--va-color-text-default);
+  margin: 0 0 var(--va-space-inline-lg);
+}
+
+.checkout-footer {
+  display: grid;
+  gap: var(--va-space-inline-lg);
+  max-width: 40rem;
+  padding: var(--va-space-inline-lg);
+  background: var(--va-color-surface-default);
+  border: 1px solid var(--va-color-border-subtle);
+  border-radius: var(--va-radius-surface);
+  font-family: var(--va-font-family-ui);
+  color: var(--va-color-text-default);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.checkout-coupon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--va-space-inline-sm);
+}
+
+.checkout-coupon va-text-field {
+  flex: 1 1 14rem;
+}
+
+/* Line the button up with the input, below the field's label. */
+.checkout-coupon va-button {
+  margin-block-start: calc(var(--va-font-size-sm) * 1.5 + var(--va-space-gap-sm));
+}
+
+.checkout-totals {
+  display: grid;
+  gap: var(--va-space-gap-md);
+  margin: 0;
+  padding-block: var(--va-space-inline-md);
+  border-block: 1px solid var(--va-color-border-subtle);
+}
+
+.checkout-totals__row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--va-space-inline-md);
+}
+
+.checkout-totals dt {
+  color: var(--va-color-text-muted);
+}
+
+.checkout-totals dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.checkout-totals__row--total {
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+}
+
+.checkout-totals__row--total dt {
+  color: var(--va-color-text-default);
+}
+
+.checkout-pay {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--va-space-inline-md);
+}
+
+.checkout-status {
+  margin: 0;
+  font-size: var(--va-font-size-sm);
+  color: var(--va-color-text-muted);
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-va-brand="vastu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>newsletter</title>
+    <link rel="stylesheet" href="/assets/vastu.css">
+    <link rel="stylesheet" href="/assets/base.css">
+    <link rel="stylesheet" href="page.css">
+    <script type="module" src="/assets/vastu.js"></script>
+    <script type="module" src="page.js"></script>
+  </head>
+  <body>
+    <main>
+<section class="newsletter" aria-labelledby="newsletter-title">
+  <h1 id="newsletter-title">Subscribe to our newsletter</h1>
+  <form class="newsletter-form" id="newsletter-form" novalidate>
+    <div class="newsletter-row">
+      <va-text-field
+        id="newsletter-email"
+        class="newsletter-email"
+        label="Email address"
+        name="email"
+        type="email"
+        autocomplete="email"
+        placeholder="e.g. ada@example.com"
+        help-text="We send one email a week."
+        required
+      ></va-text-field>
+      <va-button id="newsletter-submit" type="submit">Subscribe</va-button>
+    </div>
+  </form>
+  <p class="newsletter-status" id="newsletter-status" role="status"></p>
+</section>
+
+    </main>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+.format-toolbar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--va-space-gap-sm);
+  padding: var(--va-space-gap-sm);
+  background: var(--va-color-surface-default);
+  border: 1px solid var(--va-color-border-subtle);
+  border-radius: var(--va-radius-surface);
+}
+
+.format-toolbar va-button {
+  --va-button-padding-inline: var(--va-space-inline-sm);
+}
+
+.format-toolbar svg {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}

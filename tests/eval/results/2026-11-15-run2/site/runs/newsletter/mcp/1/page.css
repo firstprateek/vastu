@@ -1,0 +1,72 @@
+.newsletter {
+  max-inline-size: 36rem;
+  margin-inline: auto;
+  padding: var(--va-space-inline-lg);
+  font-family: var(--va-font-family-ui);
+  color: var(--va-color-text-default);
+  container-type: inline-size;
+}
+
+.newsletter h1 {
+  margin: 0 0 var(--va-space-inline-md);
+  font-family: var(--va-font-family-reading);
+  font-size: var(--va-font-size-lg);
+  font-weight: var(--va-font-weight-bold);
+}
+
+.newsletter-form {
+  margin: 0;
+}
+
+/* Field and button side by side. The row aligns to the bottom edge, so the
+   button lines up with the input box, not with the label above it. The help
+   text and any error sit just below the field, in space reserved by the
+   row's bottom padding, so they don't push the input out of line. */
+.newsletter-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--va-space-gap-md);
+  padding-block-end: calc(var(--va-font-size-sm) * 3 + var(--va-space-gap-sm));
+}
+
+.newsletter-email {
+  position: relative;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.newsletter-email::part(help),
+.newsletter-email::part(error) {
+  position: absolute;
+  inset-block-start: calc(100% + var(--va-space-gap-sm));
+  inset-inline: 0;
+  margin: 0;
+}
+
+.newsletter-row > va-button {
+  flex: 0 0 auto;
+}
+
+/* On narrow screens, stack the button under the field. */
+@container (max-width: 24rem) {
+  .newsletter-row {
+    flex-direction: column;
+    align-items: stretch;
+    padding-block-end: 0;
+  }
+
+  .newsletter-email::part(help),
+  .newsletter-email::part(error) {
+    position: static;
+  }
+}
+
+.newsletter-status {
+  margin: 0;
+  font-size: var(--va-font-size-sm);
+  color: var(--va-color-text-muted);
+}
+
+.newsletter-status:empty {
+  display: none;
+}

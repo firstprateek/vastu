@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-va-brand="vastu">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>button-states</title>
+    <link rel="stylesheet" href="/assets/vastu.css">
+    <link rel="stylesheet" href="/assets/base.css">
+    <link rel="stylesheet" href="page.css">
+    <script type="module" src="/assets/vastu.js"></script>
+    
+  </head>
+  <body>
+    <main>
+<h1 class="checkout-title">Checkout</h1>
+
+<footer class="checkout-footer" aria-labelledby="checkout-footer-heading">
+  <h2 id="checkout-footer-heading" class="visually-hidden">Order summary and payment</h2>
+
+  <div class="checkout-coupon">
+    <va-text-field
+      label="Coupon code"
+      name="coupon"
+      placeholder="e.g. SAVE10"
+      help-text="Coupons can't be changed while your payment is processing."
+      disabled
+    ></va-text-field>
+    <va-button variant="secondary" disabled>Apply coupon</va-button>
+  </div>
+
+  <dl class="checkout-totals">
+    <div class="checkout-totals__row">
+      <dt>Subtotal</dt>
+      <dd>$84.00</dd>
+    </div>
+    <div class="checkout-totals__row">
+      <dt>Shipping</dt>
+      <dd>$6.00</dd>
+    </div>
+    <div class="checkout-totals__row checkout-totals__row--total">
+      <dt>Total</dt>
+      <dd>$90.00</dd>
+    </div>
+  </dl>
+
+  <div class="checkout-pay">
+    <p class="checkout-status" role="status">Payment in progress. Please don't close this page.</p>
+    <va-button size="lg" loading>Pay now</va-button>
+  </div>
+</footer>
+
+    </main>
+  </body>
+</html>

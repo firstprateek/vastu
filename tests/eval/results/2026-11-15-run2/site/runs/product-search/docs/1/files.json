@@ -1,0 +1,4 @@
+{
+  "html": "<h1 class=\"product-search-title\">Product search</h1>\n<form class=\"product-search\" role=\"search\" action=\"\" method=\"get\">\n  <va-text-field\n    class=\"product-search-field\"\n    label=\"Search products\"\n    type=\"search\"\n    name=\"q\"\n    placeholder=\"e.g. running shoes\"\n    autocomplete=\"off\"\n    required\n  ></va-text-field>\n  <va-button type=\"submit\">Search</va-button>\n</form>\n",
+  "css": ".product-search-title {\n  margin: 0 0 var(--va-space-inline-lg);\n  font-family: var(--va-font-family-reading);\n  font-weight: var(--va-font-weight-bold);\n  color: var(--va-color-text-default);\n}\n\n.product-search {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: flex-end;\n  gap: var(--va-space-inline-sm);\n  max-width: 40rem;\n}\n\n.product-search-field {\n  flex: 1 1 16rem;\n}\n"
+}
