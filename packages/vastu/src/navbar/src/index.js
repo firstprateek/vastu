@@ -18,12 +18,13 @@ import './hamburger-btn.js';
  * 2) Themable - You can use css variables to set the theme colors for the widget. See the list of css variables below.
  * 3) Light-weight and Performant - Built using the LIT framework.
  * 
- * @property breakpoint {Number} - The width in pixels below which the Navbar displays in mobile mode.
+ * @property breakpoint {Number} - Viewport width in pixels at or below which the Navbar switches to its mobile layout, default 500.
+ * @property brandPlacement {String} - "left" (default) or "right": which side the brand and menu button sit on. Attribute: brandplacement.
  *
  * @slot brand - A link to the brand of the website
  * @slot link - Navigation links
  *  
- * @fires activeLinkChanged - Fired when a link is selected
+ * @fires activeLinkChanged - Fired when a link is selected. event.detail.active is the link's text in lower case.
  *
  * @cssproperty --hamburger-stripe-color - Color of the stripes in the hamburger menu
  * @cssproperty --navbar-shadow - Box shadow for the Navbar, default: 0 1px 2px rgb(0 0 0 / 50%)
@@ -192,13 +193,14 @@ export class MinimalNavbar extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.windowSizeChangeHandler(); // Compute the isMobile property at launch
-    this._windowSizeChangeHandler = this.windowSizeChangeHandler;
-    window.addEventListener('resize', this._windowSizeChangeHandler);
+    window.addEventListener('resize', this.windowSizeChangeHandler);
+    window.addEventListener('keydown', this.handleKeydown);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('resize', this._windowSizeChangeHandler);
+    window.removeEventListener('resize', this.windowSizeChangeHandler);
+    window.removeEventListener('keydown', this.handleKeydown);
   }
 
   updated() {
@@ -234,12 +236,15 @@ export class MinimalNavbar extends LitElement {
         })
     }
 
-    if (!this.drawerOpen) {
-        this.button.open = false;
+    if (this.button) {
+        this.button.open = this.drawerOpen;
     }
   }
 
   willUpdate(changedProperties) {
+    if (changedProperties.has('breakpoint')) {
+        this.windowSizeChangeHandler();
+    }
     if (changedProperties.has('isMobile') && !this.isMobile) {
         this.drawerOpen = false;
     }
@@ -249,8 +254,9 @@ export class MinimalNavbar extends LitElement {
     return html`
       <div>
         <slot name="brand" class="logo"></slot>
-        <hamburger-btn 
+        <hamburger-btn
           ?hidden=${!this.isMobile}
+          label="Menu"
           @click=${() => this.drawerOpen = !this.drawerOpen}
         >
         </hamburger-btn>
@@ -259,8 +265,9 @@ export class MinimalNavbar extends LitElement {
 
   navTemplate() {
     return html`
-      <nav 
-        class=${classMap({ show: this.isMobile && this.drawerOpen })} 
+      <nav
+        class=${classMap({ show: this.isMobile && this.drawerOpen })}
+        ?inert=${this.isMobile && !this.drawerOpen}
         @click=${this.handleLinkClick}
       >
         <slot name="link"></slot>
@@ -270,7 +277,7 @@ export class MinimalNavbar extends LitElement {
 
   render() {
     return html`
-      <header class=${ this.isMobile && 'mobile' }>
+      <header class=${this.isMobile ? 'mobile' : ''}>
         ${ this.brandPlacement === 'left' ? this.brandTemplate() : html`` }
         ${ this.navTemplate() }
         ${ this.brandPlacement === 'right' ? this.brandTemplate() : html`` }              
@@ -283,12 +290,19 @@ export class MinimalNavbar extends LitElement {
     this.isMobile = window.innerWidth <= this.breakpoint;
   }
 
+  handleKeydown = (e) => {
+    if (e.key === 'Escape' && this.drawerOpen) {
+        this.drawerOpen = false;
+    }
+  }
+
   handleLinkClick = (e) => {
-    if (e.target.tagName !== 'A') {
+    const link = e.target.closest('a');
+    if (!link) {
         return;
     }
 
-    this.activeLink = e.target.textContent.toLowerCase().trim();
+    this.activeLink = link.textContent.toLowerCase().trim();
 
     this.drawerOpen = false;
 
@@ -320,7 +334,7 @@ export class MinimalNavbar extends LitElement {
 
   get links() {
     const linkSlot = this.renderRoot?.querySelector('slot[name="link"]');
-    return linkSlot.assignedElements();
+    return linkSlot?.assignedElements() ?? [];
   }
 
   get headerHeight() {
@@ -328,4 +342,8 @@ export class MinimalNavbar extends LitElement {
   }
 }
 
-customElements.define('minimal-navbar', MinimalNavbar);
+export default MinimalNavbar;
+
+if (!customElements.get('minimal-navbar')) {
+  customElements.define('minimal-navbar', MinimalNavbar);
+}
