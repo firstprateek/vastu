@@ -438,343 +438,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/core/define.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "define",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "parameters": [
-            {
-              "name": "tag",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "ctor",
-              "type": {
-                "text": "CustomElementConstructor"
-              }
-            }
-          ],
-          "description": "Defines a custom element once. A second definition of the same tag is a no-op, not an error."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "define",
-          "declaration": {
-            "name": "define",
-            "module": "src/core/define.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "tag",
-          "declaration": {
-            "name": "ctor",
-            "module": "src/core/define.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/core/dev-mode.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "DEV_MODE",
-          "type": {
-            "text": "boolean"
-          },
-          "default": "true",
-          "description": "True in the development build, false in the production build.\nbuild.js rewrites this file in dist/prod so bundlers drop every dev-only branch."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "DEV_MODE",
-          "declaration": {
-            "name": "DEV_MODE",
-            "module": "src/core/dev-mode.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/core/focus-ring.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "focusRing",
-          "default": "css` :focus-visible { outline: var(--va-size-focus-ring, 2px) solid var(--va-color-focus, currentColor); outline-offset: 2px; } @media (forced-colors: active) { :focus-visible { outline-color: Highlight; } } `",
-          "description": "The shared keyboard focus ring: visible only for keyboard focus, drawn outside the control."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "focusRing",
-          "declaration": {
-            "name": "focusRing",
-            "module": "src/core/focus-ring.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/core/form-control.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Base class for Vastu form controls. It joins the control to its `<form>` through\nElementInternals, so the control submits, resets, disables and validates like a native one.\nSubclasses call `setFormValue()` and `setValidity()`; everything else is handled here.",
-          "name": "FormControl",
-          "members": [
-            {
-              "kind": "field",
-              "name": "name",
-              "privacy": "public",
-              "type": {
-                "text": "string"
-              },
-              "description": "Submitted with the form as `name=value`.",
-              "default": "''",
-              "attribute": "name"
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "privacy": "public",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Disables the control. It can't be focused, changed or submitted.",
-              "default": "false",
-              "attribute": "disabled",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "privacy": "public",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "The control must have a value before its form can be submitted.",
-              "default": "false",
-              "attribute": "required",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "form",
-              "type": {
-                "text": "HTMLFormElement | null"
-              },
-              "description": "The form this control belongs to, if any.",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "validity",
-              "type": {
-                "text": "ValidityState"
-              },
-              "description": "The control's validity state, as on native controls.",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "validationMessage",
-              "type": {
-                "text": "string"
-              },
-              "description": "The message the browser shows when the control is invalid, or an empty string.",
-              "readonly": true
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Returns true if the control is valid; otherwise fires `invalid` and returns false."
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Like `checkValidity()`, but also shows the browser's message to the user."
-            },
-            {
-              "kind": "method",
-              "name": "_emit",
-              "privacy": "protected",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "parameters": [
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "'input' | 'change'"
-                  }
-                }
-              ],
-              "description": "Fires a bubbling event on the host, as a native control would."
-            },
-            {
-              "kind": "field",
-              "name": "_internals"
-            }
-          ],
-          "events": [
-            {
-              "name": "type",
-              "type": {
-                "text": "Event"
-              }
-            }
-          ],
-          "attributes": [
-            {
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "Submitted with the form as `name=value`.",
-              "default": "''",
-              "fieldName": "name"
-            },
-            {
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Disables the control. It can't be focused, changed or submitted.",
-              "default": "false",
-              "fieldName": "disabled"
-            },
-            {
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "The control must have a value before its form can be submitted.",
-              "default": "false",
-              "fieldName": "required"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "customElement": true
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "FormControl",
-          "declaration": {
-            "name": "FormControl",
-            "module": "src/core/form-control.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/core/warn.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "devWarn",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "parameters": [
-            {
-              "name": "tag",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "problem",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "fix",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "description": "Logs a development-only warning written for people and agents alike:\nwhat is wrong, then the exact fix. Each message is shown once per page.\nStripped from production builds."
-        },
-        {
-          "kind": "function",
-          "name": "checkTokensLoaded",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "parameters": [
-            {
-              "name": "host",
-              "type": {
-                "text": "HTMLElement"
-              }
-            }
-          ],
-          "description": "Warns once per page if no Vastu brand stylesheet is loaded. Waits for the page's load event,\nso a stylesheet that is still downloading doesn't cause a false warning."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "devWarn",
-          "declaration": {
-            "name": "devWarn",
-            "module": "src/core/warn.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "checkTokensLoaded",
-          "declaration": {
-            "name": "checkTokensLoaded",
-            "module": "src/core/warn.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/checkbox/checkbox.ts",
       "declarations": [
         {
@@ -1161,6 +824,176 @@
           "declaration": {
             "name": "VaCheckbox",
             "module": "src/checkbox/checkbox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/core/form-control.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Base class for Vastu form controls. It joins the control to its `<form>` through\nElementInternals, so the control submits, resets, disables and validates like a native one.\nSubclasses call `setFormValue()` and `setValidity()`; everything else is handled here.",
+          "name": "FormControl",
+          "members": [
+            {
+              "kind": "field",
+              "name": "name",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value`.",
+              "default": "''",
+              "attribute": "name"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the control. It can't be focused, changed or submitted.",
+              "default": "false",
+              "attribute": "disabled",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The control must have a value before its form can be submitted.",
+              "default": "false",
+              "attribute": "required",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this control belongs to, if any.",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The control's validity state, as on native controls.",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The message the browser shows when the control is invalid, or an empty string.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Returns true if the control is valid; otherwise fires `invalid` and returns false."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Like `checkValidity()`, but also shows the browser's message to the user."
+            },
+            {
+              "kind": "method",
+              "name": "_emit",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "'input' | 'change'"
+                  }
+                }
+              ],
+              "description": "Fires a bubbling event on the host, as a native control would."
+            },
+            {
+              "kind": "field",
+              "name": "_internals"
+            }
+          ],
+          "events": [
+            {
+              "name": "type",
+              "type": {
+                "text": "Event"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value`.",
+              "default": "''",
+              "fieldName": "name"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the control. It can't be focused, changed or submitted.",
+              "default": "false",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The control must have a value before its form can be submitted.",
+              "default": "false",
+              "fieldName": "required"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormControl",
+          "declaration": {
+            "name": "FormControl",
+            "module": "src/core/form-control.ts"
           }
         }
       ]

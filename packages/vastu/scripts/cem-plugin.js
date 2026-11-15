@@ -79,6 +79,8 @@ export function vastuManifestPlugin() {
       extras.set(node.name.text, x);
     },
     packageLinkPhase({ customElementsManifest }) {
+      // File listing order differs between macOS and Linux; sort so the manifest is deterministic.
+      customElementsManifest.modules.sort((a, b) => a.path.localeCompare(b.path));
       for (const mod of customElementsManifest.modules) {
         for (const decl of mod.declarations ?? []) {
           if (!decl.customElement || !decl.tagName) continue; // base classes have no tag
