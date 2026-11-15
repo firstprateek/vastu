@@ -82,13 +82,26 @@ Three tiers:
 2. **System tokens:** what a value is for (`color.surface`, `color.text.muted`, `color.accent`, `radius.control`, `space.inline.md`). Themes switch these.
 3. **Component tokens:** one per styling hook (`--va-button-bg`), defaulting to a system token.
 
-**Themes:** light, dark and high-contrast.
+**Themes have two independent parts: a brand and a mode.**
 
-- They are chosen by `data-va-theme` on any ancestor and follow `prefers-color-scheme` when none is set.
+- **Brand themes** set the look: palette, type, radius, density. Each brand is one set of system-token values, so a new brand never touches component code.
+- **Modes** are light, dark and high-contrast, and every brand provides all three.
+- Both are chosen on any ancestor: `data-va-brand="lekha"` and `data-va-mode="dark"`. Without `data-va-mode`, the mode follows `prefers-color-scheme` and `prefers-contrast`.
+
+**Brands planned:**
+
+| Brand | Look | When |
+| --- | --- | --- |
+| `lekha` (working name; Sanskrit for writing) | Continues the personal site: warm paper background `#fdfcfa`, ink text `#1f1d1a`, one muted teal accent `#35697c` (`#7fb0be` in dark), near-square 2px corners, Source Serif for headings and reading text, the system sans-serif for controls. | M0, the first and default brand |
+| `vastu` | Vastu's own fresh identity, also used for the docs site's chrome and the logo | Designed in M1. It becomes the default brand once it exists. |
+
+Further brands, for example one per app in phase 3, are a token file each.
+
+Modes, per component:
 - `forced-colors` (Windows High Contrast) is handled per component with system colours.
 - All motion respects `prefers-reduced-motion`.
 
-**A CI check computes contrast for every text and background pair in every theme.** A text pair that falls below 4.5:1 fails the build. A large text or UI pair below 3:1 fails too.
+**A CI check computes contrast for every text and background pair in every brand and mode.** A text pair that falls below 4.5:1 fails the build. A large text or UI pair below 3:1 fails too.
 
 ## 6. Architecture
 
@@ -159,14 +172,14 @@ The check also runs in reverse. A public property, attribute or event on the cla
 
 **Accessibility.**
 
-- axe-core runs on every example in every theme.
+- axe-core runs on every example in every brand and mode.
 - Focus-order tests run for dialog, menu and tabs.
 - A target-size check enforces 24 by 24 CSS pixels minimum (WCAG 2.2).
 - A manual VoiceOver checklist per component is ticked before each release, because screen-reader output can't be fully automated.
 
 **Visual regression.**
 
-- Playwright screenshots of every example × theme × width (390 and 1280 pixels).
+- Playwright screenshots of every example × brand × mode × width (390 and 1280 pixels).
 - Run in the official Playwright Docker image so the pixels match across machines.
 - Baselines are committed.
 
@@ -205,7 +218,7 @@ The eval reports pass rates per task, per check and per setup, with tokens used 
 The docs site is an Astro site in `apps/docs`, deployed to GitHub Pages at `firstprateek.github.io/vastu/`. Astro matches the owner's personal site, and it keeps the docs light where Storybook would add weight.
 
 - Component pages are generated from the manifest: API tables, keyboard table, guidance, and live examples from the `x-examples` files.
-- There is a token page per theme and a theme switcher on every page.
+- There is a token page per brand, and a brand and mode switcher on every page.
 - `llms.txt` and `llms-full.txt` are served from the site root.
 - The same example files drive the docs, the contract tests, the visual tests and the agent eval's reference answers. **One source, four uses.**
 
@@ -263,8 +276,8 @@ What happens to each:
 
 | Milestone | Contents | Proves |
 | --- | --- | --- |
-| **M0: foundation** | Repo, tokens with three themes, `va-button`, manifest plugin, contract-test generator, a11y, visual, size, CSP tests, CI, docs site with one page | The whole pipeline works end to end on one component. **This is the first milestone.** |
-| M1: components | The other seven components | The patterns hold up |
+| **M0: foundation** | Repo, tokens with the `lekha` brand in all three modes, `va-button`, manifest plugin, contract-test generator, a11y, visual, size, CSP tests, CI, docs site with one page | The whole pipeline works end to end on one component. **This is the first milestone.** |
+| M1: components | The other seven components, and the `vastu` brand (Vastu's own identity) | The patterns hold up, and a second brand needs no component changes |
 | M2: agent layer | `vastu-lint`, `vastu-mcp`, `llms.txt`, eval with 12 tasks, first results | The headline claim |
 | M3: release | Trusted publishing, `1.0.0`, eval write-up on the personal site | Phase 1 done |
 | M4: widgets | Section 11 | Phase 2 done |
@@ -272,9 +285,11 @@ What happens to each:
 
 M0 is deliberately one component with every check in place. Adding the next seven is then repetition, and any gap in the pipeline shows up on the first component, when it is cheap to fix.
 
-## 13. Open questions
+## 13. Decisions made on open questions (2026-11-15)
 
-1. **Brand look.** Is the accent colour, type scale and radius a fresh identity, or a continuation of the personal site's look? Tokens make either easy, but the reference palette has to be chosen in M0.
-2. **Eval models.** Claude only, or also one other model, to show the system isn't tuned to one agent? The second adds cost and credentials.
-3. **Docs domain.** Is `firstprateek.github.io/vastu/` enough, or will it get its own domain later?
-4. **Manual screen-reader passes.** Is VoiceOver on macOS and iOS enough for phase 1, or is NVDA on Windows needed too?
+1. **Brand look:** Vastu gets a fresh identity of its own, and supports several brand themes. The first brand built, `lekha`, continues the personal site's look (section 5).
+2. **Eval models:** Claude only at first. Add one other model once the eval works, to show Vastu isn't tuned to one agent.
+3. **Docs domain:** GitHub Pages at `firstprateek.github.io/vastu/` for now. A domain can come later.
+4. **Screen readers:** VoiceOver on macOS and iOS for phase 1. Add NVDA on Windows before `1.0.0` if a Windows machine or VM is available.
+
+Still open: the final name of the `lekha` brand, and the `vastu` brand's look (decided in M1).
