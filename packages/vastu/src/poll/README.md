@@ -1,85 +1,109 @@
 # poll-widget
 
-A web component for a poll widget that is highly customizable and can be easily embedded into a web page.
-Developed using [LIT](https://lit.dev/).
+[![CI](https://github.com/firstprateek/poll-widget/actions/workflows/ci.yml/badge.svg)](https://github.com/firstprateek/poll-widget/actions/workflows/ci.yml)
 
-## Live Demo
+An embeddable, themeable poll, built as a web component with [Lit](https://lit.dev/).
+Pick an option and the bars animate to show the results.
 
-[Demo](https://firstprateek.github.io/poll-widget/)
+**[Live demo](https://firstprateek.github.io/poll-widget/)**
 
-## Installation
+## Install
+
+The package isn't on npm yet. Install it from GitHub:
 
 ```bash
-npm install poll-widget --save
+npm install github:firstprateek/poll-widget
 ```
 
 ## Usage
 
-```js
-// In index.js
-import PollWidget from 'poll-widget';
-```
-
-```jsx
-<!DOCTYPE html>
-<head>
-    <script src="./index.js"></script>
-</head>
-<body>
-    <main>
-        
-        <poll-widget 
-            voteAPI="http://localhost:3000/posts" 
-            requestAPI="http://localhost:3000/posts" 
-            height="200" 
-            width="600">
-        </poll-widget>
-    </main>
-</body>
-</html>
-```
+Import the package once (with a bundler such as Vite or webpack) to register the `<poll-widget>` element:
 
 ```js
-/**
- * Poll widget: <poll-widget></poll-widget>.
- * 
- * A web component for a poll widget.
- * It can connect to a remote API to update and request poll results.
- * Poll results are retrieved via a GET request to the URL configured via the "resultsAPI" property 
- * The API response needs to be in the following format:
- * 
- * {
- *      question: 'This is a poll!',
- *      options: [
- *          {
- *              id: 1,                     // Unique id, can be number or string
- *              text: 'This is option 1',  // String representing option text
- *              votes: 500                 // Number representing number of votes for this option
- *          },
- *          ...
- *      ]
- * }
- * 
- * A vote for an option is made via a PATCH request to the URL configured as the "voteAPI" property
- * The request body is the id of the option for which the user voted
- * 
- * @property requestAPI - String. URL for retrieving the results 
- * @property voteAPI - String. URL for casting a vote for user's choice
- * @property width - Number. width of the widget in pixels, if not defined, the width is set to 'auto'
- * @property height - Number. height of the widget in pixels, if not defined, the height is set to 'auto'
- * @property question - String. Question that is being polled
- * @property options - Array. List of options for the question. Array of objects. Each object should have an id and text
- * @property updateFrequency - Number. Minutes after which the poll results should be auto-updated, default 60 mins
- * @property timeAgo - Boolean. Show time ago the poll results were updated
- * 
- * @fires submit - Indicates when the user submits a vote
- * 
- * @cssproperty --poll-background-color - background color of the poll, default is purple
- * @cssproperty --poll-color - text color, default white
- * @cssproperty --poll-font-size - font size of text, title is 1.5 em, default 16px 
- * @cssproperty --poll-border-radius - border radius of the poll widget, default 5px
- * @cssproperty --poll-bar-border-radius - border radius of the poll bars, default 2px
- * @cssproperty --poll-bar-color - color for the bars, default Cornflower Blue
- * @cssproperty --poll-vote-color - color for the votes
- */
+import '@firstprateek/poll-widget';
 ```
+
+The poll works in two modes.
+
+**Local mode.** Without `requestapi`, the poll shows the `question` and `options` you give it and counts votes in the browser:
+
+```html
+<poll-widget
+  question="Tabs or spaces?"
+  options='[{"id":1,"text":"Tabs"},{"id":2,"text":"Spaces","votes":3}]'>
+</poll-widget>
+```
+
+**API mode.** With `requestapi`, the poll loads its question and results from your server and sends votes back to it:
+
+```html
+<poll-widget
+  requestapi="https://example.com/api/poll"
+  voteapi="https://example.com/api/poll">
+</poll-widget>
+```
+
+- `GET requestapi` returns the poll.
+- `PATCH voteapi` with the JSON body `{ "id": <option id> }` records a vote and returns the updated poll.
+
+Both responses use this shape:
+
+```json
+{
+  "question": "What is your favorite JS view library?",
+  "options": [
+    { "id": 1, "text": "Lit", "votes": 500 },
+    { "id": 2, "text": "React", "votes": 1000 }
+  ]
+}
+```
+
+[`server-example/`](server-example/) is a small Express server that implements this API:
+
+```bash
+cd server-example
+npm install
+npm start   # http://localhost:4000/posts
+```
+
+## API
+
+| Property | Attribute | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `requestAPI` | `requestapi` | String | `""` | URL to load the poll from. Empty means local mode. |
+| `voteAPI` | `voteapi` | String | `""` | URL to send votes to. Empty means votes are counted locally. |
+| `question` | `question` | String | a sample question | The question, until the API answers. |
+| `options` | `options` | Array | three sample options | `[{ id, text, votes? }]`, until the API answers. |
+| `width` | `width` | Number | fills its container | Width in pixels |
+| `height` | `height` | Number | fits its content | Height in pixels |
+| `updateFrequency` | `updatefrequency` | Number | `60` | Minutes between reloads from `requestapi` |
+| `timeAgo` | `timeago` | Boolean | `true` | Shows when the results were last updated. Set the attribute to `"false"` to hide it. |
+
+| Event | Description |
+| --- | --- |
+| `submit` | Fired when the user votes. `event.detail.id` is the chosen option's id. |
+
+| CSS custom property | Default | Description |
+| --- | --- | --- |
+| `--poll-background-color` | `purple` | Background of the poll |
+| `--poll-color` | `white` | Text colour |
+| `--poll-font-size` | `16px` | Font size; the question is 1.5em |
+| `--poll-border-radius` | `5px` | Border radius of the poll |
+| `--poll-bar-border-radius` | `2px` | Border radius of the option bars |
+| `--poll-bar-color` | `#6495ED` | Colour of the option bars |
+| `--poll-vote-color` | `white` | Colour of the vote counts |
+
+## Development
+
+```bash
+npm install
+npm run dev     # demo page at http://localhost:3000
+npm run build   # builds the demo into dist/
+```
+
+The demo lives in `demo/`. GitHub Pages has no backend, so the demo answers the poll's API calls in the browser.
+Pushing to `main` builds it and deploys it to GitHub Pages.
+
+## License
+
+ISC

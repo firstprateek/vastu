@@ -1,41 +1,46 @@
 {
-  "name": "poll-widget",
-  "version": "1.0.0",
-  "description": "A web component for a poll widget that can be embedded into a web page. Developed using [LIT](https://lit.dev/)",
+  "name": "@firstprateek/poll-widget",
+  "version": "1.1.0",
+  "description": "An embeddable, themeable poll web component built with Lit",
+  "type": "module",
   "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "src"
+  ],
+  "sideEffects": true,
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack serve",
-    "deploy": "gh-pages -d dist"
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:firstprateek/poll-widget.git"
+    "url": "git+https://github.com/firstprateek/poll-widget.git"
   },
+  "bugs": {
+    "url": "https://github.com/firstprateek/poll-widget/issues"
+  },
+  "homepage": "https://firstprateek.github.io/poll-widget/",
   "keywords": [
+    "poll",
     "poll widget",
-    "lit"
+    "survey",
+    "lit",
+    "web component"
   ],
   "author": "firstprateek",
   "license": "ISC",
-  "homepage": "https://github.com/firstprateek/poll-widget",
-  "devDependencies": {
-    "@babel/core": "^7.22.1",
-    "@babel/preset-env": "^7.22.2",
-    "babel-loader": "^9.1.2",
-    "css-loader": "^6.8.1",
-    "gh-pages": "^5.0.0",
-    "html-webpack-plugin": "^5.5.1",
-    "sass": "^1.62.1",
-    "sass-loader": "^13.3.1",
-    "style-loader": "^3.3.3",
-    "webpack": "^5.84.1",
-    "webpack-bundle-analyzer": "^4.8.0",
-    "webpack-cli": "^5.1.1",
-    "webpack-dev-server": "^4.15.0"
-  },
   "dependencies": {
-    "lit": "^2.7.6",
+    "lit": "^3.3.3",
     "timeago.js": "^4.0.2"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.8",
+    "webpack": "^5.112.2",
+    "webpack-cli": "^7.3.1",
+    "webpack-dev-server": "^6.1.0"
   }
 }
