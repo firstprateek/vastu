@@ -1,12 +1,14 @@
 # bar-chart
 
+[![Open the live demo](https://img.shields.io/badge/Live_demo-Open_%E2%86%92-b93a2f?style=for-the-badge)](https://firstprateek.github.io/bar-chart/)
+
 [![CI](https://github.com/firstprateek/bar-chart/actions/workflows/ci.yml/badge.svg)](https://github.com/firstprateek/bar-chart/actions/workflows/ci.yml)
 
 A bar chart web component built with [Lit](https://lit.dev/) and [D3](https://d3js.org/).
 It plots ordinal values on the x axis against numbers on the y axis.
 Give it new data and the bars animate to it, so it can follow real-time values.
 
-**[Live demo](https://firstprateek.github.io/bar-chart/)**
+### [▶ Try the live demo](https://firstprateek.github.io/bar-chart/)
 
 ## Install
 
