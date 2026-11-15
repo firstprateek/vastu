@@ -13,6 +13,7 @@ const name = title(c.tagName);
 const g = c['x-guidance'] ?? {};
 const a11y = c['x-a11y'] ?? {};
 const fields = (c.members ?? []).filter((m: any) => m.kind === 'field');
+const methods = (c.members ?? []).filter((m: any) => m.kind === 'method' && m.description);
 const attrFor = (field: string) => (c.attributes ?? []).find((a: any) => a.fieldName === field)?.name;
 ---
 
@@ -87,13 +88,40 @@ const attrFor = (field: string) => (c.attributes ?? []).find((a: any) => a.field
     )
   }
 
-  <h3>Slots</h3>
-  <div class="table" tabindex="0" role="region" aria-label="Slots">
-    <table>
-      <thead><tr><th>Slot</th><th>Description</th></tr></thead>
-      <tbody>{c.slots.map((s: any) => <tr><td>{s.name ? <code>{s.name}</code> : '(default)'}</td><td set:html={inline(s.description)} /></tr>)}</tbody>
-    </table>
-  </div>
+  {
+    c.slots?.length > 0 && (
+      <>
+        <h3>Slots</h3>
+        <div class="table" tabindex="0" role="region" aria-label="Slots">
+          <table>
+            <thead><tr><th>Slot</th><th>Description</th></tr></thead>
+            <tbody>{c.slots.map((s: any) => <tr><td>{s.name ? <code>{s.name}</code> : '(default)'}</td><td set:html={inline(s.description)} /></tr>)}</tbody>
+          </table>
+        </div>
+      </>
+    )
+  }
+
+  {
+    methods.length > 0 && (
+      <>
+        <h3>Methods</h3>
+        <div class="table" tabindex="0" role="region" aria-label="Methods">
+          <table>
+            <thead><tr><th>Method</th><th>Description</th></tr></thead>
+            <tbody>
+              {methods.map((m: any) => (
+                <tr>
+                  <td><code>{m.name}({(m.parameters ?? []).map((p: any) => p.name).join(', ')})</code></td>
+                  <td set:html={inline(m.description)} />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    )
+  }
 
   <h3>Styling</h3>
   <p>Components read the brand's tokens. To adjust one component, set its custom properties or style its parts.</p>
@@ -101,14 +129,14 @@ const attrFor = (field: string) => (c.attributes ?? []).find((a: any) => a.field
     <table>
       <thead><tr><th>Custom property</th><th>Type</th><th>Description</th></tr></thead>
       <tbody>
-        {c.cssProperties.map((p: any) => <tr><td><code>{p.name}</code></td><td><code>{p.syntax ?? p.type?.text}</code></td><td set:html={inline(p.description)} /></tr>)}
+        {(c.cssProperties ?? []).map((p: any) => <tr><td><code>{p.name}</code></td><td><code>{p.syntax ?? p.type?.text}</code></td><td set:html={inline(p.description)} /></tr>)}
       </tbody>
     </table>
   </div>
   <div class="table" tabindex="0" role="region" aria-label="Parts">
     <table>
       <thead><tr><th>Part</th><th>Description</th></tr></thead>
-      <tbody>{c.cssParts.map((p: any) => <tr><td><code>::part({p.name})</code></td><td set:html={inline(p.description)} /></tr>)}</tbody>
+      <tbody>{(c.cssParts ?? []).map((p: any) => <tr><td><code>::part({p.name})</code></td><td set:html={inline(p.description)} /></tr>)}</tbody>
     </table>
   </div>
 
@@ -134,8 +162,8 @@ const attrFor = (field: string) => (c.attributes ?? []).find((a: any) => a.field
 </Base>
 
 <script>
-  // Registers every component the live examples use. Add each new component here (M1).
-  import '@firstprateek/vastu/button';
+  // Registers every component, so any example can use any other.
+  import '@firstprateek/vastu/all';
 </script>
 
 <style>

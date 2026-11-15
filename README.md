@@ -8,19 +8,19 @@ Every promise a component makes is written once, in a machine-readable manifest:
 
 **[Docs and live examples](https://firstprateek.github.io/vastu/)** · **[Design document](docs/design.md)**
 
-> Status: milestone M0. One component, `<va-button>`, with every check in place. Not on npm yet.
+> Status: milestone M1. Eight components: button, checkbox, switch, text field, tabs, dialog, menu and toast. Not on npm yet.
 
 ## What runs on every change
 
 | Check | What it proves |
 | --- | --- |
 | Contract tests, generated from `custom-elements.json` | Every documented attribute, property, event, slot, part, CSS custom property and keyboard row works, and there is no undocumented public API |
-| Behaviour tests | Forms (submit with `name=value`, reset), disabled and loading states, accessible names, the warnings agents see |
+| Behaviour tests | Forms and validation, focus management, roles and names, the warnings agents see |
 | axe-core, WCAG 2.2 AA | Every example, in light, dark and high-contrast modes |
 | Strict CSP with Trusted Types | Every browser test runs under it; any violation fails the test |
 | Visual regression | Every example × mode × 390 and 1280 px widths |
 | Token contrast | Every text and UI colour pair meets its WCAG minimum in every brand and mode |
-| Size budgets | `va-button` is 1.6 kB on top of Lit (budget 3 kB) |
+| Size budgets | Each component is 1.2 to 2.1 kB on top of Lit (budget 3 kB); all eight with Lit are 13.5 kB (budget 16 kB) |
 | ESLint security rules | No `innerHTML`, `unsafeHTML`, `unsafeStatic` or `eval` in components |
 
 Browser tests run in Chromium, Firefox and WebKit.

@@ -34,15 +34,16 @@ const base = import.meta.env.BASE_URL;
 
   <h2>Status</h2>
   <p>
-    Milestone M0: one component, with every check in place. These checks run on every change: contract tests generated
-    from the manifest, axe accessibility checks in every mode, keyboard tests, visual regression at phone and desktop
-    widths, size budgets, and a strict Content Security Policy with Trusted Types. They run in Chromium, Firefox and WebKit.
-    Read the <a href="https://github.com/firstprateek/vastu/blob/main/docs/design.md">design document</a> for what comes next.
+    Milestone M1: eight components, each checked on every change by contract tests generated from the manifest,
+    behaviour tests, axe accessibility checks in every mode, visual regression at phone and desktop widths, size budgets,
+    and a strict Content Security Policy with Trusted Types, in Chromium, Firefox and WebKit. Next is the agent layer: a
+    markup validator, an MCP server and an eval. Read the
+    <a href="https://github.com/firstprateek/vastu/blob/main/docs/design.md">design document</a>.
   </p>
 </Base>
 
 <script>
-  import '@firstprateek/vastu/button';
+  import '@firstprateek/vastu/all';
 </script>
 
 <style>

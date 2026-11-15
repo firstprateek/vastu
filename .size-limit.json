@@ -1,13 +1,79 @@
 [
   {
-    "name": "va-button (production, on top of Lit)",
+    "name": "va-button (on top of Lit)",
     "path": "packages/vastu/dist/prod/button/index.js",
-    "ignore": ["lit"],
+    "ignore": [
+      "lit"
+    ],
     "limit": "3 kB"
   },
   {
-    "name": "va-button with Lit",
-    "path": "packages/vastu/dist/prod/button/index.js",
-    "limit": "9 kB"
+    "name": "va-checkbox (on top of Lit)",
+    "path": "packages/vastu/dist/prod/checkbox/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
+    "name": "va-dialog (on top of Lit)",
+    "path": "packages/vastu/dist/prod/dialog/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
+    "name": "va-menu (on top of Lit)",
+    "path": "packages/vastu/dist/prod/menu/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
+    "name": "va-switch (on top of Lit)",
+    "path": "packages/vastu/dist/prod/switch/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
+    "name": "va-tabs (on top of Lit)",
+    "path": "packages/vastu/dist/prod/tabs/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
+    "name": "va-text-field (on top of Lit)",
+    "path": "packages/vastu/dist/prod/text-field/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
+    "name": "va-toast (on top of Lit)",
+    "path": "packages/vastu/dist/prod/toast/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
+    "name": "all components (on top of Lit)",
+    "path": "packages/vastu/dist/prod/all.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "10 kB"
+  },
+  {
+    "name": "all components with Lit",
+    "path": "packages/vastu/dist/prod/all.js",
+    "limit": "16 kB"
   }
 ]

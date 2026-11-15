@@ -310,3 +310,14 @@ Choices made while building M0, and where they differ from the plan above:
 - **Tab-order checks skip on macOS WebKit,** which only tabs to buttons when a system setting is on. CI runs WebKit on Linux, where they run.
 - **The render benchmark (Tachometer) is deferred to M1.** M0 has size budgets only.
 
+## 15. Implementation notes from M1
+
+- **Two contract-test vocabularies grew.** Keyboard rows now have a context: `host` (the default), `items` (an arrow-key item has focus) or `open` (inside the open component). The actions are now `activates`, `toggles`, `focus-next`, `opens`, `closes`, `next`, `previous`, `first`, `last` and `selects`. `@keyboard-items` names the items. CSS hooks can target states (`hover`, `checked`, `unchecked`, `invalid`, `open`) and slotted elements (`light(selector)`). Event triggers take `click`, `click-item N`, `press Key`, `commit` and `call method`, optionally after opening. Contract tests run on each component's first example, so composite components have real content.
+- **Form controls share a `FormControl` base class:** form association, `name`, `disabled`, `required`, the validity API, fieldset disabling and reset. The manifest includes it, so inherited API is documented and tested on each control.
+- **Commands, not scripts.** Examples must pass a strict CSP, so they can't contain scripts. `va-button` has `commandfor` and `command`, shaped like the native Invoker Commands API: `command="--show"` opens a `va-dialog` or shows a `va-toast` message. The plugin now rejects examples with inline styles, scripts or `on…=` handlers. Agents copy examples.
+- **Composite components use plain slotted elements:** `<button slot="tab">` for tabs, `<button value>` for menu items. The component adds roles, ids, relationships and roving tabindex, so authors write less and can't get the ARIA wrong.
+- **The menu positions itself with JavaScript (CSSOM writes)**, not CSS anchor positioning. It flips above the button near the bottom of the window and stays inside narrow windows. Anchor positioning can replace it once it's in all three engines.
+- **The toast is fixed-position, not in the top layer.** A toast shown while a modal dialog is open appears above it visually but is inert. Moving it into the top layer is a follow-up.
+- **`package.json` exports and `src/all.ts` are generated** from the component folders, and CI checks they're committed, so a new component can't be left out of the package.
+- **Still deferred:** the render benchmark (Tachometer) and the `vastu` brand. The brand needs design decisions from the owner.
+
