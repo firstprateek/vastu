@@ -1,0 +1,55 @@
+{
+  "$description": "Vastu brand, light mode: warm sandstone, indigo ink and accent, terracotta for danger.",
+  "color": {
+    "$type": "color",
+    "surface": {
+      "default": {
+        "$value": "{color.sandstone.50}"
+      },
+      "subtle": {
+        "$value": "{color.sandstone.100}"
+      }
+    },
+    "text": {
+      "default": {
+        "$value": "{color.indigo.950}"
+      },
+      "muted": {
+        "$value": "{color.dusk.ink}"
+      },
+      "on-accent": {
+        "$value": "{color.white}"
+      },
+      "on-danger": {
+        "$value": "{color.white}"
+      }
+    },
+    "border": {
+      "subtle": {
+        "$value": "{color.sandstone.200}"
+      },
+      "control": {
+        "$value": "{color.sandstone.500}"
+      }
+    },
+    "accent": {
+      "default": {
+        "$value": "{color.indigo.800}"
+      },
+      "hover": {
+        "$value": "{color.indigo.850}"
+      }
+    },
+    "danger": {
+      "default": {
+        "$value": "{color.terracotta.600}"
+      },
+      "hover": {
+        "$value": "{color.terracotta.700}"
+      }
+    },
+    "focus": {
+      "$value": "{color.indigo.800}"
+    }
+  }
+}

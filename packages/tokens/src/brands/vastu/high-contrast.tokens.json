@@ -1,0 +1,55 @@
+{
+  "$description": "Vastu brand, high-contrast mode: black on white, strong borders.",
+  "color": {
+    "$type": "color",
+    "surface": {
+      "default": {
+        "$value": "{color.white}"
+      },
+      "subtle": {
+        "$value": "{color.white}"
+      }
+    },
+    "text": {
+      "default": {
+        "$value": "{color.black}"
+      },
+      "muted": {
+        "$value": "{color.indigo.950}"
+      },
+      "on-accent": {
+        "$value": "{color.white}"
+      },
+      "on-danger": {
+        "$value": "{color.white}"
+      }
+    },
+    "border": {
+      "subtle": {
+        "$value": "{color.black}"
+      },
+      "control": {
+        "$value": "{color.black}"
+      }
+    },
+    "accent": {
+      "default": {
+        "$value": "{color.indigo.900}"
+      },
+      "hover": {
+        "$value": "{color.black}"
+      }
+    },
+    "danger": {
+      "default": {
+        "$value": "{color.terracotta.800}"
+      },
+      "hover": {
+        "$value": "{color.black}"
+      }
+    },
+    "focus": {
+      "$value": "{color.black}"
+    }
+  }
+}

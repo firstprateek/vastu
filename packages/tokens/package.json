@@ -4,6 +4,8 @@
   "description": "Design tokens for Vastu: DTCG sources and built CSS, JSON and TypeScript, per brand and mode",
   "type": "module",
   "exports": {
+    "./vastu.css": "./dist/vastu.css",
+    "./vastu.json": "./dist/vastu.json",
     "./lekha.css": "./dist/lekha.css",
     "./lekha.json": "./dist/lekha.json",
     "./tokens.json": "./dist/tokens.json",

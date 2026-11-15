@@ -319,5 +319,8 @@ Choices made while building M0, and where they differ from the plan above:
 - **The menu positions itself with JavaScript (CSSOM writes)**, not CSS anchor positioning. It flips above the button near the bottom of the window and stays inside narrow windows. Anchor positioning can replace it once it's in all three engines.
 - **The toast is fixed-position, not in the top layer.** A toast shown while a modal dialog is open appears above it visually but is inert. Moving it into the top layer is a follow-up.
 - **`package.json` exports and `src/all.ts` are generated** from the component folders, and CI checks they're committed, so a new component can't be left out of the package.
-- **Still deferred:** the render benchmark (Tachometer) and the `vastu` brand. The brand needs design decisions from the owner.
+- **The `vastu` brand is sandstone and indigo** (the owner's choice, 2026-11-15). It has warm sandstone surfaces, indigo ink and accent, terracotta for danger, 6px control and 10px surface corners, and Inter throughout. It is now the default brand; `lekha` is the second. Tokens don't load fonts: the docs site self-hosts Inter, and an app without it falls back to the system sans.
+- **Brand selectors:** a brand applies where `data-va-brand` names it, and to a page that sets no `data-va-brand`. A mode applies on the brand's element or any element inside it. With several brand files loaded, set `data-va-brand`. Without it, the last file loaded wins.
+- **Accessibility and visual tests run on every brand:** 2 brands × 3 modes, plus 2 widths for screenshots. The contrast check covers every pair in both brands.
+- **Still deferred:** the render benchmark (Tachometer).
 

@@ -1,7 +1,8 @@
 // Test harness. Serves one example per page, built and served under a strict CSP with Trusted Types.
 //   ?c=button&e=1-variants   render that example
 //   ?c=button                an empty stage with the component defined (for generated tests)
-//   &mode=dark               data-va-mode on <html>; &brand=lekha (default)
+//   &mode=dark               data-va-mode on <html>; &brand=vastu (default) or lekha
+import '../../packages/tokens/dist/vastu.css';
 import '../../packages/tokens/dist/lekha.css';
 import './harness.css';
 
@@ -13,7 +14,7 @@ const policy = window.trustedTypes?.createPolicy('vastu-harness', { createHTML: 
 
 const params = new URLSearchParams(location.search);
 const root = document.documentElement;
-root.dataset.vaBrand = params.get('brand') ?? 'lekha';
+root.dataset.vaBrand = params.get('brand') ?? 'vastu';
 if (params.get('mode')) root.dataset.vaMode = params.get('mode');
 
 const stage = document.querySelector('#stage');

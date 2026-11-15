@@ -214,7 +214,8 @@ const attrFor = (field: string) => (c.attributes ?? []).find((a: any) => a.field
   .demo {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    /* Top-aligned, so fields with and without help text keep their labels in line. */
+    align-items: flex-start;
     gap: 12px;
     padding: 24px 16px;
     border: 1px solid var(--va-color-border-subtle);

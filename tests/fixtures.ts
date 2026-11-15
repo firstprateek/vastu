@@ -9,6 +9,7 @@ export const components: any[] = manifest.modules.flatMap((m: any) => m.declarat
 export const componentDir = (tag: string) => tag.replace(/^va-/, '');
 export const exampleName = (ex: any) => ex.path.split('/').pop().replace(/\.html$/, '');
 export const MODES = ['light', 'dark', 'high-contrast'] as const;
+export const BRANDS = ['vastu', 'lekha'] as const;
 
 type Fixtures = {
   /** Vastu dev warnings this test expects; any other warning fails it. */

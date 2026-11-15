@@ -16,10 +16,10 @@ Every promise a component makes is written once, in a machine-readable manifest:
 | --- | --- |
 | Contract tests, generated from `custom-elements.json` | Every documented attribute, property, event, slot, part, CSS custom property and keyboard row works, and there is no undocumented public API |
 | Behaviour tests | Forms and validation, focus management, roles and names, the warnings agents see |
-| axe-core, WCAG 2.2 AA | Every example, in light, dark and high-contrast modes |
+| axe-core, WCAG 2.2 AA | Every example, in both brands (Vastu, Lekha) and all three modes |
 | Strict CSP with Trusted Types | Every browser test runs under it; any violation fails the test |
-| Visual regression | Every example × mode × 390 and 1280 px widths |
-| Token contrast | Every text and UI colour pair meets its WCAG minimum in every brand and mode |
+| Visual regression | Every example × brand × mode × 390 and 1280 px widths |
+| Token contrast | Every text and UI colour pair meets its WCAG minimum in both brands and every mode |
 | Size budgets | Each component is 1.2 to 2.1 kB on top of Lit (budget 3 kB); all eight with Lit are 13.5 kB (budget 16 kB) |
 | ESLint security rules | No `innerHTML`, `unsafeHTML`, `unsafeStatic` or `eval` in components |
 
@@ -28,7 +28,7 @@ Browser tests run in Chromium, Firefox and WebKit.
 ## Repository
 
 ```
-packages/tokens   @firstprateek/vastu-tokens: DTCG tokens → CSS, JSON, TS (brand "lekha", 3 modes)
+packages/tokens   @firstprateek/vastu-tokens: DTCG tokens → CSS, JSON, TS (brands "vastu" and "lekha", 3 modes each)
 packages/vastu    @firstprateek/vastu: components, manifest plugin, dev and prod builds
 apps/docs         Astro docs site, generated from the manifest
 tests/            harness (strict CSP), contract, behaviour, a11y, security, visual

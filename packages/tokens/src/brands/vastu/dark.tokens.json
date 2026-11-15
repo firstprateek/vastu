@@ -1,0 +1,55 @@
+{
+  "$description": "Vastu brand, dark mode: indigo night, sandstone text, a pale indigo accent.",
+  "color": {
+    "$type": "color",
+    "surface": {
+      "default": {
+        "$value": "{color.dusk.900}"
+      },
+      "subtle": {
+        "$value": "{color.dusk.800}"
+      }
+    },
+    "text": {
+      "default": {
+        "$value": "{color.dusk.50}"
+      },
+      "muted": {
+        "$value": "{color.dusk.400}"
+      },
+      "on-accent": {
+        "$value": "{color.dusk.900}"
+      },
+      "on-danger": {
+        "$value": "{color.dusk.900}"
+      }
+    },
+    "border": {
+      "subtle": {
+        "$value": "{color.dusk.700}"
+      },
+      "control": {
+        "$value": "{color.dusk.500}"
+      }
+    },
+    "accent": {
+      "default": {
+        "$value": "{color.indigo.300}"
+      },
+      "hover": {
+        "$value": "{color.indigo.400}"
+      }
+    },
+    "danger": {
+      "default": {
+        "$value": "{color.terracotta.300}"
+      },
+      "hover": {
+        "$value": "{color.terracotta.400}"
+      }
+    },
+    "focus": {
+      "$value": "{color.indigo.300}"
+    }
+  }
+}

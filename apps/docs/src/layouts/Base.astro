@@ -1,4 +1,7 @@
 ---
+// The vastu brand uses Inter; it is self-hosted here (no third-party font requests).
+import '@fontsource-variable/inter';
+import '@firstprateek/vastu-tokens/vastu.css';
 import '@firstprateek/vastu-tokens/lekha.css';
 import { components, slug, title as nameOf } from '../lib/manifest';
 
@@ -12,7 +15,7 @@ const path = Astro.url.pathname;
 ---
 
 <!doctype html>
-<html lang="en" data-va-brand="lekha">
+<html lang="en" data-va-brand="vastu">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,8 +23,10 @@ const path = Astro.url.pathname;
     <link rel="icon" href="data:," />
     <title>{title === 'Vastu' ? 'Vastu design system' : `${title} · Vastu`}</title>
     <script is:inline>
-      // Apply the saved mode before first paint, so the page doesn't flash.
+      // Apply the saved brand and mode before first paint, so the page doesn't flash.
       try {
+        const brand = localStorage.getItem('va-brand');
+        if (brand) document.documentElement.dataset.vaBrand = brand;
         const mode = localStorage.getItem('va-mode');
         if (mode) document.documentElement.dataset.vaMode = mode;
       } catch {}
@@ -42,6 +47,13 @@ const path = Astro.url.pathname;
         <a href="https://github.com/firstprateek/vastu">GitHub</a>
       </nav>
       <label class="mode">
+        <span>Brand</span>
+        <select id="brand-select">
+          <option value="vastu">Vastu</option>
+          <option value="lekha">Lekha</option>
+        </select>
+      </label>
+      <label class="mode">
         <span>Mode</span>
         <select id="mode-select">
           <option value="">Follow system</option>
@@ -55,12 +67,21 @@ const path = Astro.url.pathname;
       <slot />
     </main>
     <footer>
-      Vastu is a work in progress (milestone M1). Brand: Lekha. <a href="https://github.com/firstprateek/vastu/blob/main/docs/design.md">Design document</a>.
+      Vastu is a work in progress (milestone M1). <a href="https://github.com/firstprateek/vastu/blob/main/docs/design.md">Design document</a>.
     </footer>
   </body>
 </html>
 
 <script>
+  const brandSelect = document.querySelector<HTMLSelectElement>('#brand-select')!;
+  brandSelect.value = document.documentElement.dataset.vaBrand ?? 'vastu';
+  brandSelect.addEventListener('change', () => {
+    document.documentElement.dataset.vaBrand = brandSelect.value;
+    try {
+      localStorage.setItem('va-brand', brandSelect.value);
+    } catch {}
+  });
+
   const select = document.querySelector<HTMLSelectElement>('#mode-select')!;
   select.value = document.documentElement.dataset.vaMode ?? '';
   select.addEventListener('change', () => {
