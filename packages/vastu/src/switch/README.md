@@ -10,10 +10,8 @@ It's handy as a light/dark theme switch, which is why the element is called `<th
 
 ## Install
 
-The package isn't on npm yet. Install it from GitHub:
-
 ```bash
-npm install github:firstprateek/switch
+npm install @firstprateek/switch
 ```
 
 ## Usage
