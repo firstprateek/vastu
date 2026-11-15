@@ -10,7 +10,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const KEYBOARD_ACTIONS = new Set(['activates', 'focus-next', 'focus-previous', 'closes', 'opens', 'next', 'previous', 'first', 'last', 'toggles']);
+// What a key does, in words a contract test can check (tests/contract/contract.spec.ts).
+const KEYBOARD_ACTIONS = new Set(['activates', 'toggles', 'focus-next', 'opens', 'closes', 'next', 'previous', 'first', 'last', 'selects']);
+// Where focus is when the key is pressed: on the host (default), on an item, or inside the open element.
+const KEYBOARD_CONTEXTS = new Set(['host', 'items', 'open']);
 
 function tagText(tag) {
   const c = tag.comment;
@@ -31,11 +34,21 @@ export function vastuManifestPlugin() {
         const name = tag.tagName.text;
         const text = tagText(tag);
         if (name === 'keyboard') {
-          const [key, action, description] = text.split('|').map((s) => s.trim());
+          // "[context:] Key | action | description", e.g. "items: ArrowRight | next | Moves to the next tab."
+          const [head, action, description] = text.split('|').map((s) => s.trim());
+          const m = head.match(/^(?:(\w+):\s*)?(.+)$/);
+          const context = m[1] ?? 'host';
+          const key = m[2];
           if (!KEYBOARD_ACTIONS.has(action)) {
             throw new Error(`${node.name.text}: @keyboard ${key} has unknown action "${action}". Use one of: ${[...KEYBOARD_ACTIONS].join(', ')}.`);
           }
-          x.keyboard.push({ key, action, description });
+          if (!KEYBOARD_CONTEXTS.has(context)) {
+            throw new Error(`${node.name.text}: @keyboard ${key} has unknown context "${context}". Use one of: ${[...KEYBOARD_CONTEXTS].join(', ')}.`);
+          }
+          x.keyboard.push({ context, key, action, description });
+        } else if (name === 'keyboard-items') {
+          // CSS selector, relative to the host, for the items that arrow keys move between.
+          x.items = text;
         } else if (name === 'a11y-role') x.a11y.role = text;
         else if (name === 'a11y-name') x.a11y.name = text;
         else if (name === 'a11y-note') x.a11y.notes.push(text);
@@ -43,9 +56,10 @@ export function vastuManifestPlugin() {
         else if (name === 'guidance-avoid') x.guidance.avoid = text;
         else if (name === 'guidance-instead') x.guidance.instead = text;
         else if (name === 'event-trigger') {
-          // "event | click" or "event | press Key": how a contract test makes the event fire.
-          const [event, how] = text.split('|').map((s) => s.trim());
-          x.triggers[event] = how;
+          // "event | how [| open]": how a contract test makes the event fire ("click", "press Key",
+          // "call method"), and "open" if the element must be open first.
+          const [event, how, setup] = text.split('|').map((s) => s.trim());
+          x.triggers[event] = setup ? { how, setup } : { how };
         } else if (name === 'cssprop-applies') {
           // "--var part property", or "--var part:hover property" for a value that only shows on hover.
           const [variable, target, property] = text.split(/\s+/);
@@ -58,7 +72,7 @@ export function vastuManifestPlugin() {
     packageLinkPhase({ customElementsManifest }) {
       for (const mod of customElementsManifest.modules) {
         for (const decl of mod.declarations ?? []) {
-          if (!decl.customElement) continue;
+          if (!decl.customElement || !decl.tagName) continue; // base classes have no tag
           const x = extras.get(decl.name);
           const where = `${decl.tagName} (${mod.path})`;
           const missing = [];
@@ -70,18 +84,27 @@ export function vastuManifestPlugin() {
           if (missing.length) throw new Error(`${where} is missing ${missing.join(', ')} in its JSDoc.`);
 
           decl['x-keyboard'] = x.keyboard;
+          if (x.items) decl['x-keyboard-items'] = x.items;
+          if (x.keyboard.some((k) => k.context === 'items' || ['next', 'previous', 'first', 'last', 'selects'].includes(k.action)) && !x.items) {
+            throw new Error(`${where} has item navigation keys but no @keyboard-items selector.`);
+          }
           decl['x-a11y'] = x.a11y;
           decl['x-guidance'] = x.guidance;
           for (const prop of decl.cssProperties ?? []) {
             if (!x.applies[prop.name]) throw new Error(`${where}: ${prop.name} has no @cssprop-applies line, so it can't be contract-tested.`);
             prop['x-applies'] = x.applies[prop.name];
           }
-          for (const event of decl.events ?? []) {
+          // FormControl's generic _emit(type) helper makes the analyzer guess an event named "type".
+          // Components document their real events with @fires, so drop the guessed one.
+          decl.events = (decl.events ?? []).filter((e) => e.inheritedFrom?.name !== 'FormControl');
+          for (const event of decl.events) {
             if (!x.triggers[event.name]) throw new Error(`${where}: event ${event.name} has no @event-trigger line, so it can't be contract-tested.`);
             event['x-trigger'] = x.triggers[event.name];
           }
-          // Public API only: drop private (#), protected and static framework plumbing (styles, properties…).
-          decl.members = (decl.members ?? []).filter((m) => !m.name.startsWith('#') && !m.static && m.privacy !== 'private' && m.privacy !== 'protected');
+          // Public API only: drop private (#, _), protected, @internal and static framework plumbing.
+          decl.members = (decl.members ?? []).filter(
+            (m) => !m.name.startsWith('#') && !m.name.startsWith('_') && !m.static && m.privacy !== 'private' && m.privacy !== 'protected' && !/@internal/.test(m.description ?? '')
+          );
 
           const dir = path.join(path.dirname(mod.path), 'examples');
           decl['x-examples'] = fs.existsSync(dir)
@@ -93,6 +116,12 @@ export function vastuManifestPlugin() {
               })
             : [];
           if (!decl['x-examples'].length) throw new Error(`${where} has no examples in ${dir}.`);
+          // Examples are what people and agents copy, so they must work under a strict CSP.
+          for (const ex of decl['x-examples']) {
+            if (/\sstyle=|<script|<style|\son[a-z]+=/i.test(ex.code)) {
+              throw new Error(`${ex.path} uses an inline style, script or on…= handler. Examples must work under a strict CSP.`);
+            }
+          }
         }
       }
     },

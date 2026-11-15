@@ -2,8 +2,9 @@
 import { vastuManifestPlugin } from './scripts/cem-plugin.js';
 
 export default {
-  globs: ['src/**/*.ts'],
-  exclude: ['src/core/**', 'src/**/index.ts'],
+  // Components, plus the base classes they inherit public API from.
+  globs: ['src/*/*.ts', 'src/core/form-control.ts'],
+  exclude: ['src/**/index.ts', 'src/all.ts'],
   outdir: '.',
   litelement: true,
   plugins: [vastuManifestPlugin()],

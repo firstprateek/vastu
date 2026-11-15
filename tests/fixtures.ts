@@ -5,7 +5,7 @@ export { expect };
 
 /** The component manifest, read once. */
 export const manifest = JSON.parse(fs.readFileSync(new URL('../packages/vastu/custom-elements.json', import.meta.url), 'utf8'));
-export const components: any[] = manifest.modules.flatMap((m: any) => m.declarations ?? []).filter((d: any) => d.customElement);
+export const components: any[] = manifest.modules.flatMap((m: any) => m.declarations ?? []).filter((d: any) => d.customElement && d.tagName);
 export const componentDir = (tag: string) => tag.replace(/^va-/, '');
 export const exampleName = (ex: any) => ex.path.split('/').pop().replace(/\.html$/, '');
 export const MODES = ['light', 'dark', 'high-contrast'] as const;

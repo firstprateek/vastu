@@ -9,21 +9,57 @@
       "development": "./dist/dev/button/index.js",
       "default": "./dist/prod/button/index.js"
     },
+    "./checkbox": {
+      "types": "./dist/dev/checkbox/index.d.ts",
+      "development": "./dist/dev/checkbox/index.js",
+      "default": "./dist/prod/checkbox/index.js"
+    },
+    "./switch": {
+      "types": "./dist/dev/switch/index.d.ts",
+      "development": "./dist/dev/switch/index.js",
+      "default": "./dist/prod/switch/index.js"
+    },
+    "./all": {
+      "types": "./dist/dev/all.d.ts",
+      "development": "./dist/dev/all.js",
+      "default": "./dist/prod/all.js"
+    },
     "./custom-elements.json": "./custom-elements.json"
   },
   "customElements": "custom-elements.json",
-  "files": ["dist", "custom-elements.json", "README.md"],
-  "sideEffects": ["./dist/*/*/index.js"],
+  "files": [
+    "dist",
+    "custom-elements.json",
+    "README.md"
+  ],
+  "sideEffects": [
+    "./dist/*/*/index.js",
+    "./dist/*/all.js"
+  ],
   "scripts": {
     "build": "node build.js",
     "analyze": "cem analyze --config cem.config.js"
   },
-  "repository": { "type": "git", "url": "git+https://github.com/firstprateek/vastu.git", "directory": "packages/vastu" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firstprateek/vastu.git",
+    "directory": "packages/vastu"
+  },
   "homepage": "https://firstprateek.github.io/vastu/",
-  "keywords": ["web components", "lit", "design system", "accessibility", "custom elements"],
+  "keywords": [
+    "web components",
+    "lit",
+    "design system",
+    "accessibility",
+    "custom elements"
+  ],
   "license": "ISC",
-  "dependencies": { "lit": "^3.3.3" },
-  "peerDependencies": { "@firstprateek/vastu-tokens": "workspace:^" },
+  "dependencies": {
+    "lit": "^3.3.3"
+  },
+  "peerDependencies": {
+    "@firstprateek/vastu-tokens": "workspace:^"
+  },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "@firstprateek/vastu-tokens": "workspace:^",

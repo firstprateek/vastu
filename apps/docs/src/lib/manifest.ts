@@ -3,7 +3,7 @@ import manifest from '@firstprateek/vastu/custom-elements.json';
 
 export const components: any[] = (manifest as any).modules
   .flatMap((m: any) => m.declarations ?? [])
-  .filter((d: any) => d.customElement);
+  .filter((d: any) => d.customElement && d.tagName);
 
 export const slug = (tag: string) => tag.replace(/^va-/, '');
 export const title = (tag: string) => slug(tag).replace(/-/g, ' ').replace(/^\w/, (c) => c.toUpperCase());

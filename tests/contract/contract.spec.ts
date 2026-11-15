@@ -2,13 +2,17 @@
 // attribute, property, event, slot, part, CSS custom property and keyboard row gets a test that
 // checks the code does what the manifest says. The reverse check fails on public API that the
 // manifest doesn't describe. Adding a component needs no changes here.
-import { components, componentDir, expect, mount, test } from '../fixtures.js';
+//
+// Tests run against the first instance of the component in its first example, so composite
+// components (tabs, menus) have real content.
+import type { Page } from '@playwright/test';
+import { components, componentDir, exampleName, expect, test } from '../fixtures.js';
 
 /** A value to set for a declared type, different from the default, plus what the property should read back. */
 function sample(typeText: string, defaultValue?: string): { attr: string | null; prop: unknown } {
   const t = typeText.trim();
   if (t === 'boolean') return { attr: '', prop: true };
-  if (t === 'number') return { attr: '7', prop: 7 };
+  if (t === 'number') return { attr: defaultValue === '1' ? '2' : '1', prop: defaultValue === '1' ? 2 : 1 };
   if (t === 'string') return { attr: 'contract-sample', prop: 'contract-sample' };
   const literals = [...t.matchAll(/'([^']*)'/g)].map((m) => m[1]);
   if (literals.length && t.replace(/'[^']*'|\|/g, '').trim() === '') {
@@ -23,23 +27,45 @@ const SENTINEL: Record<string, { set: string; computed: string }> = {
   '<length>': { set: '37px', computed: '37px' },
 };
 
+/** Index, among the host's items, of the item that has focus (looking through shadow roots). */
+async function focusedItemIndex(page: Page, selector: string): Promise<number> {
+  return page.locator('#subject').evaluate((host, selector) => {
+    const items = [...host.querySelectorAll(selector)];
+    let active: Element | null = document.activeElement;
+    while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement;
+    return items.findIndex((item) => item === active || item.contains(active));
+  }, selector);
+}
+
+async function openSubject(page: Page): Promise<void> {
+  await page.locator('#subject').evaluate(async (el: any) => {
+    if (typeof el.show === 'function') el.show();
+    else el.open = true;
+    await el.updateComplete;
+  });
+  await page.waitForTimeout(50);
+}
+
 for (const c of components) {
   const tag: string = c.tagName;
+  const fixture = exampleName(c['x-examples'][0]);
+  const items: string | undefined = c['x-keyboard-items'];
 
   test.describe(`${tag} contract`, () => {
     test.beforeEach(async ({ page, open }) => {
       // Reduced motion turns transitions off, so computed styles are final values.
       await page.emulateMedia({ reducedMotion: 'reduce' });
-      await open(`c=${componentDir(tag)}`);
+      await open(`c=${componentDir(tag)}&e=${fixture}`);
+      await page.evaluate((tag) => {
+        document.querySelector(tag)!.id = 'subject';
+      }, tag);
     });
 
     for (const attr of c.attributes ?? []) {
       test(`attribute ${attr.name} sets property ${attr.fieldName}`, async ({ page }) => {
         const { attr: value, prop } = sample(attr.type.text, attr.default);
-        await mount(page, tag);
-        const got = await page.evaluate(
-          async ({ name, value, field }) => {
-            const el = document.querySelector('#subject') as any;
+        const got = await page.locator('#subject').evaluate(
+          async (el: any, { name, value, field }) => {
             el.setAttribute(name, value);
             await el.updateComplete;
             return el[field];
@@ -54,10 +80,8 @@ for (const c of components) {
       const attr = c.attributes.find((a: any) => a.fieldName === member.name);
       test(`property ${member.name} reflects to attribute ${attr.name}`, async ({ page }) => {
         const { attr: expected, prop } = sample(member.type.text, member.default);
-        await mount(page, tag);
-        const got = await page.evaluate(
-          async ({ field, prop, name }) => {
-            const el = document.querySelector('#subject') as any;
+        const got = await page.locator('#subject').evaluate(
+          async (el: any, { field, prop, name }) => {
             el[field] = prop;
             await el.updateComplete;
             return el.getAttribute(name);
@@ -69,51 +93,59 @@ for (const c of components) {
     }
 
     for (const event of c.events ?? []) {
-      test(`event ${event.name} fires on ${event['x-trigger']}`, async ({ page }) => {
-        await mount(page, tag);
-        await page.evaluate((name) => {
-          const el = document.querySelector('#subject') as any;
+      const { how, setup } = event['x-trigger'];
+      test(`event ${event.name} fires on ${how}${setup ? ` (when ${setup})` : ''}`, async ({ page }) => {
+        if (setup === 'open') await openSubject(page);
+        await page.locator('#subject').evaluate((el, name) => {
           (window as any).__fired = 0;
           el.addEventListener(name, () => (window as any).__fired++);
         }, event.name);
-        const [how, key] = event['x-trigger'].split(/\s+/);
-        if (how === 'click') await page.locator('#subject').click();
-        else if (how === 'press') {
-          await page.locator('#subject').focus();
-          await page.keyboard.press(key);
-        } else throw new Error(`Unknown trigger "${event['x-trigger']}"`);
-        expect(await page.evaluate(() => (window as any).__fired)).toBe(1);
+        const [verb, arg] = how.split(/\s+/);
+        if (verb === 'click') {
+          await page.locator('#subject').click();
+        } else if (verb === 'press') {
+          if (setup !== 'open') await page.locator('#subject').focus();
+          await page.keyboard.press(arg);
+        } else if (verb === 'call') {
+          await page.locator('#subject').evaluate((el: any, method) => el[method](), arg);
+        } else {
+          throw new Error(`Unknown trigger "${how}" for ${event.name}`);
+        }
+        await expect.poll(() => page.evaluate(() => (window as any).__fired)).toBe(1);
       });
     }
 
     for (const slot of c.slots ?? []) {
       const label = slot.name ? `slot "${slot.name}"` : 'default slot';
       test(`${label} renders its content`, async ({ page }) => {
-        const assigned = await page.evaluate(async ({ tag, name }) => {
-          // Build the element with its content before connecting it, as markup would.
-          const el = document.createElement(tag) as any;
-          const child = document.createElement('span');
-          child.textContent = 'slotted';
-          if (name) {
-            child.slot = name;
-            el.textContent = 'Contract';
-          }
-          el.append(child);
-          el.id = 'subject';
-          document.querySelector('#stage')!.replaceChildren(el);
-          await el.updateComplete;
-          const slotEl = el.shadowRoot.querySelector(name ? `slot[name="${name}"]` : 'slot:not([name])');
-          return !!slotEl && slotEl.assignedNodes().includes(child);
-        }, { tag, name: slot.name });
+        const hasLabel = (c.attributes ?? []).some((a: any) => a.name === 'label');
+        const assigned = await page.evaluate(
+          async ({ tag, name, hasLabel }) => {
+            // Build a fresh element with its content before connecting it, as markup would.
+            const el = document.createElement(tag) as any;
+            if (hasLabel) el.setAttribute('label', 'Contract');
+            const child = document.createElement('span');
+            child.textContent = 'slotted';
+            if (name) {
+              child.slot = name;
+              el.append('Contract');
+            }
+            el.append(child);
+            document.querySelector('#stage')!.append(el);
+            await el.updateComplete;
+            const slotEl = el.shadowRoot.querySelector(name ? `slot[name="${name}"]` : 'slot:not([name])');
+            return !!slotEl && slotEl.assignedNodes({ flatten: true }).includes(child);
+          },
+          { tag, name: slot.name, hasLabel }
+        );
         expect(assigned).toBe(true);
       });
     }
 
     for (const part of c.cssParts ?? []) {
       test(`part ${part.name} exists`, async ({ page }) => {
-        await mount(page, tag);
-        const count = await page.evaluate(
-          (name) => (document.querySelector('#subject') as any).shadowRoot.querySelectorAll(`[part~="${name}"]`).length,
+        const count = await page.locator('#subject').evaluate(
+          (el, name) => el.shadowRoot!.querySelectorAll(`[part~="${name}"]`).length,
           part.name
         );
         expect(count).toBeGreaterThan(0);
@@ -126,12 +158,27 @@ for (const c of components) {
       test(`CSS property ${prop.name} sets ${property} of part ${part}${state ? ` on ${state}` : ''}`, async ({ page }) => {
         const sentinel = SENTINEL[syntax];
         if (!sentinel) throw new Error(`No sentinel for CSS syntax ${syntax} of ${prop.name}`);
-        await mount(page, tag);
+        if (state === 'open') await openSubject(page);
+        if (state === 'checked' || state === 'unchecked') {
+          await page.locator('#subject').evaluate(async (el: any, checked) => {
+            el.checked = checked;
+            el.indeterminate = false;
+            await el.updateComplete;
+          }, state === 'checked');
+        }
         await page.locator('#subject').evaluate((el, { name, value }) => el.style.setProperty(name, value), {
           name: prop.name,
           value: sentinel.set,
         });
-        if (state === 'hover') await page.locator('#subject').hover();
+        if (state === 'hover') {
+          const box = await page.locator('#subject').evaluate((el, part) => {
+            const target = el.shadowRoot!.querySelector(`[part~="${part}"]`)!;
+            target.scrollIntoView();
+            const r = target.getBoundingClientRect();
+            return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+          }, part);
+          await page.mouse.move(box.x, box.y);
+        }
         const got = await page.locator('#subject').evaluate(
           (el, { part, property }) => getComputedStyle(el.shadowRoot!.querySelector(`[part~="${part}"]`)!).getPropertyValue(property),
           { part, property }
@@ -141,46 +188,90 @@ for (const c of components) {
     }
 
     for (const row of c['x-keyboard'] ?? []) {
-      test(`keyboard ${row.key}: ${row.action}`, async ({ page, browserName }) => {
+      const where = row.context === 'host' ? '' : ` (${row.context})`;
+      test(`keyboard${where} ${row.key}: ${row.action}`, async ({ page, browserName }) => {
         test.skip(
-          row.key === 'Tab' && browserName === 'webkit' && process.platform === 'darwin',
+          row.key.includes('Tab') && browserName === 'webkit' && process.platform === 'darwin',
           "macOS WebKit only tabs to buttons when the system's keyboard-navigation setting is on; CI runs WebKit on Linux."
         );
-        await mount(page, tag);
-        await page.evaluate(() => {
-          const before = document.createElement('button');
-          before.id = 'before';
-          before.textContent = 'before';
-          const after = document.createElement('button');
-          after.id = 'after';
-          after.textContent = 'after';
-          const subject = document.querySelector('#subject')!;
+        await page.locator('#subject').evaluate((subject) => {
+          const before = Object.assign(document.createElement('button'), { id: 'before', textContent: 'before' });
+          const after = Object.assign(document.createElement('button'), { id: 'after', textContent: 'after' });
           subject.before(before);
           subject.after(after);
           (window as any).__clicks = 0;
+          (window as any).__selects = 0;
           subject.addEventListener('click', () => (window as any).__clicks++);
+          subject.addEventListener('va-select', () => (window as any).__selects++);
         });
-        if (row.key === 'Tab') {
+
+        // Put focus where the row says the key is pressed.
+        if (row.context === 'open') {
+          await openSubject(page);
+          if (items) await page.locator('#subject').locator(items).first().focus();
+        } else if (row.context === 'items') {
+          const start = await page.locator('#subject').evaluate((host, sel) => {
+            const i = [...host.querySelectorAll<HTMLElement>(sel)].findIndex((el) => el.tabIndex === 0);
+            return i < 0 ? 0 : i;
+          }, items!);
+          await page.locator('#subject').locator(items!).nth(start).focus();
+        } else if (row.key.includes('Tab')) {
           await page.locator('#before').focus();
           await page.keyboard.press('Tab');
         } else {
           await page.locator('#subject').focus();
         }
-        await expect(page.locator('#subject')).toBeFocused();
-        const key = row.key === 'Space' ? ' ' : row.key;
-        await page.keyboard.press(key === ' ' ? 'Space' : key);
-        if (row.action === 'activates') {
-          expect(await page.evaluate(() => (window as any).__clicks)).toBe(1);
-        } else if (row.action === 'focus-next') {
-          await expect(page.locator('#after')).toBeFocused();
-        } else {
-          throw new Error(`No contract check for keyboard action "${row.action}" yet; add one in tests/contract/contract.spec.ts.`);
+
+        const before = items ? await focusedItemIndex(page, items) : -1;
+        const count = items ? await page.locator('#subject').locator(items).count() : 0;
+        const state = await page.locator('#subject').evaluate((el: any) => ({ checked: el.checked, open: el.open }));
+        const focusedBefore = await page.evaluate(() => document.activeElement?.id || document.activeElement?.localName);
+
+        await page.keyboard.press(row.key);
+        await page.waitForTimeout(30);
+
+        switch (row.action) {
+          case 'activates':
+            expect(await page.evaluate(() => (window as any).__clicks)).toBe(1);
+            break;
+          case 'toggles':
+            expect(await page.locator('#subject').evaluate((el: any) => el.checked)).toBe(!state.checked);
+            break;
+          case 'opens':
+            expect(state.open).toBe(false);
+            expect(await page.locator('#subject').evaluate((el: any) => el.open)).toBe(true);
+            break;
+          case 'closes':
+            expect(await page.locator('#subject').evaluate((el: any) => el.open)).toBe(false);
+            break;
+          case 'selects':
+            expect(await page.evaluate(() => (window as any).__selects)).toBe(1);
+            break;
+          case 'focus-next': {
+            const focusedAfter = await page.evaluate(() => document.activeElement?.id || document.activeElement?.localName);
+            expect(focusedAfter).not.toBe(focusedBefore);
+            if (row.context === 'host') await expect(page.locator('#after')).toBeFocused();
+            break;
+          }
+          case 'next':
+            expect(await focusedItemIndex(page, items!)).toBe((before + 1) % count);
+            break;
+          case 'previous':
+            expect(await focusedItemIndex(page, items!)).toBe((before - 1 + count) % count);
+            break;
+          case 'first':
+            expect(await focusedItemIndex(page, items!)).toBe(0);
+            break;
+          case 'last':
+            expect(await focusedItemIndex(page, items!)).toBe(count - 1);
+            break;
+          default:
+            throw new Error(`No contract check for keyboard action "${row.action}"; add one in tests/contract/contract.spec.ts.`);
         }
       });
     }
 
     test('has no public API the manifest leaves out', async ({ page }) => {
-      await mount(page, tag);
       // The analyzer lists every public member, so "documented" means listed *with a description*.
       const described = (x: any) => !!x.description?.trim();
       const documentedFields = new Set((c.members ?? []).filter((m: any) => m.kind === 'field' && described(m)).map((m: any) => m.name));
@@ -200,13 +291,16 @@ for (const c of components) {
         }
         return { reactive, observed: [...ctor.observedAttributes], own };
       }, tag);
-      // Lit lifecycle overrides are framework plumbing, not component API.
-      const LIFECYCLE = new Set(['render', 'connectedCallback', 'disconnectedCallback', 'firstUpdated', 'updated', 'willUpdate', 'shouldUpdate', 'update', 'attributeChangedCallback', 'createRenderRoot']);
+      // Lit lifecycle and form-associated callbacks are framework plumbing, not component API.
+      const PLUMBING = new Set([
+        'render', 'connectedCallback', 'disconnectedCallback', 'firstUpdated', 'updated', 'willUpdate', 'shouldUpdate', 'update',
+        'attributeChangedCallback', 'createRenderRoot', 'formDisabledCallback', 'formResetCallback', 'formStateRestoreCallback', 'formAssociatedCallback',
+      ]);
       const undocumented = [
         ...actual.reactive.filter((p) => !documentedFields.has(p)).map((p) => `property ${p}`),
         ...actual.observed.filter((a) => !documentedAttrs.has(a)).map((a) => `attribute ${a}`),
         ...actual.own
-          .filter((m) => !LIFECYCLE.has(m.name) && !actual.reactive.includes(m.name))
+          .filter((m) => !PLUMBING.has(m.name) && !actual.reactive.includes(m.name))
           .filter((m) => (m.kind === 'method' ? !documentedMethods.has(m.name) : !documentedFields.has(m.name)))
           .map((m) => `${m.kind} ${m.name}`),
       ];

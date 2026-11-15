@@ -1,4 +1,4 @@
-import { LitElement, css, html, nothing } from 'lit';
+import { LitElement, css, html, nothing, type PropertyDeclarations } from 'lit';
 import { focusRing } from '../core/focus-ring.js';
 import { checkTokensLoaded, devWarn } from '../core/warn.js';
 
@@ -54,7 +54,7 @@ export class VaButton extends LitElement {
   /** @internal */
   static formAssociated = true;
 
-  static override properties = {
+  static override properties: PropertyDeclarations = {
     variant: { reflect: true },
     size: { reflect: true },
     type: { reflect: true },
