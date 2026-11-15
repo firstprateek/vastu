@@ -9,10 +9,8 @@ Pick an option and the bars animate to show the results.
 
 ## Install
 
-The package isn't on npm yet. Install it from GitHub:
-
 ```bash
-npm install github:firstprateek/poll-widget
+npm install @firstprateek/poll-widget
 ```
 
 ## Usage
