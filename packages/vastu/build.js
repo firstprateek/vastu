@@ -28,3 +28,13 @@ for (const f of fs.readdirSync('dist/prod', { recursive: true })) {
   if (String(f).endsWith('.map') || String(f).endsWith('.d.ts')) fs.rmSync(`dist/prod/${f}`);
 }
 execFileSync('npx', ['cem', 'analyze', '--config', 'cem.config.js'], { stdio: 'inherit' });
+
+// Every component folder must have a documented custom element in the manifest. (A JSDoc block
+// separated from its class drops the component silently, so check explicitly.)
+const manifest = JSON.parse(fs.readFileSync('custom-elements.json', 'utf8'));
+const tags = new Set(manifest.modules.flatMap((m) => m.declarations ?? []).map((d) => d.tagName).filter(Boolean));
+const missing = componentDirs.filter((c) => !tags.has(`va-${c}`));
+if (missing.length) {
+  console.error(`The manifest has no documented element for: ${missing.map((c) => `va-${c} (src/${c}/)`).join(', ')}. Check that its JSDoc block sits directly above the class.`);
+  process.exit(1);
+}

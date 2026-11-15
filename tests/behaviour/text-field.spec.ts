@@ -20,6 +20,20 @@ test.describe('va-text-field', () => {
     await expect(username).not.toHaveAttribute('aria-invalid', 'true');
   });
 
+  test('an error appearing on blur does not swallow the click that caused the blur', async ({ page, open }) => {
+    await open('c=text-field&e=1-basic');
+    // A checkbox right under the field: the error that appears on blur would push it down mid-click.
+    await page.evaluate(() => {
+      const box = document.createElement('va-checkbox');
+      box.textContent = 'Remember me';
+      document.querySelector('va-text-field[label="Username"]')!.after(box);
+    });
+    await page.getByRole('textbox', { name: 'Username' }).fill('a!');
+    await page.getByRole('checkbox', { name: 'Remember me' }).click();
+    await expect(page.getByRole('checkbox', { name: 'Remember me' })).toBeChecked();
+    await expect(page.getByRole('textbox', { name: 'Username' })).toHaveAttribute('aria-invalid', 'true');
+  });
+
   test('required: submit is blocked and the error shows; a valid value submits', async ({ page, open }) => {
     await open('c=text-field&e=2-validation');
     await page.evaluate(() => {

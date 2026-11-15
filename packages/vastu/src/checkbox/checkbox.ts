@@ -121,6 +121,7 @@ export class VaCheckbox extends FormControl {
         : nothing;
     return html`
       <label class="wrapper">
+        <span class="control-wrap">
         <input
           class="native"
           type="checkbox"
@@ -135,6 +136,7 @@ export class VaCheckbox extends FormControl {
         />
         <span part="control" class="box" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${mark}</svg>
+        </span>
         </span>
         <span class="text">
           <span part="label" class="label"><slot></slot></span>
@@ -166,12 +168,21 @@ export class VaCheckbox extends FormControl {
       padding-block: 0.1875rem;
       box-sizing: border-box;
     }
+    .control-wrap {
+      position: relative;
+      flex: none;
+      display: inline-flex;
+    }
+    /* The real checkbox covers the visible box, invisibly, so pointers and automation hit it directly. */
     .native {
       position: absolute;
-      opacity: 0;
-      width: 1px;
-      height: 1px;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       margin: 0;
+      opacity: 0;
+      cursor: inherit;
+      z-index: 1;
     }
     .box {
       flex: none;

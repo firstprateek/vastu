@@ -5,3 +5,7 @@ test-results
 playwright-report
 *.tsbuildinfo
 .DS_Store
+
+# Eval runs: keep reports, pages and screenshots; not the bundled assets
+tests/eval/results/*/site/assets
+tests/eval/results/dry-run

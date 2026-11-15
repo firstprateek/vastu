@@ -28,7 +28,7 @@ const noRawHtml = {
 };
 
 export default tseslint.config(
-  { ignores: ['**/dist/**', '**/node_modules/**', '**/.astro/**', 'test-results/**', 'playwright-report/**', 'packages/vastu/custom-elements.json'] },
+  { ignores: ['**/dist/**', '**/node_modules/**', '**/.astro/**', 'test-results/**', 'playwright-report/**', 'packages/vastu/custom-elements.json', 'tests/eval/results/**', 'packages/*/data/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

@@ -2,6 +2,15 @@ import { css, html, nothing, type PropertyDeclarations, type PropertyValues } fr
 import { FormControl } from '../core/form-control.js';
 import { checkTokensLoaded, devWarn } from '../core/warn.js';
 
+// Whether a pointer button is down anywhere on the page. Used to delay error messages that
+// would otherwise appear mid-click and move the layout under the pointer (see #onBlur).
+let pointerDown = false;
+if (typeof document !== 'undefined') {
+  document.addEventListener('pointerdown', () => (pointerDown = true), true);
+  document.addEventListener('pointerup', () => (pointerDown = false), true);
+  document.addEventListener('pointercancel', () => (pointerDown = false), true);
+}
+
 /**
  * A single-line text input with a visible label, help text and error message.
  *
@@ -152,8 +161,14 @@ export class VaTextField extends FormControl {
   }
 
   #onBlur(): void {
-    this._showError = true;
-    this.requestUpdate();
+    const show = () => {
+      this._showError = true;
+      this.requestUpdate();
+    };
+    // Focus left because the user is clicking something else. Showing the error now would push
+    // the content below down between mousedown and mouseup, and the click would be lost.
+    if (pointerDown) window.addEventListener('pointerup', () => setTimeout(show), { once: true, capture: true });
+    else show();
   }
 
   override render() {
