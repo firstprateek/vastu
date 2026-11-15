@@ -1,5 +1,7 @@
 # minimal-navbar
 
+[![Open the live demo](https://img.shields.io/badge/Live_demo-Open_%E2%86%92-b93a2f?style=for-the-badge)](https://firstprateek.github.io/minimal-navbar/)
+
 [![CI](https://github.com/firstprateek/minimal-navbar/actions/workflows/ci.yml/badge.svg)](https://github.com/firstprateek/minimal-navbar/actions/workflows/ci.yml)
 
 A simple, responsive navigation bar, built as a web component with [Lit](https://lit.dev/).
@@ -8,7 +10,7 @@ A simple, responsive navigation bar, built as a web component with [Lit](https:/
 - **Themeable:** colours, height and fonts come from CSS custom properties (listed below).
 - **Lightweight:** one small component plus Lit.
 
-**[Live demo](https://firstprateek.github.io/minimal-navbar/)**
+### [▶ Try the live demo](https://firstprateek.github.io/minimal-navbar/)
 
 ## Install
 
@@ -33,6 +35,15 @@ Put your brand link in the `brand` slot and your navigation links in the `link` 
   <a slot="link" href="/work">Work</a>
   <a slot="link" href="/contact">Contact</a>
 </minimal-navbar>
+```
+
+To keep the navbar at the top of the page while scrolling (as the demo does), make it sticky:
+
+```css
+minimal-navbar {
+  position: sticky;
+  top: 0;
+}
 ```
 
 The navbar marks the link you pick as active and fires `activeLinkChanged`:

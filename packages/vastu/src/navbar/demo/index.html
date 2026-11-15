@@ -79,7 +79,11 @@
       footer a { margin-right: 10px; white-space: nowrap; }
       pre + pre { margin-top: 10px; }
       @media (max-width: 480px) { pre { white-space: pre-wrap; overflow-wrap: anywhere; } }
-      minimal-navbar { --navbar-font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      minimal-navbar {
+        position: sticky;
+        top: 0;
+        --navbar-font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
       minimal-navbar.dark {
         --navbar-bg-color: #1f2933;
         --navbar-menu-color: #1f2933;
@@ -111,7 +115,7 @@
 
       <section class="card">
         <h2>Try it</h2>
-        <p>The bar above uses <code>breakpoint="600"</code>; this window is <strong id="width"></strong> wide. Resize it, pick a link, or switch the colours, which all come from CSS custom properties.</p>
+        <p>The bar above uses <code>breakpoint="600"</code>; this window is <strong id="width"></strong> wide. Resize it, pick a link, or switch the colours, which all come from CSS custom properties. The bar is <code>position: sticky</code>, so it stays at the top as you scroll.</p>
         <div class="controls"><button id="theme" type="button">Switch theme</button></div>
         <p class="log" id="log" aria-live="polite">Pick a link…</p>
       </section>
