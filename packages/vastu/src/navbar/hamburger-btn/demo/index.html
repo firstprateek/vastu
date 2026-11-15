@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Demo of hamburger-btn, a Lit web component for a menu button that turns into a cross.">
+    <link rel="icon" href="data:,">
+    <title>hamburger-btn demo</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --fg: #1d1d1f;
+        --muted: #5f6368;
+        --bg: #f6f6f7;
+        --card: #ffffff;
+        --border: #e2e2e6;
+        --accent: #b93a2f;
+        --code-bg: #1d1d1f;
+        --code-fg: #f5f5f7;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      .page { max-width: 760px; margin: 0 auto; padding: 32px 16px 48px; }
+      .intro h1 { font-size: 1.75rem; line-height: 1.2; margin: 0 0 6px; }
+      .intro h1 code { font-size: 0.9em; }
+      .intro p { margin: 0 0 12px; color: var(--muted); }
+      .links { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.95rem; }
+      .page a { color: var(--accent); }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .card h2 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin: 0 0 12px;
+      }
+      .card > p { margin: 0 0 12px; }
+      .row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+      .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+      .controls button {
+        font: inherit;
+        font-size: 0.95rem;
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--fg);
+        cursor: pointer;
+      }
+      .controls button:hover { border-color: var(--muted); }
+      .log {
+        margin: 12px 0 0;
+        font: 0.85rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+        color: var(--muted);
+        overflow-wrap: anywhere;
+      }
+      pre {
+        margin: 0;
+        padding: 12px 14px;
+        background: var(--code-bg);
+        color: var(--code-fg);
+        border-radius: 8px;
+        overflow-x: auto;
+        font: 0.85rem/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+      footer { margin-top: 32px; font-size: 0.9rem; color: var(--muted); }
+      footer a { margin-right: 10px; white-space: nowrap; }
+      pre + pre { margin-top: 10px; }
+      @media (max-width: 480px) { pre { white-space: pre-wrap; overflow-wrap: anywhere; } }
+      .mock-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+      }
+      .mock-bar strong { font-size: 1.1rem; }
+      .mock-bar.dark { background: #1f2933; color: #f5f7fa; border-color: #1f2933; --hamburger-stripe-color: #f5f7fa; }
+      .mock-bar.brand { --hamburger-stripe-color: #b93a2f; }
+      .stack { display: grid; gap: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="intro">
+        <h1><code>&lt;hamburger-btn&gt;</code></h1>
+        <p>A menu button built with Lit. Its three stripes turn into a cross when it's open.</p>
+        <nav class="links">
+          <a href="https://github.com/firstprateek/hamburger-btn">Source on GitHub</a>
+          <a href="https://www.npmjs.com/package/hamburger-btn">npm</a>
+        </nav>
+      </header>
+
+      <section class="card">
+        <h2>Try it</h2>
+        <p>Click or tap a button. The stripe colour comes from <code>--hamburger-stripe-color</code>.</p>
+        <div class="stack">
+          <div class="mock-bar"><strong>Default</strong><hamburger-btn></hamburger-btn></div>
+          <div class="mock-bar dark"><strong>Dark</strong><hamburger-btn></hamburger-btn></div>
+          <div class="mock-bar brand"><strong>Brand colour, starts open</strong><hamburger-btn open></hamburger-btn></div>
+        </div>
+        <p class="log" id="log" aria-live="polite">Waiting for a click…</p>
+      </section>
+
+      <section class="card">
+        <h2>Use it</h2>
+        <pre><code>npm install hamburger-btn</code></pre>
+        <pre><code>// main.js
+import 'hamburger-btn';
+
+&lt;!-- index.html --&gt;
+&lt;hamburger-btn&gt;&lt;/hamburger-btn&gt;
+&lt;hamburger-btn open style="--hamburger-stripe-color: tomato"&gt;&lt;/hamburger-btn&gt;</code></pre>
+      </section>
+
+<footer>
+        <p>One of five small Lit web components from 2023:</p>
+        <p>
+          <a href="https://firstprateek.github.io/minimal-navbar/">minimal-navbar</a>
+          <a href="https://firstprateek.github.io/hamburger-btn/">hamburger-btn</a>
+          <a href="https://firstprateek.github.io/switch/">switch</a>
+          <a href="https://firstprateek.github.io/poll-widget/">poll-widget</a>
+          <a href="https://firstprateek.github.io/bar-chart/">bar-chart</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

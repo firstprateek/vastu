@@ -1,48 +1,71 @@
 # hamburger-btn
 
-A webcomponent for a hamburger menu button developed using [LIT](https://lit.dev/)
+[![CI](https://github.com/firstprateek/hamburger-btn/actions/workflows/ci.yml/badge.svg)](https://github.com/firstprateek/hamburger-btn/actions/workflows/ci.yml)
 
-## Live Demo
+A lightweight hamburger menu button, built as a web component with [Lit](https://lit.dev/).
+Its three stripes turn into a cross when the button is open.
 
-[Demo](https://firstprateek.github.io/hamburger-btn/)
+**[Live demo](https://firstprateek.github.io/hamburger-btn/)**
 
-## Installation
+## Install
 
 ```bash
-npm install hamburger-btn --save
+npm install hamburger-btn
 ```
 
 ## Usage
 
-```js
-// In index.js
-import HamburgerBtn from 'hamburger-btn';
-```
-
-```jsx
-<!DOCTYPE html>
-<head>
-    <script src="./index.js"></script>
-</head>
-<body>
-    <main>
-        <hamburger-btn></hamburger-btn>
-    </main>
-</body>
-</html>
-```
+Import the package once (with a bundler such as Vite or webpack) to register the `<hamburger-btn>` element:
 
 ```js
-/**
- * HamburgerButton widget: <hamburger-btn></hamburger-btn>.
- * 
- * This widget is a hamburger button that changes into a cross button upon click.
- * 
- * @property hidden {Boolean}. If false then button is hidden.
- * @property open {Boolean}. If true then the stripes change into a cross.
- * 
- * @fires click - Indicates when the button is clicked. The open property is toggled when button is clicked.
- * 
- * @cssproperty --hamburger-stripe-color - This variable controls the color of the stripes
- */
+import 'hamburger-btn';
 ```
+
+Then use it in your HTML:
+
+```html
+<hamburger-btn></hamburger-btn>
+
+<hamburger-btn open style="--hamburger-stripe-color: tomato"></hamburger-btn>
+```
+
+Listen for clicks to open and close your menu. `open` has already been toggled when your listener runs:
+
+```js
+const button = document.querySelector('hamburger-btn');
+button.addEventListener('click', () => {
+  menu.classList.toggle('visible', button.open);
+});
+```
+
+## API
+
+| Property / attribute | Type | Default | Description |
+| --- | --- | --- | --- |
+| `open` | Boolean | `false` | Shows the cross when true. Toggled on every click and reflected to the attribute. |
+| `hidden` | Boolean | `false` | Hides the button when true. |
+| `label` | String | `"Toggle menu"` | Accessible name of the button. |
+
+The inner `<button>` sets `aria-expanded` from `open`.
+
+| CSS custom property | Default | Description |
+| --- | --- | --- |
+| `--hamburger-stripe-color` | `#58595B` | Colour of the stripes |
+
+| Event | Description |
+| --- | --- |
+| `click` | The native click event, after `open` has been toggled. |
+
+## Development
+
+```bash
+npm install
+npm run dev     # demo page at http://localhost:3000
+npm run build   # builds the demo into dist/
+```
+
+The demo lives in `demo/`. Pushing to `main` builds it and deploys it to GitHub Pages.
+
+## License
+
+ISC

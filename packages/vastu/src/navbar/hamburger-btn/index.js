@@ -1,3 +1,3 @@
-import HamburgerBtn from './src'
+import HamburgerButton from './src/index.js';
 
-export default HamburgerBtn
+export default HamburgerButton;
