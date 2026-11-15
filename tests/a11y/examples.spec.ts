@@ -14,6 +14,9 @@ for (const c of components) {
     }
   }
 
+  // WCAG 2.2 target size applies to controls you click, not containers such as dialogs or tab lists.
+  const CONTROL_ROLES = new Set(['button', 'checkbox', 'switch', 'textbox', 'radio', 'combobox']);
+  if (!CONTROL_ROLES.has(c['x-a11y']?.role)) continue;
   test(`${c.tagName}: every size meets the 24px target size`, async ({ page, open }) => {
     await open(`c=${componentDir(c.tagName)}&e=${exampleName(c['x-examples'][0])}`);
     const small = await page.evaluate((tag) => {

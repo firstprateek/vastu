@@ -63,6 +63,8 @@ export class VaButton extends LitElement {
     name: {},
     value: {},
     label: {},
+    commandfor: {},
+    command: {},
   };
 
   /** Visual emphasis. Use one `primary` button per view. */
@@ -84,6 +86,13 @@ export class VaButton extends LitElement {
   declare value: string;
   /** Accessible name. Required when the button has no text, such as an icon-only button. */
   declare label: string;
+  /**
+   * The id of the element this button sends `command` to, as with the native Invoker Commands API.
+   * For example `commandfor="confirm" command="--show"` opens `<va-dialog id="confirm">`.
+   */
+  declare commandfor: string;
+  /** The command sent to the `commandfor` element on click, such as `--show` or `--close`. */
+  declare command: string;
 
   readonly #internals: ElementInternals;
 
@@ -97,6 +106,8 @@ export class VaButton extends LitElement {
     this.name = '';
     this.value = '';
     this.label = '';
+    this.commandfor = '';
+    this.command = '';
     this.#internals = this.attachInternals();
     this.addEventListener('click', this.#onClick);
   }
@@ -115,6 +126,13 @@ export class VaButton extends LitElement {
     if (this.disabled || this.loading) {
       event.preventDefault();
       event.stopImmediatePropagation();
+      return;
+    }
+    if (this.commandfor && this.command) {
+      // Same shape as the native CommandEvent, so components handle both.
+      const target = (this.getRootNode() as Document | ShadowRoot).getElementById(this.commandfor);
+      if (target) target.dispatchEvent(Object.assign(new Event('command', { cancelable: true }), { command: this.command, source: this }));
+      else devWarn('va-button', `commandfor="${this.commandfor}" doesn't match any element id.`, 'Set commandfor to the id of the element to control, in the same document or shadow root.');
       return;
     }
     const form = this.#internals.form;

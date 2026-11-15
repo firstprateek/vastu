@@ -1,0 +1,8 @@
+<!-- title: A short form
+     description: Focus starts on the first field. Escape or the close button cancels. -->
+<va-button commandfor="rename-dialog" command="--show">Rename</va-button>
+<va-dialog id="rename-dialog" heading="Rename file">
+  <va-text-field label="File name" value="notes-final-v2.md"></va-text-field>
+  <va-button slot="footer" variant="secondary" commandfor="rename-dialog" command="--close">Cancel</va-button>
+  <va-button slot="footer">Save</va-button>
+</va-dialog>

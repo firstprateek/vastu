@@ -14,6 +14,11 @@
       "development": "./dist/dev/checkbox/index.js",
       "default": "./dist/prod/checkbox/index.js"
     },
+    "./dialog": {
+      "types": "./dist/dev/dialog/index.d.ts",
+      "development": "./dist/dev/dialog/index.js",
+      "default": "./dist/prod/dialog/index.js"
+    },
     "./switch": {
       "types": "./dist/dev/switch/index.d.ts",
       "development": "./dist/dev/switch/index.js",

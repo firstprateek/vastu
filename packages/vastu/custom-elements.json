@@ -221,6 +221,28 @@
             },
             {
               "kind": "field",
+              "name": "commandfor",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "The id of the element this button sends `command` to, as with the native Invoker Commands API.\nFor example `commandfor=\"confirm\" command=\"--show\"` opens `<va-dialog id=\"confirm\">`.",
+              "default": "''",
+              "attribute": "commandfor"
+            },
+            {
+              "kind": "field",
+              "name": "command",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "The command sent to the `commandfor` element on click, such as `--show` or `--close`.",
+              "default": "''",
+              "attribute": "command"
+            },
+            {
+              "kind": "field",
               "name": "form",
               "type": {
                 "text": "HTMLFormElement | null"
@@ -310,6 +332,24 @@
               "description": "Accessible name. Required when the button has no text, such as an icon-only button.",
               "default": "''",
               "fieldName": "label"
+            },
+            {
+              "name": "commandfor",
+              "type": {
+                "text": "string"
+              },
+              "description": "The id of the element this button sends `command` to, as with the native Invoker Commands API.\nFor example `commandfor=\"confirm\" command=\"--show\"` opens `<va-dialog id=\"confirm\">`.",
+              "default": "''",
+              "fieldName": "commandfor"
+            },
+            {
+              "name": "command",
+              "type": {
+                "text": "string"
+              },
+              "description": "The command sent to the `commandfor` element on click, such as `--show` or `--close`.",
+              "default": "''",
+              "fieldName": "command"
             }
           ],
           "superclass": {
@@ -392,6 +432,343 @@
           "declaration": {
             "name": "VaButton",
             "module": "src/button/button.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/core/define.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "define",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "parameters": [
+            {
+              "name": "tag",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "ctor",
+              "type": {
+                "text": "CustomElementConstructor"
+              }
+            }
+          ],
+          "description": "Defines a custom element once. A second definition of the same tag is a no-op, not an error."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "define",
+          "declaration": {
+            "name": "define",
+            "module": "src/core/define.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "tag",
+          "declaration": {
+            "name": "ctor",
+            "module": "src/core/define.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/core/dev-mode.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "DEV_MODE",
+          "type": {
+            "text": "boolean"
+          },
+          "default": "true",
+          "description": "True in the development build, false in the production build.\nbuild.js rewrites this file in dist/prod so bundlers drop every dev-only branch."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "DEV_MODE",
+          "declaration": {
+            "name": "DEV_MODE",
+            "module": "src/core/dev-mode.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/core/focus-ring.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "focusRing",
+          "default": "css` :focus-visible { outline: var(--va-size-focus-ring, 2px) solid var(--va-color-focus, currentColor); outline-offset: 2px; } @media (forced-colors: active) { :focus-visible { outline-color: Highlight; } } `",
+          "description": "The shared keyboard focus ring: visible only for keyboard focus, drawn outside the control."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "focusRing",
+          "declaration": {
+            "name": "focusRing",
+            "module": "src/core/focus-ring.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/core/form-control.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Base class for Vastu form controls. It joins the control to its `<form>` through\nElementInternals, so the control submits, resets, disables and validates like a native one.\nSubclasses call `setFormValue()` and `setValidity()`; everything else is handled here.",
+          "name": "FormControl",
+          "members": [
+            {
+              "kind": "field",
+              "name": "name",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value`.",
+              "default": "''",
+              "attribute": "name"
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the control. It can't be focused, changed or submitted.",
+              "default": "false",
+              "attribute": "disabled",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The control must have a value before its form can be submitted.",
+              "default": "false",
+              "attribute": "required",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this control belongs to, if any.",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The control's validity state, as on native controls.",
+              "readonly": true
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The message the browser shows when the control is invalid, or an empty string.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Returns true if the control is valid; otherwise fires `invalid` and returns false."
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Like `checkValidity()`, but also shows the browser's message to the user."
+            },
+            {
+              "kind": "method",
+              "name": "_emit",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "type",
+                  "type": {
+                    "text": "'input' | 'change'"
+                  }
+                }
+              ],
+              "description": "Fires a bubbling event on the host, as a native control would."
+            },
+            {
+              "kind": "field",
+              "name": "_internals"
+            }
+          ],
+          "events": [
+            {
+              "name": "type",
+              "type": {
+                "text": "Event"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value`.",
+              "default": "''",
+              "fieldName": "name"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the control. It can't be focused, changed or submitted.",
+              "default": "false",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The control must have a value before its form can be submitted.",
+              "default": "false",
+              "fieldName": "required"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "FormControl",
+          "declaration": {
+            "name": "FormControl",
+            "module": "src/core/form-control.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/core/warn.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "devWarn",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "parameters": [
+            {
+              "name": "tag",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "problem",
+              "type": {
+                "text": "string"
+              }
+            },
+            {
+              "name": "fix",
+              "type": {
+                "text": "string"
+              }
+            }
+          ],
+          "description": "Logs a development-only warning written for people and agents alike:\nwhat is wrong, then the exact fix. Each message is shown once per page.\nStripped from production builds."
+        },
+        {
+          "kind": "function",
+          "name": "checkTokensLoaded",
+          "return": {
+            "type": {
+              "text": "void"
+            }
+          },
+          "parameters": [
+            {
+              "name": "host",
+              "type": {
+                "text": "HTMLElement"
+              }
+            }
+          ],
+          "description": "Warns once per page if no Vastu brand stylesheet is loaded. Waits for the page's load event,\nso a stylesheet that is still downloading doesn't cause a false warning."
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "devWarn",
+          "declaration": {
+            "name": "devWarn",
+            "module": "src/core/warn.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "checkTokensLoaded",
+          "declaration": {
+            "name": "checkTokensLoaded",
+            "module": "src/core/warn.ts"
           }
         }
       ]
@@ -790,337 +1167,263 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/core/define.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "define",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "parameters": [
-            {
-              "name": "tag",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "ctor",
-              "type": {
-                "text": "CustomElementConstructor"
-              }
-            }
-          ],
-          "description": "Defines a custom element once. A second definition of the same tag is a no-op, not an error."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "define",
-          "declaration": {
-            "name": "define",
-            "module": "src/core/define.ts"
-          }
-        },
-        {
-          "kind": "custom-element-definition",
-          "name": "tag",
-          "declaration": {
-            "name": "ctor",
-            "module": "src/core/define.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/core/dev-mode.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "DEV_MODE",
-          "type": {
-            "text": "boolean"
-          },
-          "default": "true",
-          "description": "True in the development build, false in the production build.\nbuild.js rewrites this file in dist/prod so bundlers drop every dev-only branch."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "DEV_MODE",
-          "declaration": {
-            "name": "DEV_MODE",
-            "module": "src/core/dev-mode.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/core/focus-ring.ts",
-      "declarations": [
-        {
-          "kind": "variable",
-          "name": "focusRing",
-          "default": "css` :focus-visible { outline: var(--va-size-focus-ring, 2px) solid var(--va-color-focus, currentColor); outline-offset: 2px; } @media (forced-colors: active) { :focus-visible { outline-color: Highlight; } } `",
-          "description": "The shared keyboard focus ring: visible only for keyboard focus, drawn outside the control."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "focusRing",
-          "declaration": {
-            "name": "focusRing",
-            "module": "src/core/focus-ring.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/core/form-control.ts",
+      "path": "src/dialog/dialog.ts",
       "declarations": [
         {
           "kind": "class",
-          "description": "Base class for Vastu form controls. It joins the control to its `<form>` through\nElementInternals, so the control submits, resets, disables and validates like a native one.\nSubclasses call `setFormValue()` and `setValidity()`; everything else is handled here.",
-          "name": "FormControl",
+          "description": "A modal dialog built on the native `<dialog>`: it sits in the top layer, makes the page behind it\ninert, keeps focus inside, closes with Escape and returns focus to where it came from.",
+          "name": "VaDialog",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Background colour.",
+              "name": "--va-dialog-bg",
+              "x-applies": {
+                "part": "dialog",
+                "state": "open",
+                "property": "background-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Maximum width.",
+              "name": "--va-dialog-width",
+              "x-applies": {
+                "part": "dialog",
+                "state": "open",
+                "property": "max-width"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Corner radius.",
+              "name": "--va-dialog-radius",
+              "x-applies": {
+                "part": "dialog",
+                "state": "open",
+                "property": "border-top-left-radius"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The native dialog element.",
+              "name": "dialog"
+            },
+            {
+              "description": "The row with the heading and the close button.",
+              "name": "header"
+            },
+            {
+              "description": "The heading.",
+              "name": "heading"
+            },
+            {
+              "description": "The close button.",
+              "name": "close"
+            },
+            {
+              "description": "The wrapper around the content.",
+              "name": "body"
+            },
+            {
+              "description": "The wrapper around the actions.",
+              "name": "footer"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The dialog's content.",
+              "name": ""
+            },
+            {
+              "description": "Actions, such as Cancel and Confirm buttons. Put the primary action last.",
+              "name": "footer"
+            }
+          ],
           "members": [
             {
               "kind": "field",
-              "name": "name",
+              "name": "open",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the dialog is open. Prefer `show()` and `close()`, or `command=\"--show\"` on a `va-button`.",
+              "default": "false",
+              "attribute": "open",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "heading",
               "privacy": "public",
               "type": {
                 "text": "string"
               },
-              "description": "Submitted with the form as `name=value`.",
+              "description": "The visible heading. It is also the dialog's accessible name.",
               "default": "''",
-              "attribute": "name"
+              "attribute": "heading"
             },
             {
               "kind": "field",
-              "name": "disabled",
+              "name": "label",
               "privacy": "public",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Disables the control. It can't be focused, changed or submitted.",
-              "default": "false",
-              "attribute": "disabled",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "privacy": "public",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "The control must have a value before its form can be submitted.",
-              "default": "false",
-              "attribute": "required",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "form",
-              "type": {
-                "text": "HTMLFormElement | null"
-              },
-              "description": "The form this control belongs to, if any.",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "validity",
-              "type": {
-                "text": "ValidityState"
-              },
-              "description": "The control's validity state, as on native controls.",
-              "readonly": true
-            },
-            {
-              "kind": "field",
-              "name": "validationMessage",
               "type": {
                 "text": "string"
               },
-              "description": "The message the browser shows when the control is invalid, or an empty string.",
-              "readonly": true
+              "description": "Accessible name, when there is no visible heading.",
+              "default": "''",
+              "attribute": "label"
             },
             {
-              "kind": "method",
-              "name": "checkValidity",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
+              "kind": "field",
+              "name": "dismissible",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
               },
-              "description": "Returns true if the control is valid; otherwise fires `invalid` and returns false."
+              "description": "Shows a close button in the header. Escape always closes the dialog.",
+              "default": "true",
+              "attribute": "dismissible",
+              "reflects": true
             },
             {
               "kind": "method",
-              "name": "reportValidity",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Like `checkValidity()`, but also shows the browser's message to the user."
-            },
-            {
-              "kind": "method",
-              "name": "_emit",
-              "privacy": "protected",
+              "name": "show",
               "return": {
                 "type": {
                   "text": "void"
                 }
               },
-              "parameters": [
-                {
-                  "name": "type",
-                  "type": {
-                    "text": "'input' | 'change'"
-                  }
-                }
-              ],
-              "description": "Fires a bubbling event on the host, as a native control would."
+              "description": "Opens the dialog as a modal."
             },
             {
-              "kind": "field",
-              "name": "_internals"
+              "kind": "method",
+              "name": "close",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Closes the dialog, unless a `va-close` listener cancels it."
             }
           ],
           "events": [
             {
-              "name": "type",
+              "name": "va-open",
               "type": {
                 "text": "Event"
+              },
+              "description": "After the dialog opens.",
+              "x-trigger": {
+                "how": "call show"
+              }
+            },
+            {
+              "description": "Before the dialog closes. Cancel it with `preventDefault()` to keep the dialog open. `event.detail.reason` is `escape`, `close-button`, `command` or `method`.",
+              "name": "va-close",
+              "x-trigger": {
+                "how": "press Escape",
+                "setup": "open"
               }
             }
           ],
           "attributes": [
             {
-              "name": "name",
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the dialog is open. Prefer `show()` and `close()`, or `command=\"--show\"` on a `va-button`.",
+              "default": "false",
+              "fieldName": "open"
+            },
+            {
+              "name": "heading",
               "type": {
                 "text": "string"
               },
-              "description": "Submitted with the form as `name=value`.",
+              "description": "The visible heading. It is also the dialog's accessible name.",
               "default": "''",
-              "fieldName": "name"
+              "fieldName": "heading"
             },
             {
-              "name": "disabled",
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name, when there is no visible heading.",
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "dismissible",
               "type": {
                 "text": "boolean"
               },
-              "description": "Disables the control. It can't be focused, changed or submitted.",
-              "default": "false",
-              "fieldName": "disabled"
-            },
-            {
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "The control must have a value before its form can be submitted.",
-              "default": "false",
-              "fieldName": "required"
+              "description": "Shows a close button in the header. Escape always closes the dialog.",
+              "default": "true",
+              "fieldName": "dismissible"
             }
           ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
           },
-          "customElement": true
+          "tagName": "va-dialog",
+          "customElement": true,
+          "summary": "Asks the user to confirm, decide or enter something before going back to the page.",
+          "x-keyboard": [
+            {
+              "context": "open",
+              "key": "Escape",
+              "action": "closes",
+              "description": "Closes the dialog and returns focus to the element that opened it."
+            }
+          ],
+          "x-a11y": {
+            "notes": [
+              "The page behind is inert while the dialog is open, so focus and screen readers stay inside it.",
+              "On open, focus goes to the first element with `autofocus`, else the first focusable control in the content, else the close button."
+            ],
+            "role": "dialog",
+            "name": "The `heading`, or `label` when there is no visible heading."
+          },
+          "x-guidance": {
+            "use": "For a decision the user must make before going on, such as confirming a deletion, or a short focused task.",
+            "avoid": "For information that doesn't need a response, or for long, multi-step flows.",
+            "instead": "`va-toast` for confirmations that need no response; a full page for long flows."
+          },
+          "x-examples": [
+            {
+              "title": "Confirm a destructive action",
+              "description": "A va-button with commandfor and command=\"--show\" opens the dialog without any script. Focus returns to it on close.",
+              "path": "src/dialog/examples/1-confirm.html",
+              "code": "<va-button variant=\"danger\" commandfor=\"delete-dialog\" command=\"--show\">Delete project</va-button>\n<va-dialog id=\"delete-dialog\" heading=\"Delete this project?\">\n  <p>“Atlas” and its 14 files will be deleted for everyone. You can't undo this.</p>\n  <va-button slot=\"footer\" variant=\"secondary\" commandfor=\"delete-dialog\" command=\"--close\">Cancel</va-button>\n  <va-button slot=\"footer\" variant=\"danger\">Delete project</va-button>\n</va-dialog>"
+            },
+            {
+              "title": "A short form",
+              "description": "Focus starts on the first field. Escape or the close button cancels.",
+              "path": "src/dialog/examples/2-form.html",
+              "code": "<va-button commandfor=\"rename-dialog\" command=\"--show\">Rename</va-button>\n<va-dialog id=\"rename-dialog\" heading=\"Rename file\">\n  <va-text-field label=\"File name\" value=\"notes-final-v2.md\"></va-text-field>\n  <va-button slot=\"footer\" variant=\"secondary\" commandfor=\"rename-dialog\" command=\"--close\">Cancel</va-button>\n  <va-button slot=\"footer\">Save</va-button>\n</va-dialog>"
+            }
+          ]
         }
       ],
       "exports": [
         {
           "kind": "js",
-          "name": "FormControl",
+          "name": "VaDialog",
           "declaration": {
-            "name": "FormControl",
-            "module": "src/core/form-control.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/core/warn.ts",
-      "declarations": [
-        {
-          "kind": "function",
-          "name": "devWarn",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "parameters": [
-            {
-              "name": "tag",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "problem",
-              "type": {
-                "text": "string"
-              }
-            },
-            {
-              "name": "fix",
-              "type": {
-                "text": "string"
-              }
-            }
-          ],
-          "description": "Logs a development-only warning written for people and agents alike:\nwhat is wrong, then the exact fix. Each message is shown once per page.\nStripped from production builds."
-        },
-        {
-          "kind": "function",
-          "name": "checkTokensLoaded",
-          "return": {
-            "type": {
-              "text": "void"
-            }
-          },
-          "parameters": [
-            {
-              "name": "host",
-              "type": {
-                "text": "HTMLElement"
-              }
-            }
-          ],
-          "description": "Warns once per page if no Vastu brand stylesheet is loaded. Waits for the page's load event,\nso a stylesheet that is still downloading doesn't cause a false warning."
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "devWarn",
-          "declaration": {
-            "name": "devWarn",
-            "module": "src/core/warn.ts"
-          }
-        },
-        {
-          "kind": "js",
-          "name": "checkTokensLoaded",
-          "declaration": {
-            "name": "checkTokensLoaded",
-            "module": "src/core/warn.ts"
+            "name": "VaDialog",
+            "module": "src/dialog/dialog.ts"
           }
         }
       ]
@@ -1490,233 +1793,6 @@
           "declaration": {
             "name": "VaSwitch",
             "module": "src/switch/switch.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
-      "path": "src/tabs/tabs.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "Tabs that switch between panels of related content, following the WAI-ARIA tabs pattern.",
-          "name": "VaTabs",
-          "cssProperties": [
-            {
-              "type": {
-                "text": "<color>"
-              },
-              "description": "Colour of the line under the row of tabs.",
-              "name": "--va-tabs-border",
-              "x-applies": {
-                "part": "tablist",
-                "property": "border-bottom-color"
-              }
-            },
-            {
-              "type": {
-                "text": "<color>"
-              },
-              "description": "Colour of the selected tab's underline.",
-              "name": "--va-tabs-indicator",
-              "x-applies": {
-                "light": "[aria-selected=\"true\"]",
-                "property": "border-bottom-color"
-              }
-            },
-            {
-              "type": {
-                "text": "<color>"
-              },
-              "description": "Text colour of tabs that aren't selected.",
-              "name": "--va-tabs-text",
-              "x-applies": {
-                "light": "[aria-selected=\"false\"]",
-                "property": "color"
-              }
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The row of tabs.",
-              "name": "tablist"
-            },
-            {
-              "description": "The wrapper around the panels.",
-              "name": "panels"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The tabs, as `<button slot=\"tab\">` elements, in order.",
-              "name": "tab"
-            },
-            {
-              "description": "The panels, as elements with `slot=\"panel\"`, in the same order as the tabs.",
-              "name": "panel"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "selected",
-              "privacy": "public",
-              "type": {
-                "text": "number"
-              },
-              "description": "The index of the selected tab, from 0.",
-              "default": "0",
-              "attribute": "selected",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "activation",
-              "privacy": "public",
-              "type": {
-                "text": "'automatic' | 'manual'"
-              },
-              "description": "`automatic` selects a tab as soon as it gets focus; `manual` waits for Enter or Space.",
-              "default": "'automatic'",
-              "attribute": "activation",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "privacy": "public",
-              "type": {
-                "text": "string"
-              },
-              "description": "Accessible name of the row of tabs.",
-              "default": "''",
-              "attribute": "label"
-            }
-          ],
-          "events": [
-            {
-              "name": "change",
-              "type": {
-                "text": "Event"
-              },
-              "description": "When the user selects a different tab. Read `event.target.selected`.",
-              "x-trigger": {
-                "how": "click-item 2"
-              }
-            }
-          ],
-          "attributes": [
-            {
-              "name": "selected",
-              "type": {
-                "text": "number"
-              },
-              "description": "The index of the selected tab, from 0.",
-              "default": "0",
-              "fieldName": "selected"
-            },
-            {
-              "name": "activation",
-              "type": {
-                "text": "'automatic' | 'manual'"
-              },
-              "description": "`automatic` selects a tab as soon as it gets focus; `manual` waits for Enter or Space.",
-              "default": "'automatic'",
-              "fieldName": "activation"
-            },
-            {
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "Accessible name of the row of tabs.",
-              "default": "''",
-              "fieldName": "label"
-            }
-          ],
-          "superclass": {
-            "name": "LitElement",
-            "package": "lit"
-          },
-          "tagName": "va-tabs",
-          "customElement": true,
-          "summary": "Switches between panels of related content in the same place on the page.",
-          "x-keyboard": [
-            {
-              "context": "items",
-              "key": "ArrowRight",
-              "action": "next",
-              "description": "Moves to the next tab, wrapping round. Selects it unless `activation=\"manual\"`."
-            },
-            {
-              "context": "items",
-              "key": "ArrowLeft",
-              "action": "previous",
-              "description": "Moves to the previous tab, wrapping round."
-            },
-            {
-              "context": "items",
-              "key": "Home",
-              "action": "first",
-              "description": "Moves to the first tab."
-            },
-            {
-              "context": "items",
-              "key": "End",
-              "action": "last",
-              "description": "Moves to the last tab."
-            },
-            {
-              "context": "items",
-              "key": "Enter",
-              "action": "activates",
-              "description": "Selects the focused tab (needed when `activation=\"manual\"`)."
-            },
-            {
-              "context": "items",
-              "key": "Tab",
-              "action": "focus-next",
-              "description": "Moves focus from the tabs into the selected panel."
-            }
-          ],
-          "x-keyboard-items": "[slot=\"tab\"]",
-          "x-a11y": {
-            "notes": [
-              "Each tab gets `role=\"tab\"`, `aria-selected` and `aria-controls`; each panel gets `role=\"tabpanel\"` and `aria-labelledby`.",
-              "Only the selected tab is in the Tab order (roving tabindex); arrow keys move between tabs."
-            ],
-            "role": "tablist",
-            "name": "The `label` attribute, such as \"Account settings\"."
-          },
-          "x-guidance": {
-            "use": "To switch between a few views of related content in one place, such as sections of a settings page.",
-            "avoid": "For navigation between pages, for steps in a sequence, or for more than about 6 tabs.",
-            "instead": "Links for navigation; a stepper for sequences; a list or menu for many options."
-          },
-          "x-examples": [
-            {
-              "title": "Settings sections",
-              "description": "Tabs are buttons in the tab slot; panels follow in the same order. Arrow keys move between tabs.",
-              "path": "src/tabs/examples/1-settings.html",
-              "code": "<va-tabs label=\"Account settings\">\n  <button slot=\"tab\">Profile</button>\n  <button slot=\"tab\">Notifications</button>\n  <button slot=\"tab\">Billing</button>\n  <div slot=\"panel\"><p>Your name, photo and bio.</p></div>\n  <div slot=\"panel\"><p>Choose what we email you about.</p></div>\n  <div slot=\"panel\"><p>Plan, invoices and payment method.</p></div>\n</va-tabs>"
-            },
-            {
-              "title": "Manual activation",
-              "description": "With activation=\"manual\", arrow keys only move focus; Enter or Space selects. Use it when showing a panel is slow.",
-              "path": "src/tabs/examples/2-manual.html",
-              "code": "<va-tabs label=\"Reports\" activation=\"manual\" selected=\"1\">\n  <button slot=\"tab\">Daily</button>\n  <button slot=\"tab\">Weekly</button>\n  <button slot=\"tab\">Monthly</button>\n  <div slot=\"panel\"><p>Today's numbers.</p></div>\n  <div slot=\"panel\"><p>This week's numbers.</p></div>\n  <div slot=\"panel\"><p>This month's numbers.</p></div>\n</va-tabs>"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "VaTabs",
-          "declaration": {
-            "name": "VaTabs",
-            "module": "src/tabs/tabs.ts"
           }
         }
       ]
@@ -2276,6 +2352,233 @@
           "declaration": {
             "name": "VaTextField",
             "module": "src/text-field/text-field.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/tabs/tabs.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "Tabs that switch between panels of related content, following the WAI-ARIA tabs pattern.",
+          "name": "VaTabs",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Colour of the line under the row of tabs.",
+              "name": "--va-tabs-border",
+              "x-applies": {
+                "part": "tablist",
+                "property": "border-bottom-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Colour of the selected tab's underline.",
+              "name": "--va-tabs-indicator",
+              "x-applies": {
+                "light": "[aria-selected=\"true\"]",
+                "property": "border-bottom-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Text colour of tabs that aren't selected.",
+              "name": "--va-tabs-text",
+              "x-applies": {
+                "light": "[aria-selected=\"false\"]",
+                "property": "color"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The row of tabs.",
+              "name": "tablist"
+            },
+            {
+              "description": "The wrapper around the panels.",
+              "name": "panels"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The tabs, as `<button slot=\"tab\">` elements, in order.",
+              "name": "tab"
+            },
+            {
+              "description": "The panels, as elements with `slot=\"panel\"`, in the same order as the tabs.",
+              "name": "panel"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "selected",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "description": "The index of the selected tab, from 0.",
+              "default": "0",
+              "attribute": "selected",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "activation",
+              "privacy": "public",
+              "type": {
+                "text": "'automatic' | 'manual'"
+              },
+              "description": "`automatic` selects a tab as soon as it gets focus; `manual` waits for Enter or Space.",
+              "default": "'automatic'",
+              "attribute": "activation",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name of the row of tabs.",
+              "default": "''",
+              "attribute": "label"
+            }
+          ],
+          "events": [
+            {
+              "name": "change",
+              "type": {
+                "text": "Event"
+              },
+              "description": "When the user selects a different tab. Read `event.target.selected`.",
+              "x-trigger": {
+                "how": "click-item 2"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "selected",
+              "type": {
+                "text": "number"
+              },
+              "description": "The index of the selected tab, from 0.",
+              "default": "0",
+              "fieldName": "selected"
+            },
+            {
+              "name": "activation",
+              "type": {
+                "text": "'automatic' | 'manual'"
+              },
+              "description": "`automatic` selects a tab as soon as it gets focus; `manual` waits for Enter or Space.",
+              "default": "'automatic'",
+              "fieldName": "activation"
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name of the row of tabs.",
+              "default": "''",
+              "fieldName": "label"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "va-tabs",
+          "customElement": true,
+          "summary": "Switches between panels of related content in the same place on the page.",
+          "x-keyboard": [
+            {
+              "context": "items",
+              "key": "ArrowRight",
+              "action": "next",
+              "description": "Moves to the next tab, wrapping round. Selects it unless `activation=\"manual\"`."
+            },
+            {
+              "context": "items",
+              "key": "ArrowLeft",
+              "action": "previous",
+              "description": "Moves to the previous tab, wrapping round."
+            },
+            {
+              "context": "items",
+              "key": "Home",
+              "action": "first",
+              "description": "Moves to the first tab."
+            },
+            {
+              "context": "items",
+              "key": "End",
+              "action": "last",
+              "description": "Moves to the last tab."
+            },
+            {
+              "context": "items",
+              "key": "Enter",
+              "action": "activates",
+              "description": "Selects the focused tab (needed when `activation=\"manual\"`)."
+            },
+            {
+              "context": "items",
+              "key": "Tab",
+              "action": "focus-next",
+              "description": "Moves focus from the tabs into the selected panel."
+            }
+          ],
+          "x-keyboard-items": "[slot=\"tab\"]",
+          "x-a11y": {
+            "notes": [
+              "Each tab gets `role=\"tab\"`, `aria-selected` and `aria-controls`; each panel gets `role=\"tabpanel\"` and `aria-labelledby`.",
+              "Only the selected tab is in the Tab order (roving tabindex); arrow keys move between tabs."
+            ],
+            "role": "tablist",
+            "name": "The `label` attribute, such as \"Account settings\"."
+          },
+          "x-guidance": {
+            "use": "To switch between a few views of related content in one place, such as sections of a settings page.",
+            "avoid": "For navigation between pages, for steps in a sequence, or for more than about 6 tabs.",
+            "instead": "Links for navigation; a stepper for sequences; a list or menu for many options."
+          },
+          "x-examples": [
+            {
+              "title": "Settings sections",
+              "description": "Tabs are buttons in the tab slot; panels follow in the same order. Arrow keys move between tabs.",
+              "path": "src/tabs/examples/1-settings.html",
+              "code": "<va-tabs label=\"Account settings\">\n  <button slot=\"tab\">Profile</button>\n  <button slot=\"tab\">Notifications</button>\n  <button slot=\"tab\">Billing</button>\n  <div slot=\"panel\"><p>Your name, photo and bio.</p></div>\n  <div slot=\"panel\"><p>Choose what we email you about.</p></div>\n  <div slot=\"panel\"><p>Plan, invoices and payment method.</p></div>\n</va-tabs>"
+            },
+            {
+              "title": "Manual activation",
+              "description": "With activation=\"manual\", arrow keys only move focus; Enter or Space selects. Use it when showing a panel is slow.",
+              "path": "src/tabs/examples/2-manual.html",
+              "code": "<va-tabs label=\"Reports\" activation=\"manual\" selected=\"1\">\n  <button slot=\"tab\">Daily</button>\n  <button slot=\"tab\">Weekly</button>\n  <button slot=\"tab\">Monthly</button>\n  <div slot=\"panel\"><p>Today's numbers.</p></div>\n  <div slot=\"panel\"><p>This week's numbers.</p></div>\n  <div slot=\"panel\"><p>This month's numbers.</p></div>\n</va-tabs>"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VaTabs",
+          "declaration": {
+            "name": "VaTabs",
+            "module": "src/tabs/tabs.ts"
           }
         }
       ]

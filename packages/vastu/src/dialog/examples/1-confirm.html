@@ -1,0 +1,8 @@
+<!-- title: Confirm a destructive action
+     description: A va-button with commandfor and command="--show" opens the dialog without any script. Focus returns to it on close. -->
+<va-button variant="danger" commandfor="delete-dialog" command="--show">Delete project</va-button>
+<va-dialog id="delete-dialog" heading="Delete this project?">
+  <p>“Atlas” and its 14 files will be deleted for everyone. You can't undo this.</p>
+  <va-button slot="footer" variant="secondary" commandfor="delete-dialog" command="--close">Cancel</va-button>
+  <va-button slot="footer" variant="danger">Delete project</va-button>
+</va-dialog>
