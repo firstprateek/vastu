@@ -1,12 +1,14 @@
 # switch
 
+[![Open the live demo](https://img.shields.io/badge/Live_demo-Open_%E2%86%92-b93a2f?style=for-the-badge)](https://firstprateek.github.io/switch/)
+
 [![CI](https://github.com/firstprateek/switch/actions/workflows/ci.yml/badge.svg)](https://github.com/firstprateek/switch/actions/workflows/ci.yml)
 
 An accessible on/off switch, built as a web component with [Lit](https://lit.dev/).
 It wraps a native checkbox with `role="switch"`, so it works with the keyboard and screen readers.
 It's handy as a light/dark theme switch, which is why the element is called `<theme-switch>`.
 
-**[Live demo](https://firstprateek.github.io/switch/)**
+### [▶ Try the live demo](https://firstprateek.github.io/switch/)
 
 ## Install
 
