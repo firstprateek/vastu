@@ -61,10 +61,17 @@ export function vastuManifestPlugin() {
           const [event, how, setup] = text.split('|').map((s) => s.trim());
           x.triggers[event] = setup ? { how, setup } : { how };
         } else if (name === 'cssprop-applies') {
-          // "--var part property", or "--var part:hover property" for a value that only shows on hover.
-          const [variable, target, property] = text.split(/\s+/);
-          const [part, state] = target.split(':');
-          x.applies[variable] = state ? { part, state, property } : { part, property };
+          // "--var part property"; "--var part:state property" for a value that only shows in a state
+          // (hover, checked, unchecked, invalid, open); "--var light(selector) property" for a slotted element.
+          const m = text.match(/^(\S+)\s+(light\(.*\)|\S+)\s+(\S+)$/);
+          if (!m) throw new Error(`${node.name.text}: can't read "@cssprop-applies ${text}". Use: --var part[:state] property, or --var light(selector) property.`);
+          const [, variable, target, property] = m;
+          if (target.startsWith('light(')) {
+            x.applies[variable] = { light: target.slice(6, -1), property };
+          } else {
+            const [part, state] = target.split(':');
+            x.applies[variable] = state ? { part, state, property } : { part, property };
+          }
         }
       }
       extras.set(node.name.text, x);

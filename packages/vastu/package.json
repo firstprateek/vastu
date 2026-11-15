@@ -19,6 +19,11 @@
       "development": "./dist/dev/switch/index.js",
       "default": "./dist/prod/switch/index.js"
     },
+    "./tabs": {
+      "types": "./dist/dev/tabs/index.d.ts",
+      "development": "./dist/dev/tabs/index.js",
+      "default": "./dist/prod/tabs/index.js"
+    },
     "./text-field": {
       "types": "./dist/dev/text-field/index.d.ts",
       "development": "./dist/dev/text-field/index.js",

@@ -111,6 +111,8 @@ for (const c of components) {
           await page.locator('#subject').focus();
           await page.keyboard.type('a');
           await page.keyboard.press('Tab');
+        } else if (verb === 'click-item') {
+          await page.locator('#subject').locator(items!).nth(Number(arg) - 1).click();
         } else if (verb === 'call') {
           await page.locator('#subject').evaluate((el: any, method) => el[method](), arg);
         } else {
@@ -120,6 +122,9 @@ for (const c of components) {
       });
     }
 
+    // Slot tests build deliberately incomplete elements (a tab with no panel), so warnings are expected.
+    test.describe('slots', () => {
+    test.use({ expectedWarnings: [/^<va-/] });
     for (const slot of c.slots ?? []) {
       const label = slot.name ? `slot "${slot.name}"` : 'default slot';
       test(`${label} renders its content`, async ({ page }) => {
@@ -146,6 +151,7 @@ for (const c of components) {
         expect(assigned).toBe(true);
       });
     }
+    });
 
     for (const part of c.cssParts ?? []) {
       test(`part ${part.name} exists`, async ({ page }) => {
@@ -158,9 +164,10 @@ for (const c of components) {
     }
 
     for (const prop of c.cssProperties ?? []) {
-      const { part, state, property } = prop['x-applies'];
+      const { part, light, state, property } = prop['x-applies'];
       const syntax = prop.syntax ?? prop.type?.text;
-      test(`CSS property ${prop.name} sets ${property} of part ${part}${state ? ` on ${state}` : ''}`, async ({ page }) => {
+      const target = light ? `slotted ${light}` : `part ${part}`;
+      test(`CSS property ${prop.name} sets ${property} of ${target}${state ? ` on ${state}` : ''}`, async ({ page }) => {
         const sentinel = SENTINEL[syntax];
         if (!sentinel) throw new Error(`No sentinel for CSS syntax ${syntax} of ${prop.name}`);
         if (state === 'open') await openSubject(page);
@@ -191,8 +198,11 @@ for (const c of components) {
           await page.mouse.move(box.x, box.y);
         }
         const got = await page.locator('#subject').evaluate(
-          (el, { part, property }) => getComputedStyle(el.shadowRoot!.querySelector(`[part~="${part}"]`)!).getPropertyValue(property),
-          { part, property }
+          (el, { part, light, property }) => {
+            const node = light ? el.querySelector(light) : el.shadowRoot!.querySelector(`[part~="${part}"]`);
+            return getComputedStyle(node!).getPropertyValue(property);
+          },
+          { part, light, property }
         );
         expect(got).toBe(sentinel.computed);
       });
