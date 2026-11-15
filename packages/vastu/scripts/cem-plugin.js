@@ -101,6 +101,7 @@ export function vastuManifestPlugin() {
             if (!x.triggers[event.name]) throw new Error(`${where}: event ${event.name} has no @event-trigger line, so it can't be contract-tested.`);
             event['x-trigger'] = x.triggers[event.name];
           }
+          decl.attributes = (decl.attributes ?? []).filter((a) => !a.name.startsWith('_') && !a.fieldName?.startsWith('_'));
           // Public API only: drop private (#, _), protected, @internal and static framework plumbing.
           decl.members = (decl.members ?? []).filter(
             (m) => !m.name.startsWith('#') && !m.name.startsWith('_') && !m.static && m.privacy !== 'private' && m.privacy !== 'protected' && !/@internal/.test(m.description ?? '')

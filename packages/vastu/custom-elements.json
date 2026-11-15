@@ -735,375 +735,6 @@
     },
     {
       "kind": "javascript-module",
-      "path": "src/switch/switch.ts",
-      "declarations": [
-        {
-          "kind": "class",
-          "description": "An on/off switch for a setting that takes effect immediately.",
-          "name": "VaSwitch",
-          "cssProperties": [
-            {
-              "type": {
-                "text": "<color>"
-              },
-              "description": "Track colour when off.",
-              "name": "--va-switch-track",
-              "x-applies": {
-                "part": "control",
-                "state": "unchecked",
-                "property": "background-color"
-              }
-            },
-            {
-              "type": {
-                "text": "<color>"
-              },
-              "description": "Track colour when on.",
-              "name": "--va-switch-track-on",
-              "x-applies": {
-                "part": "control",
-                "state": "checked",
-                "property": "background-color"
-              }
-            },
-            {
-              "type": {
-                "text": "<color>"
-              },
-              "description": "Thumb colour.",
-              "name": "--va-switch-thumb",
-              "x-applies": {
-                "part": "thumb",
-                "property": "background-color"
-              }
-            }
-          ],
-          "cssParts": [
-            {
-              "description": "The switch's track (a native button with `role=\"switch\"`).",
-              "name": "control"
-            },
-            {
-              "description": "The round thumb.",
-              "name": "thumb"
-            },
-            {
-              "description": "The label text.",
-              "name": "label"
-            }
-          ],
-          "slots": [
-            {
-              "description": "The visible label. Clicking it flips the switch.",
-              "name": ""
-            },
-            {
-              "description": "Optional help text under the label.",
-              "name": "description"
-            }
-          ],
-          "members": [
-            {
-              "kind": "field",
-              "name": "checked",
-              "privacy": "public",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether the switch is on.",
-              "default": "false",
-              "attribute": "checked",
-              "reflects": true
-            },
-            {
-              "kind": "field",
-              "name": "value",
-              "privacy": "public",
-              "type": {
-                "text": "string"
-              },
-              "description": "Submitted with `name` while the switch is on. Defaults to `on`, as for a native checkbox.",
-              "default": "'on'",
-              "attribute": "value"
-            },
-            {
-              "kind": "field",
-              "name": "label",
-              "privacy": "public",
-              "type": {
-                "text": "string"
-              },
-              "description": "Accessible name, when there is no visible label text.",
-              "default": "''",
-              "attribute": "label"
-            },
-            {
-              "kind": "field",
-              "name": "name",
-              "privacy": "public",
-              "type": {
-                "text": "string"
-              },
-              "description": "Submitted with the form as `name=value`.",
-              "default": "''",
-              "attribute": "name",
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "disabled",
-              "privacy": "public",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Disables the control. It can't be focused, changed or submitted.",
-              "default": "false",
-              "attribute": "disabled",
-              "reflects": true,
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "required",
-              "privacy": "public",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "The control must have a value before its form can be submitted.",
-              "default": "false",
-              "attribute": "required",
-              "reflects": true,
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "form",
-              "type": {
-                "text": "HTMLFormElement | null"
-              },
-              "description": "The form this control belongs to, if any.",
-              "readonly": true,
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validity",
-              "type": {
-                "text": "ValidityState"
-              },
-              "description": "The control's validity state, as on native controls.",
-              "readonly": true,
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            },
-            {
-              "kind": "field",
-              "name": "validationMessage",
-              "type": {
-                "text": "string"
-              },
-              "description": "The message the browser shows when the control is invalid, or an empty string.",
-              "readonly": true,
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "checkValidity",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Returns true if the control is valid; otherwise fires `invalid` and returns false.",
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            },
-            {
-              "kind": "method",
-              "name": "reportValidity",
-              "return": {
-                "type": {
-                  "text": "boolean"
-                }
-              },
-              "description": "Like `checkValidity()`, but also shows the browser's message to the user.",
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            }
-          ],
-          "events": [
-            {
-              "description": "When the user flips the switch. Read `event.target.checked`.",
-              "name": "change",
-              "x-trigger": {
-                "how": "click"
-              }
-            },
-            {
-              "description": "When the user flips the switch, just before `change`.",
-              "name": "input",
-              "x-trigger": {
-                "how": "click"
-              }
-            }
-          ],
-          "attributes": [
-            {
-              "name": "checked",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Whether the switch is on.",
-              "default": "false",
-              "fieldName": "checked"
-            },
-            {
-              "name": "value",
-              "type": {
-                "text": "string"
-              },
-              "description": "Submitted with `name` while the switch is on. Defaults to `on`, as for a native checkbox.",
-              "default": "'on'",
-              "fieldName": "value"
-            },
-            {
-              "name": "label",
-              "type": {
-                "text": "string"
-              },
-              "description": "Accessible name, when there is no visible label text.",
-              "default": "''",
-              "fieldName": "label"
-            },
-            {
-              "name": "name",
-              "type": {
-                "text": "string"
-              },
-              "description": "Submitted with the form as `name=value`.",
-              "default": "''",
-              "fieldName": "name",
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            },
-            {
-              "name": "disabled",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "Disables the control. It can't be focused, changed or submitted.",
-              "default": "false",
-              "fieldName": "disabled",
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            },
-            {
-              "name": "required",
-              "type": {
-                "text": "boolean"
-              },
-              "description": "The control must have a value before its form can be submitted.",
-              "default": "false",
-              "fieldName": "required",
-              "inheritedFrom": {
-                "name": "FormControl",
-                "module": "src/core/form-control.ts"
-              }
-            }
-          ],
-          "superclass": {
-            "name": "FormControl",
-            "module": "/src/core/form-control.js"
-          },
-          "tagName": "va-switch",
-          "customElement": true,
-          "summary": "Turns a setting on or off, with immediate effect.",
-          "x-keyboard": [
-            {
-              "context": "host",
-              "key": "Space",
-              "action": "toggles",
-              "description": "Turns the switch on or off."
-            },
-            {
-              "context": "host",
-              "key": "Enter",
-              "action": "toggles",
-              "description": "Turns the switch on or off."
-            },
-            {
-              "context": "host",
-              "key": "Tab",
-              "action": "focus-next",
-              "description": "Moves focus to the next control."
-            }
-          ],
-          "x-a11y": {
-            "notes": [
-              "The state is announced as on or off, not checked or unchecked."
-            ],
-            "role": "switch",
-            "name": "The slotted label text, or the `label` attribute when there is no visible label."
-          },
-          "x-guidance": {
-            "use": "For a setting that applies as soon as it changes, such as \"Dark theme\" or \"Email notifications\".",
-            "avoid": "For a choice that is only applied when a form is submitted, or for agreeing to terms.",
-            "instead": "`va-checkbox` for choices submitted with a form."
-          },
-          "x-examples": [
-            {
-              "title": "Settings",
-              "description": "Each switch applies its setting straight away.",
-              "path": "src/switch/examples/1-settings.html",
-              "code": "<va-switch checked>Email notifications</va-switch>\n<va-switch>\n  Dark theme\n  <span slot=\"description\">Uses darker colours for this page.</span>\n</va-switch>\n<va-switch disabled>Sync (needs an account)</va-switch>"
-            },
-            {
-              "title": "In a form",
-              "description": "A switch submits name=value while it's on, and resets with its form.",
-              "path": "src/switch/examples/2-form.html",
-              "code": "<form>\n  <va-switch name=\"newsletter\" value=\"weekly\" checked>Weekly newsletter</va-switch>\n  <va-button type=\"submit\">Save</va-button>\n  <va-button type=\"reset\" variant=\"secondary\">Reset</va-button>\n</form>"
-            }
-          ]
-        }
-      ],
-      "exports": [
-        {
-          "kind": "js",
-          "name": "VaSwitch",
-          "declaration": {
-            "name": "VaSwitch",
-            "module": "src/switch/switch.ts"
-          }
-        }
-      ]
-    },
-    {
-      "kind": "javascript-module",
       "path": "src/checkbox/checkbox.ts",
       "declarations": [
         {
@@ -1490,6 +1121,934 @@
           "declaration": {
             "name": "VaCheckbox",
             "module": "src/checkbox/checkbox.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/switch/switch.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "An on/off switch for a setting that takes effect immediately.",
+          "name": "VaSwitch",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Track colour when off.",
+              "name": "--va-switch-track",
+              "x-applies": {
+                "part": "control",
+                "state": "unchecked",
+                "property": "background-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Track colour when on.",
+              "name": "--va-switch-track-on",
+              "x-applies": {
+                "part": "control",
+                "state": "checked",
+                "property": "background-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Thumb colour.",
+              "name": "--va-switch-thumb",
+              "x-applies": {
+                "part": "thumb",
+                "property": "background-color"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The switch's track (a native button with `role=\"switch\"`).",
+              "name": "control"
+            },
+            {
+              "description": "The round thumb.",
+              "name": "thumb"
+            },
+            {
+              "description": "The label text.",
+              "name": "label"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The visible label. Clicking it flips the switch.",
+              "name": ""
+            },
+            {
+              "description": "Optional help text under the label.",
+              "name": "description"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "checked",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the switch is on.",
+              "default": "false",
+              "attribute": "checked",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with `name` while the switch is on. Defaults to `on`, as for a native checkbox.",
+              "default": "'on'",
+              "attribute": "value"
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name, when there is no visible label text.",
+              "default": "''",
+              "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value`.",
+              "default": "''",
+              "attribute": "name",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the control. It can't be focused, changed or submitted.",
+              "default": "false",
+              "attribute": "disabled",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The control must have a value before its form can be submitted.",
+              "default": "false",
+              "attribute": "required",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this control belongs to, if any.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The control's validity state, as on native controls.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The message the browser shows when the control is invalid, or an empty string.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Returns true if the control is valid; otherwise fires `invalid` and returns false.",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Like `checkValidity()`, but also shows the browser's message to the user.",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "description": "When the user flips the switch. Read `event.target.checked`.",
+              "name": "change",
+              "x-trigger": {
+                "how": "click"
+              }
+            },
+            {
+              "description": "When the user flips the switch, just before `change`.",
+              "name": "input",
+              "x-trigger": {
+                "how": "click"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "checked",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the switch is on.",
+              "default": "false",
+              "fieldName": "checked"
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with `name` while the switch is on. Defaults to `on`, as for a native checkbox.",
+              "default": "'on'",
+              "fieldName": "value"
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name, when there is no visible label text.",
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value`.",
+              "default": "''",
+              "fieldName": "name",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the control. It can't be focused, changed or submitted.",
+              "default": "false",
+              "fieldName": "disabled",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The control must have a value before its form can be submitted.",
+              "default": "false",
+              "fieldName": "required",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "FormControl",
+            "module": "/src/core/form-control.js"
+          },
+          "tagName": "va-switch",
+          "customElement": true,
+          "summary": "Turns a setting on or off, with immediate effect.",
+          "x-keyboard": [
+            {
+              "context": "host",
+              "key": "Space",
+              "action": "toggles",
+              "description": "Turns the switch on or off."
+            },
+            {
+              "context": "host",
+              "key": "Enter",
+              "action": "toggles",
+              "description": "Turns the switch on or off."
+            },
+            {
+              "context": "host",
+              "key": "Tab",
+              "action": "focus-next",
+              "description": "Moves focus to the next control."
+            }
+          ],
+          "x-a11y": {
+            "notes": [
+              "The state is announced as on or off, not checked or unchecked."
+            ],
+            "role": "switch",
+            "name": "The slotted label text, or the `label` attribute when there is no visible label."
+          },
+          "x-guidance": {
+            "use": "For a setting that applies as soon as it changes, such as \"Dark theme\" or \"Email notifications\".",
+            "avoid": "For a choice that is only applied when a form is submitted, or for agreeing to terms.",
+            "instead": "`va-checkbox` for choices submitted with a form."
+          },
+          "x-examples": [
+            {
+              "title": "Settings",
+              "description": "Each switch applies its setting straight away.",
+              "path": "src/switch/examples/1-settings.html",
+              "code": "<va-switch checked>Email notifications</va-switch>\n<va-switch>\n  Dark theme\n  <span slot=\"description\">Uses darker colours for this page.</span>\n</va-switch>\n<va-switch disabled>Sync (needs an account)</va-switch>"
+            },
+            {
+              "title": "In a form",
+              "description": "A switch submits name=value while it's on, and resets with its form.",
+              "path": "src/switch/examples/2-form.html",
+              "code": "<form>\n  <va-switch name=\"newsletter\" value=\"weekly\" checked>Weekly newsletter</va-switch>\n  <va-button type=\"submit\">Save</va-button>\n  <va-button type=\"reset\" variant=\"secondary\">Reset</va-button>\n</form>"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VaSwitch",
+          "declaration": {
+            "name": "VaSwitch",
+            "module": "src/switch/switch.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/text-field/text-field.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A single-line text input with a visible label, help text and error message.",
+          "name": "VaTextField",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Background colour of the field.",
+              "name": "--va-text-field-bg",
+              "x-applies": {
+                "part": "field",
+                "property": "background-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Border colour of the field.",
+              "name": "--va-text-field-border",
+              "x-applies": {
+                "part": "field",
+                "property": "border-top-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Border colour while the field shows an error.",
+              "name": "--va-text-field-border-invalid",
+              "x-applies": {
+                "part": "field",
+                "state": "invalid",
+                "property": "border-top-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Corner radius of the field.",
+              "name": "--va-text-field-radius",
+              "x-applies": {
+                "part": "field",
+                "property": "border-top-left-radius"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Minimum height of the field.",
+              "name": "--va-text-field-height",
+              "x-applies": {
+                "part": "field",
+                "property": "min-height"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The visible label.",
+              "name": "label"
+            },
+            {
+              "description": "The box around the input and its icons.",
+              "name": "field"
+            },
+            {
+              "description": "The native input.",
+              "name": "input"
+            },
+            {
+              "description": "The help text.",
+              "name": "help"
+            },
+            {
+              "description": "The error message.",
+              "name": "error"
+            }
+          ],
+          "slots": [
+            {
+              "description": "An icon or prefix inside the field, before the text.",
+              "name": "start"
+            },
+            {
+              "description": "An icon or suffix inside the field, after the text.",
+              "name": "end"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "The visible label above the field. Required: it is also the field's accessible name.",
+              "default": "''",
+              "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "privacy": "public",
+              "type": {
+                "text": "'text' | 'email' | 'password' | 'search' | 'tel' | 'url'"
+              },
+              "description": "The kind of text. Sets the keyboard on phones and the built-in validation.",
+              "default": "'text'",
+              "attribute": "type"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "The current text.",
+              "default": "''",
+              "attribute": "value"
+            },
+            {
+              "kind": "field",
+              "name": "placeholder",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Example text shown while the field is empty. Never a substitute for `label`.",
+              "default": "''",
+              "attribute": "placeholder"
+            },
+            {
+              "kind": "field",
+              "name": "helpText",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Help text under the field, such as the expected format.",
+              "default": "''",
+              "attribute": "help-text"
+            },
+            {
+              "kind": "field",
+              "name": "error",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "A custom error message. While set, the field is invalid and shows it.",
+              "default": "''",
+              "attribute": "error"
+            },
+            {
+              "kind": "field",
+              "name": "readonly",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The text can be selected and submitted, but not changed.",
+              "default": "false",
+              "attribute": "readonly",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "minLength",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "description": "The minimum number of characters.",
+              "attribute": "minlength"
+            },
+            {
+              "kind": "field",
+              "name": "maxLength",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "description": "The maximum number of characters.",
+              "attribute": "maxlength"
+            },
+            {
+              "kind": "field",
+              "name": "pattern",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "A regular expression the whole value must match.",
+              "default": "''",
+              "attribute": "pattern"
+            },
+            {
+              "kind": "field",
+              "name": "autocomplete",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "A hint for the browser's autofill, such as `email` or `name`.",
+              "default": "''",
+              "attribute": "autocomplete"
+            },
+            {
+              "kind": "method",
+              "name": "select",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Selects all the text in the field."
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value`.",
+              "default": "''",
+              "attribute": "name",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the control. It can't be focused, changed or submitted.",
+              "default": "false",
+              "attribute": "disabled",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "required",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The control must have a value before its form can be submitted.",
+              "default": "false",
+              "attribute": "required",
+              "reflects": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this control belongs to, if any.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validity",
+              "type": {
+                "text": "ValidityState"
+              },
+              "description": "The control's validity state, as on native controls.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "validationMessage",
+              "type": {
+                "text": "string"
+              },
+              "description": "The message the browser shows when the control is invalid, or an empty string.",
+              "readonly": true,
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "checkValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Returns true if the control is valid; otherwise fires `invalid` and returns false.",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "reportValidity",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "description": "Like `checkValidity()`, but also shows the browser's message to the user.",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            }
+          ],
+          "events": [
+            {
+              "description": "The native input event, on every keystroke. Read `event.target.value`.",
+              "name": "input",
+              "x-trigger": {
+                "how": "press a"
+              }
+            },
+            {
+              "description": "When the user commits a change, by leaving the field or pressing Enter.",
+              "name": "change",
+              "x-trigger": {
+                "how": "commit"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The visible label above the field. Required: it is also the field's accessible name.",
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "type",
+              "type": {
+                "text": "'text' | 'email' | 'password' | 'search' | 'tel' | 'url'"
+              },
+              "description": "The kind of text. Sets the keyboard on phones and the built-in validation.",
+              "default": "'text'",
+              "fieldName": "type"
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The current text.",
+              "default": "''",
+              "fieldName": "value"
+            },
+            {
+              "name": "placeholder",
+              "type": {
+                "text": "string"
+              },
+              "description": "Example text shown while the field is empty. Never a substitute for `label`.",
+              "default": "''",
+              "fieldName": "placeholder"
+            },
+            {
+              "name": "help-text",
+              "type": {
+                "text": "string"
+              },
+              "description": "Help text under the field, such as the expected format.",
+              "default": "''",
+              "fieldName": "helpText"
+            },
+            {
+              "name": "error",
+              "type": {
+                "text": "string"
+              },
+              "description": "A custom error message. While set, the field is invalid and shows it.",
+              "default": "''",
+              "fieldName": "error"
+            },
+            {
+              "name": "readonly",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The text can be selected and submitted, but not changed.",
+              "default": "false",
+              "fieldName": "readonly"
+            },
+            {
+              "name": "minlength",
+              "type": {
+                "text": "number"
+              },
+              "description": "The minimum number of characters.",
+              "fieldName": "minLength"
+            },
+            {
+              "name": "maxlength",
+              "type": {
+                "text": "number"
+              },
+              "description": "The maximum number of characters.",
+              "fieldName": "maxLength"
+            },
+            {
+              "name": "pattern",
+              "type": {
+                "text": "string"
+              },
+              "description": "A regular expression the whole value must match.",
+              "default": "''",
+              "fieldName": "pattern"
+            },
+            {
+              "name": "autocomplete",
+              "type": {
+                "text": "string"
+              },
+              "description": "A hint for the browser's autofill, such as `email` or `name`.",
+              "default": "''",
+              "fieldName": "autocomplete"
+            },
+            {
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value`.",
+              "default": "''",
+              "fieldName": "name",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the control. It can't be focused, changed or submitted.",
+              "default": "false",
+              "fieldName": "disabled",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            },
+            {
+              "name": "required",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "The control must have a value before its form can be submitted.",
+              "default": "false",
+              "fieldName": "required",
+              "inheritedFrom": {
+                "name": "FormControl",
+                "module": "src/core/form-control.ts"
+              }
+            }
+          ],
+          "superclass": {
+            "name": "FormControl",
+            "module": "/src/core/form-control.js"
+          },
+          "tagName": "va-text-field",
+          "customElement": true,
+          "summary": "Collects a short piece of text, such as a name, an email address or a search term.",
+          "x-keyboard": [
+            {
+              "context": "host",
+              "key": "Tab",
+              "action": "focus-next",
+              "description": "Moves focus to the next control."
+            }
+          ],
+          "x-a11y": {
+            "notes": [
+              "Help text and the error message are linked with `aria-describedby`; the error also sets `aria-invalid`.",
+              "Errors appear after the user leaves the field or submits the form, not while they type."
+            ],
+            "role": "textbox",
+            "name": "The `label` attribute, shown above the field. Every text field needs one."
+          },
+          "x-guidance": {
+            "use": "For short, free-form text: names, email addresses, search terms, codes.",
+            "avoid": "For long text, or for picking from a fixed set of options.",
+            "instead": "A textarea for long text; a select or radio group for fixed options."
+          },
+          "x-examples": [
+            {
+              "title": "Label, help and placeholder",
+              "description": "Every field has a visible label. Help text says what format to use; a placeholder only gives an example.",
+              "path": "src/text-field/examples/1-basic.html",
+              "code": "<va-text-field label=\"Full name\" autocomplete=\"name\"></va-text-field>\n<va-text-field label=\"Username\" help-text=\"Letters and numbers only, 3 to 20 characters.\" placeholder=\"e.g. ada99\" minlength=\"3\" maxlength=\"20\" pattern=\"[A-Za-z0-9]+\"></va-text-field>"
+            },
+            {
+              "title": "Validation in a form",
+              "description": "Errors show after the user leaves the field or submits, never while they type.",
+              "path": "src/text-field/examples/2-validation.html",
+              "code": "<form>\n  <va-text-field label=\"Email address\" name=\"email\" type=\"email\" required autocomplete=\"email\"></va-text-field>\n  <va-button type=\"submit\">Subscribe</va-button>\n</form>"
+            },
+            {
+              "title": "Custom error, read-only and disabled",
+              "description": "Set error to show a message from your own validation, such as a server check.",
+              "path": "src/text-field/examples/3-states.html",
+              "code": "<va-text-field label=\"Coupon code\" value=\"SPRING\" error=\"This code has expired.\"></va-text-field>\n<va-text-field label=\"Account ID\" value=\"ACC-20817\" readonly></va-text-field>\n<va-text-field label=\"Company\" disabled></va-text-field>"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VaTextField",
+          "declaration": {
+            "name": "VaTextField",
+            "module": "src/text-field/text-field.ts"
           }
         }
       ]

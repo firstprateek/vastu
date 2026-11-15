@@ -106,6 +106,11 @@ for (const c of components) {
         } else if (verb === 'press') {
           if (setup !== 'open') await page.locator('#subject').focus();
           await page.keyboard.press(arg);
+        } else if (verb === 'commit') {
+          // Edit, then leave the field: what makes a text input fire change.
+          await page.locator('#subject').focus();
+          await page.keyboard.type('a');
+          await page.keyboard.press('Tab');
         } else if (verb === 'call') {
           await page.locator('#subject').evaluate((el: any, method) => el[method](), arg);
         } else {
@@ -159,6 +164,12 @@ for (const c of components) {
         const sentinel = SENTINEL[syntax];
         if (!sentinel) throw new Error(`No sentinel for CSS syntax ${syntax} of ${prop.name}`);
         if (state === 'open') await openSubject(page);
+        if (state === 'invalid') {
+          await page.locator('#subject').evaluate(async (el: any) => {
+            el.error = 'Contract error';
+            await el.updateComplete;
+          });
+        }
         if (state === 'checked' || state === 'unchecked') {
           await page.locator('#subject').evaluate(async (el: any, checked) => {
             el.checked = checked;

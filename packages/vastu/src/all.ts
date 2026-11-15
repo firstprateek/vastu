@@ -2,3 +2,4 @@
 export * from './button/index.js';
 export * from './checkbox/index.js';
 export * from './switch/index.js';
+export * from './text-field/index.js';
