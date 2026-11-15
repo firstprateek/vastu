@@ -1,80 +1,96 @@
 # bar-chart
 
-A customizable web component that plots a bar chart with ordinal values in the x axis and numerical values in y axis.
-The web component is built using [LIT](https://lit.dev/) and the chart is rendered using [D3](https://d3js.org/)
-The widget can render real-time data.
+[![CI](https://github.com/firstprateek/bar-chart/actions/workflows/ci.yml/badge.svg)](https://github.com/firstprateek/bar-chart/actions/workflows/ci.yml)
 
-## Live Demo
+A bar chart web component built with [Lit](https://lit.dev/) and [D3](https://d3js.org/).
+It plots ordinal values on the x axis against numbers on the y axis.
+Give it new data and the bars animate to it, so it can follow real-time values.
 
-[Demo](https://firstprateek.github.io/bar-chart/)
+**[Live demo](https://firstprateek.github.io/bar-chart/)**
 
-## Installation
+## Install
 
 ```bash
-npm install @firstprateek/bar-chart --save
+npm install @firstprateek/bar-chart
 ```
+
+The D3 modules it needs are regular dependencies, so you don't need to add D3 to your page.
 
 ## Usage
 
-### Properties
-
-1. width - Number. width of the widget in pixels, default value is 460
-2. height - Number. height of the widget in pixels, default value is 400
-3. data - Array. An array of objects. Each object should be of the form { "group": <group_str>, "value": <number> }, default value is []
-4. min - Number. Min range value for the y-axis. Default is 0
-5. max - Number. Max range value for the y-axis. Default is the max "value" in the data stream
-6. transitionDuration - Number. Time taken to transition from one data value to another in ms. Default is 1000
-7. dataApi - String. URL for retrieving the data
-8. updateFrequency - Number. Seconds after which the chart data should be auto-updated, default is 60 seconds
-9. autoUpdate - Boolean. Seconds after which the chart data should be auto-updated, default is 60 seconds
-
-### Events
-
-1. updated - Indicates when the chart was auto-updated
-
-### CSS variables
-
-1. --bar-chart-background-color - background color of the poll, default is white
-2. --bar-chart-bar-color - background color for the individual bars, default is #69B3A2
-3. --bar-chart-axis-color - color of the axis, default is black
-4. --bar-chart-text-color - color of the axis text, default is black
-
-### Example
+Import the package once (with a bundler such as Vite or webpack) to register the `<bar-chart>` element:
 
 ```js
-// In index.js
-import BarChart from '@firstprateek/bar-chart';
+import '@firstprateek/bar-chart';
 ```
 
-```jsx
-<!DOCTYPE html>
-<head>
-    <script src="./index.js"></script>
-    <script src="https://d3js.org/d3.v6.js"></script>
-</head>
-<body>
-    <bar-chart
-        width="500" 
-        height="440" 
-        data='[{"group":"A","value":10},{"group":"B","value":19},{"group":"C","value":8}]'
-        min="0"
-        max="20"
-    ></bar-chart>
-</body>
-</html>
+Pass the data as a JSON attribute or set the `data` property:
+
+```html
+<bar-chart
+  width="500"
+  height="400"
+  max="20"
+  data='[{"group":"A","value":10},{"group":"B","value":19},{"group":"C","value":8}]'>
+</bar-chart>
 ```
 
-## Note
-
-```
-Data needs to be in the following format:
-[
-    {'group': 'group1', 'value': 1},
-    {'group': 'group2', 'value': 2},
-    {'group': 'group3', 'value': 3},
-    ...
-]
+```js
+const chart = document.querySelector('bar-chart');
+chart.data = [
+  { group: 'A', value: 12 },
+  { group: 'B', value: 7 },
+];
 ```
 
-D3 library is not bundled with this widget. Make sure that the D3 library is available in your webpage.
-For example, see the example section above where D3 is downloaded via CDN using the script tag.
+To load data from a server, set `dataapi`. The response must be `{ "data": [...], "min"?: Number, "max"?: Number }`:
+
+```html
+<bar-chart dataapi="https://example.com/api/chart" autoupdate updatefrequency="30"></bar-chart>
+```
+
+## API
+
+| Property | Attribute | Type | Default | Description |
+| --- | --- | --- | --- | --- |
+| `data` | `data` | Array | `[]` | `[{ group: String, value: Number }]` |
+| `width` | `width` | Number | `460` | Width in pixels. In a narrower container the chart shrinks to fit, keeping its proportions. |
+| `height` | `height` | Number | `400` | Height in pixels at full width |
+| `min` | `min` | Number | `0` | Lowest value on the y axis |
+| `max` | `max` | Number | largest value in `data` | Highest value on the y axis |
+| `transitionDuration` | `transitionduration` | Number | `1000` | Milliseconds the bars take to animate |
+| `dataAPI` | `dataapi` | String | `""` | URL to load data from |
+| `autoUpdate` | `autoupdate` | Boolean | `false` | Reload from `dataapi` every `updateFrequency` seconds |
+| `updateFrequency` | `updatefrequency` | Number | `60` | Seconds between reloads |
+| `label` | `label` | String | `"Bar chart"` | Accessible name of the chart |
+
+| Event | Description |
+| --- | --- |
+| `updated` | Fired after new data has been loaded from `dataapi`. `event.detail` is the response. |
+
+| CSS custom property | Default | Description |
+| --- | --- | --- |
+| `--bar-chart-background-color` | `transparent` | Background of the chart |
+| `--bar-chart-bar-color` | `#69B3A2` | Colour of the bars |
+| `--bar-chart-axis-color` | `currentColor` | Colour of the axis lines |
+| `--bar-chart-text-color` | `currentColor` | Colour of the axis labels |
+
+## Upgrading from 1.0
+
+- D3 is now bundled as dependencies. You can remove the `<script src="https://d3js.org/d3.v6.js">` tag.
+- `max` now defaults to the largest value in `data`, as documented. 1.0 used a fixed 20.
+- The CSS custom properties now take effect. In 1.0 the bar colour was hard-coded.
+
+## Development
+
+```bash
+npm install
+npm run dev     # demo page at http://localhost:3000
+npm run build   # builds the demo into dist/
+```
+
+The demo lives in `demo/`. Pushing to `main` builds it and deploys it to GitHub Pages.
+
+## License
+
+ISC

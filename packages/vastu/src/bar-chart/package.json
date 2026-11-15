@@ -1,36 +1,49 @@
 {
   "name": "@firstprateek/bar-chart",
-  "version": "1.0.1",
-  "description": "A customizable web component that plots a bar chart with ordinal values in the x axis and numerical values in y axis.",
+  "version": "1.1.0",
+  "description": "A bar chart web component built with Lit and D3 that animates to new data, for real-time values",
+  "type": "module",
   "main": "index.js",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "src"
+  ],
+  "sideEffects": true,
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack serve",
-    "deploy": "npx gh-pages -d dist"
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:firstprateek/bar-chart.git"
+    "url": "git+https://github.com/firstprateek/bar-chart.git"
   },
-  "keywords": ["bar-chart", "bar chart", "LIT", "widget", "webcomponent"],
+  "bugs": {
+    "url": "https://github.com/firstprateek/bar-chart/issues"
+  },
+  "homepage": "https://firstprateek.github.io/bar-chart/",
+  "keywords": [
+    "bar-chart",
+    "bar chart",
+    "LIT",
+    "widget",
+    "webcomponent"
+  ],
   "author": "firstprateek",
   "license": "ISC",
-  "homepage": "https://github.com/firstprateek/bar-chart",
-  "devDependencies": {
-    "@babel/core": "^7.22.1",
-    "@babel/preset-env": "^7.22.2",
-    "babel-loader": "^9.1.2",
-    "css-loader": "^6.8.1",
-    "gh-pages": "^5.0.0",
-    "html-webpack-plugin": "^5.5.1",
-    "sass": "^1.62.1",
-    "sass-loader": "^13.3.1",
-    "style-loader": "^3.3.3",
-    "webpack": "^5.84.1",
-    "webpack-cli": "^5.1.1",
-    "webpack-dev-server": "^4.15.0"
-  },
   "dependencies": {
-    "lit": "^2.7.6"
+    "d3-axis": "^3.0.1",
+    "d3-scale": "^4.0.3",
+    "d3-selection": "^3.0.1",
+    "d3-transition": "^3.0.2",
+    "lit": "^3.3.3"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.8",
+    "webpack": "^5.112.2",
+    "webpack-cli": "^7.3.1",
+    "webpack-dev-server": "^6.1.0"
   }
 }

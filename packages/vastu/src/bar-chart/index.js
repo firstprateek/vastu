@@ -1,2 +1,3 @@
-import BarChart from './src/components/BarChart';
-export default BarChart
+import BarChart from './src/components/BarChart.js';
+
+export default BarChart;

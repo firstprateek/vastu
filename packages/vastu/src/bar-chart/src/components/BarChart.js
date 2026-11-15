@@ -1,203 +1,196 @@
-import {LitElement, html, css} from 'lit';
-import {styleMap} from 'lit/directives/style-map.js';
+import { LitElement, html, css } from 'lit';
+import { select } from 'd3-selection';
+import { scaleBand, scaleLinear } from 'd3-scale';
+import { axisBottom, axisLeft } from 'd3-axis';
+import 'd3-transition';
 
 /**
- * Bar Chart: <bar-chart></bar-chart>.
- * 
- * A widget that renders a bar chart with ordinal values in the x-axis and numerical values in y-axis.
+ * Bar chart: <bar-chart></bar-chart>.
  *
- * @property width - Number. width of the widget in pixels, default value is 460
- * @property height - Number. height of the widget in pixels, default value is 400
- * @property data - Array. An array of objects. Each object should be of the form { "group": <group_str>, "value": <number> }, default value is []
- * @property min - Number. Min range value for the y-axis. Default is 0
- * @property max - Number. Max range value for the y-axis. Default is the max "value" in the data stream
- * @property transitionDuration - Number. Time taken to transition from one data value to another in ms. Default is 1000
- * @property dataApi - String. URL for retrieving the data
- * @property updateFrequency - Number. Seconds after which the chart data should be auto-updated, default is 60 seconds
- * @property autoUpdate - Boolean. Seconds after which the chart data should be auto-updated, default is 60 seconds
- * 
- * @fires updated - Indicates when the chart was auto-updated
- * 
- * @cssproperty --bar-chart-background-color - background color of the poll, default is white
- * @cssproperty --bar-chart-bar-color - background color for the individual bars, default is #69B3A2
- * @cssproperty --bar-chart-axis-color - color of the axis, default is black
- * @cssproperty --bar-chart-text-color - color of the axis text, default is black
+ * Plots ordinal values on the x axis against numbers on the y axis, drawn with D3.
+ * Set `data` to new values and the bars animate to them, so it can show real-time data.
+ * In a container narrower than `width` it shrinks to fit, keeping its proportions.
+ *
+ * @property data {Array} - [{ group: String, value: Number }], default [].
+ * @property width {Number} - Width in pixels, default 460. The chart shrinks to fit a narrower container.
+ * @property height {Number} - Height in pixels at full width, default 400.
+ * @property min {Number} - Lowest value on the y axis, default 0.
+ * @property max {Number} - Highest value on the y axis, default: the largest value in `data`.
+ * @property transitionDuration {Number} - Milliseconds the bars take to animate, default 1000. Attribute: transitionduration.
+ * @property dataAPI {String} - URL to load { data, min?, max? } from. Attribute: dataapi.
+ * @property autoUpdate {Boolean} - Reload from dataAPI every updateFrequency seconds, default false. Attribute: autoupdate.
+ * @property updateFrequency {Number} - Seconds between reloads when autoUpdate is on, default 60. Attribute: updatefrequency.
+ * @property label {String} - Accessible name of the chart, default "Bar chart".
+ *
+ * @fires updated - After new data has been loaded from dataAPI. event.detail is the API response.
+ *
+ * @cssproperty --bar-chart-background-color - Background of the chart, default transparent.
+ * @cssproperty --bar-chart-bar-color - Colour of the bars, default #69B3A2.
+ * @cssproperty --bar-chart-axis-color - Colour of the axis lines, default currentColor.
+ * @cssproperty --bar-chart-text-color - Colour of the axis labels, default currentColor.
  */
-
-
 export default class BarChart extends LitElement {
-    static styles = css`
-        :host {
-            --background-color: var(--bar-chart-background-color, white);
-            --bar-color: var(--bar-chart-bar-color, #69B3A2);
-            --axis-color: var(--bar-chart-axis-color, black);
-            --text-color: var(--bar-chart-text-color, black);
-        }
-    `;
-
-    static properties = {
-        width: {type: Number},
-        height: {type: Number},
-        data: {type: Array},
-        min: {type: Number},
-        max: {type: Number},
-        transitionDuration: {type: Number},
-        dataAPI: {},
-        updateFrequency: {type: Number},
-        autoUpdate: {type: Boolean}
+  static styles = css`
+    :host {
+      display: block;
+      max-width: 100%;
     }
 
-    constructor() {
-        super();
-        // Reactive properties
-        this.width = 460;
-        this.height = 400;
-        this.data = [];
-        this.min = 0;
-        this.max = 20;
-        this.transitionDuration = 1000;
-        this.dataAPI = "";
-        this.updateFrequency = 60;
-        this.autoUpdate = false;
-
-        // Non-Reactive properties
-        this._data1 = [
-            {group: "A", value: 4},
-            {group: "B", value: 16},
-            {group: "C", value: 8}
-        ];
-        this._data2 = [
-            {group: "A", value: 7},
-            {group: "B", value: 1},
-            {group: "C", value: 20}
-        ];
-        this._SVG = null;
-        this._x = null;
-        this._y = null;
-        this._width = null;
-        this._height = null;
+    .chart {
+      width: fit-content;
+      max-width: 100%;
+      background-color: var(--bar-chart-background-color, transparent);
     }
 
-    async connectedCallback() {
-        super.connectedCallback();
-        if (this.dataAPI) {
-            await this.fetchResults();
-
-            if (this.autoUpdate) {
-                this.setupUpdateTimer();
-            }
-        }
+    svg {
+      display: block;
     }
 
-    disconnectedCallback() {
-        super.disconnectedCallback();
-        if (this.autoUpdate) {
-            this.removeUpdateTimer();
-        }
+    rect {
+      fill: var(--bar-chart-bar-color, #69b3a2);
     }
 
-    setupUpdateTimer() {
-        if (!this._timer) {
-            this._timer = setInterval(() => this.fetchResults(), this.updateFrequency * 1000);
-        }
+    .axis path,
+    .axis line {
+      stroke: var(--bar-chart-axis-color, currentColor);
     }
 
-    removeUpdateTimer() {
-        clearInterval(this._timer);
-        delete this._timer;
+    .axis text {
+      fill: var(--bar-chart-text-color, currentColor);
+      font-size: 12px;
     }
+  `;
 
-    async fetchResults() {
-        const response = await fetch(this.dataAPI);
-        const result = await response.json();
+  static properties = {
+    width: { type: Number },
+    height: { type: Number },
+    data: { type: Array },
+    min: { type: Number },
+    max: { type: Number },
+    transitionDuration: { type: Number },
+    dataAPI: {},
+    updateFrequency: { type: Number },
+    autoUpdate: { type: Boolean },
+    label: {},
+    _fitWidth: { state: true },
+  };
 
-        this.updateView(result);
+  constructor() {
+    super();
+    this.width = 460;
+    this.height = 400;
+    this.data = [];
+    this.min = 0;
+    this.max = undefined;
+    this.transitionDuration = 1000;
+    this.dataAPI = '';
+    this.updateFrequency = 60;
+    this.autoUpdate = false;
+    this.label = 'Bar chart';
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    // Redraw at the real available width instead of scaling the SVG, so labels stay readable.
+    this._resizeObserver ??= new ResizeObserver(([entry]) => {
+      const width = Math.floor(entry.contentRect.width);
+      if (width && width !== this._fitWidth) this._fitWidth = width;
+    });
+    this._resizeObserver.observe(this);
+    if (this.dataAPI) {
+      this.fetchResults();
+      if (this.autoUpdate) {
+        this.setupUpdateTimer();
+      }
     }
+  }
 
-    updateView(result) {
-        this.max = result.max;
-        this.min = result.min;
-        this.data = result.data;
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._resizeObserver?.disconnect();
+    this.removeUpdateTimer();
+  }
 
-        const options = {
-            detail: {
-                ...result
-            },
-            bubbles: true,
-            composed: true
-        }
-
-        this.dispatchEvent(new CustomEvent('updated', options));
+  setupUpdateTimer() {
+    if (!this._timer) {
+      this._timer = setInterval(() => this.fetchResults(), this.updateFrequency * 1000);
     }
+  }
 
-    updated(changedProperties) {
-        // Set the dimensions and margins of the graph
-        const margin = {top: 30, right: 30, bottom: 70, left: 60};
-        this._width = this.width - margin.left - margin.right;
-        this._height = this.height - margin.top - margin.bottom;
-        
-        this._data1 = this.data;
-        
-        // Append the SVG object to the body of the page
-        if (!this._SVG) {
-            this._SVG = d3.select(this.containerDiv)
-            .append("svg")
-                .attr("width", this._width + margin.left + margin.right)
-                .attr("height", this._height + margin.top + margin.bottom)
-            .append("g")
-                .attr("transform", `translate(${margin.left},${margin.top})`);
-        }
+  removeUpdateTimer() {
+    clearInterval(this._timer);
+    this._timer = undefined;
+  }
 
-        this._SVG.selectAll('g').remove();
-        
-        // X axis
-        this._x = d3.scaleBand()
-        .range([ 0, this._width ])
-        .domain(this._data1.map(d => d.group))
-        .padding(0.2);
-        this._SVG.append("g")
-        .attr("transform", `translate(0,${this._height})`)
-        .call(d3.axisBottom(this._x))
-        
-        // Add Y axis
-        this._y = d3.scaleLinear()
-        .domain([this.min, this.max])
-        .range([ this._height, 0]);
-        this._SVG.append("g")
-        .attr("class", "myYaxis")
-        .call(d3.axisLeft(this._y));
-        
-        // Initialize the plot with the first dataset
-        this.updateChart(this._data1)
+  async fetchResults() {
+    try {
+      const response = await fetch(this.dataAPI);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      this.updateView(await response.json());
+    } catch (error) {
+      console.warn('bar-chart: loading data failed', error);
     }
+  }
 
-    get containerDiv() {
-        return this.renderRoot?.querySelector('#my_dataviz') ?? null;
-    }
+  updateView(result) {
+    if (result.min !== undefined) this.min = result.min;
+    if (result.max !== undefined) this.max = result.max;
+    this.data = result.data;
+    this.dispatchEvent(new CustomEvent('updated', { detail: { ...result }, bubbles: true, composed: true }));
+  }
 
-    render() {
-        const styles = styleMap({ width: `${this.width}px`, height: `${this.height}px` });
+  render() {
+    return html`<div class="chart"></div>`;
+  }
 
-        return html`
-            <div style=${styles} id="my_dataviz"></div>
-        `;
-    }
+  firstUpdated() {
+    this._svg = select(this.renderRoot.querySelector('.chart')).append('svg').attr('role', 'img');
+    this._plot = this._svg.append('g');
+    this._xAxis = this._plot.append('g').attr('class', 'axis x');
+    this._yAxis = this._plot.append('g').attr('class', 'axis y');
+    this._bars = this._plot.append('g').attr('class', 'bars');
+  }
 
-    updateChart(data) {
-        // A function that create / update the plot for a given variable:
-        var u = this._SVG.selectAll("rect")
-            .data(data)
-        
-        u
-            .join("rect")
-            .transition()
-            .duration(this.transitionDuration)
-            .attr("x", d => this._x(d.group))
-            .attr("y", d => this._y(d.value))
-            .attr("width", this._x.bandwidth())
-            .attr("height", d => this._height - this._y(d.value))
-            .attr("fill", "#69b3a2")
-    }
+  updated() {
+    // In a container narrower than `width`, shrink the chart and keep its proportions.
+    const width = Math.min(this.width, this._fitWidth || this.width);
+    const height = width < this.width ? Math.max(200, Math.round((this.height * width) / this.width)) : this.height;
+    const margin = { top: 20, right: 20, bottom: 40, left: 50 };
+    const innerWidth = width - margin.left - margin.right;
+    const innerHeight = height - margin.top - margin.bottom;
+    const data = Array.isArray(this.data) ? this.data : [];
+    const max = this.max ?? Math.max(this.min + 1, ...data.map((d) => d.value));
+
+    this._svg
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .attr('aria-label', `${this.label}: ${data.map((d) => `${d.group} ${d.value}`).join(', ')}`);
+    this._plot.attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const x = scaleBand().range([0, innerWidth]).domain(data.map((d) => d.group)).padding(0.2);
+    const y = scaleLinear().domain([this.min, max]).range([innerHeight, 0]).clamp(true);
+
+    this._xAxis.attr('transform', `translate(0,${innerHeight})`).call(axisBottom(x));
+    this._yAxis.call(axisLeft(y));
+
+    this._bars
+      .selectAll('rect')
+      .data(data, (d) => d.group)
+      .join(
+        (enter) => enter.append('rect').attr('x', (d) => x(d.group)).attr('y', y(this.min)).attr('height', 0),
+        (update) => update,
+        (exit) => exit.transition().duration(this.transitionDuration / 2).attr('y', y(this.min)).attr('height', 0).remove()
+      )
+      .transition()
+      .duration(this.transitionDuration)
+      .attr('x', (d) => x(d.group))
+      .attr('width', x.bandwidth())
+      .attr('y', (d) => y(d.value))
+      .attr('height', (d) => innerHeight - y(d.value));
+  }
 }
 
-customElements.define('bar-chart', BarChart);
+if (!customElements.get('bar-chart')) {
+  customElements.define('bar-chart', BarChart);
+}
