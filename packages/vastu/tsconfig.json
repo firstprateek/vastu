@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist/dev",
+    "rootDir": "src",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noImplicitOverride": true,
+    "useDefineForClassFields": false,
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": ["src/**/examples"]
+}

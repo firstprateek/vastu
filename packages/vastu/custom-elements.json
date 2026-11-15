@@ -1,0 +1,398 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/button/button.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A button that starts an action or submits a form.",
+          "name": "VaButton",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Background colour.",
+              "name": "--va-button-bg",
+              "x-applies": {
+                "part": "control",
+                "property": "background-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Background colour on hover.",
+              "name": "--va-button-bg-hover",
+              "x-applies": {
+                "part": "control",
+                "state": "hover",
+                "property": "background-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Text and icon colour.",
+              "name": "--va-button-fg",
+              "x-applies": {
+                "part": "control",
+                "property": "color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Border colour.",
+              "name": "--va-button-border",
+              "x-applies": {
+                "part": "control",
+                "property": "border-top-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Corner radius.",
+              "name": "--va-button-radius",
+              "x-applies": {
+                "part": "control",
+                "property": "border-top-left-radius"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Minimum height.",
+              "name": "--va-button-height",
+              "x-applies": {
+                "part": "control",
+                "property": "min-height"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Space before and after the text.",
+              "name": "--va-button-padding-inline",
+              "x-applies": {
+                "part": "control",
+                "property": "padding-left"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Text size.",
+              "name": "--va-button-font-size",
+              "x-applies": {
+                "part": "control",
+                "property": "font-size"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The native button inside.",
+              "name": "control"
+            },
+            {
+              "description": "The wrapper around the text.",
+              "name": "label"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The button's text. This is its accessible name unless `label` is set.",
+              "name": ""
+            },
+            {
+              "description": "An icon before the text. Mark decorative icons `aria-hidden=\"true\"`.",
+              "name": "start"
+            },
+            {
+              "description": "An icon after the text.",
+              "name": "end"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "variant",
+              "privacy": "public",
+              "type": {
+                "text": "'primary' | 'secondary' | 'ghost' | 'danger'"
+              },
+              "description": "Visual emphasis. Use one `primary` button per view.",
+              "default": "'primary'",
+              "attribute": "variant",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "size",
+              "privacy": "public",
+              "type": {
+                "text": "'sm' | 'md' | 'lg'"
+              },
+              "description": "Height and text size. Every size meets the 24px WCAG 2.2 target size.",
+              "default": "'md'",
+              "attribute": "size",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "type",
+              "privacy": "public",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              },
+              "description": "What the button does in a form. Defaults to `button`, unlike the native `<button>`,\nso a button never submits a form by accident. Set `type=\"submit\"` to submit.",
+              "default": "'button'",
+              "attribute": "type",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "disabled",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the button. It cannot be focused or activated.",
+              "default": "false",
+              "attribute": "disabled",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Shows a spinner and blocks activation, but keeps the button focusable.",
+              "default": "false",
+              "attribute": "loading",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "name",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value` when this button submits it.",
+              "default": "''",
+              "attribute": "name",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with `name` when this button submits the form.",
+              "default": "''",
+              "attribute": "value",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name. Required when the button has no text, such as an icon-only button.",
+              "default": "''",
+              "attribute": "label",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "form",
+              "type": {
+                "text": "HTMLFormElement | null"
+              },
+              "description": "The form this button belongs to, if any.",
+              "readonly": true
+            }
+          ],
+          "events": [
+            {
+              "description": "The native click event. Not fired while `disabled` or `loading`.",
+              "name": "click",
+              "x-trigger": "click"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "variant",
+              "type": {
+                "text": "'primary' | 'secondary' | 'ghost' | 'danger'"
+              },
+              "description": "Visual emphasis. Use one `primary` button per view.",
+              "default": "'primary'",
+              "fieldName": "variant"
+            },
+            {
+              "name": "size",
+              "type": {
+                "text": "'sm' | 'md' | 'lg'"
+              },
+              "description": "Height and text size. Every size meets the 24px WCAG 2.2 target size.",
+              "default": "'md'",
+              "fieldName": "size"
+            },
+            {
+              "name": "type",
+              "type": {
+                "text": "'button' | 'submit' | 'reset'"
+              },
+              "description": "What the button does in a form. Defaults to `button`, unlike the native `<button>`,\nso a button never submits a form by accident. Set `type=\"submit\"` to submit.",
+              "default": "'button'",
+              "fieldName": "type"
+            },
+            {
+              "name": "disabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disables the button. It cannot be focused or activated.",
+              "default": "false",
+              "fieldName": "disabled"
+            },
+            {
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Shows a spinner and blocks activation, but keeps the button focusable.",
+              "default": "false",
+              "fieldName": "loading"
+            },
+            {
+              "name": "name",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with the form as `name=value` when this button submits it.",
+              "default": "''",
+              "fieldName": "name"
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "Submitted with `name` when this button submits the form.",
+              "default": "''",
+              "fieldName": "value"
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name. Required when the button has no text, such as an icon-only button.",
+              "default": "''",
+              "fieldName": "label"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "va-button",
+          "customElement": true,
+          "summary": "Starts an action, or submits or resets the form it is in.",
+          "x-keyboard": [
+            {
+              "key": "Enter",
+              "action": "activates",
+              "description": "Activates the button."
+            },
+            {
+              "key": "Space",
+              "action": "activates",
+              "description": "Activates the button."
+            },
+            {
+              "key": "Tab",
+              "action": "focus-next",
+              "description": "Moves focus to the next control. A disabled button is skipped."
+            }
+          ],
+          "x-a11y": {
+            "notes": [
+              "`loading` keeps the button focusable, sets `aria-disabled` and `aria-busy`, and adds \"Loading\" to its name."
+            ],
+            "role": "button",
+            "name": "The slotted text, or the `label` attribute. A button with only an icon must have `label`."
+          },
+          "x-guidance": {
+            "use": "For an action on the current page (Save, Delete, Open dialog) or to submit a form.",
+            "avoid": "For navigation to another page or URL.",
+            "instead": "A link (`<a href>`) for navigation."
+          },
+          "x-examples": [
+            {
+              "title": "Variants",
+              "description": "One primary action per view; secondary and ghost for the rest; danger for destructive actions.",
+              "path": "src/button/examples/1-variants.html",
+              "code": "<va-button>Save changes</va-button>\n<va-button variant=\"secondary\">Cancel</va-button>\n<va-button variant=\"ghost\">Learn more</va-button>\n<va-button variant=\"danger\">Delete project</va-button>"
+            },
+            {
+              "title": "Sizes",
+              "description": "Every size meets the WCAG 2.2 target size of 24 by 24 pixels.",
+              "path": "src/button/examples/2-sizes.html",
+              "code": "<va-button size=\"sm\">Small</va-button>\n<va-button size=\"md\">Medium</va-button>\n<va-button size=\"lg\">Large</va-button>"
+            },
+            {
+              "title": "Disabled and loading",
+              "description": "Disabled buttons can't be focused. Loading buttons stay focusable, so the user keeps their place.",
+              "path": "src/button/examples/3-states.html",
+              "code": "<va-button disabled>Disabled</va-button>\n<va-button loading>Saving</va-button>\n<va-button variant=\"secondary\" disabled>Disabled</va-button>"
+            },
+            {
+              "title": "With icons",
+              "description": "Decorative icons are aria-hidden. An icon-only button needs label.",
+              "path": "src/button/examples/4-icons.html",
+              "code": "<va-button variant=\"secondary\">\n  <svg slot=\"start\" aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 5v14M5 12h14\"/></svg>\n  New article\n</va-button>\n<va-button variant=\"ghost\" label=\"Close\">\n  <svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M6 6l12 12M18 6L6 18\"/></svg>\n</va-button>"
+            },
+            {
+              "title": "In a form",
+              "description": "type=\"submit\" submits the form with name=value; the default type=\"button\" never submits.",
+              "path": "src/button/examples/5-form.html",
+              "code": "<form>\n  <label>Email <input name=\"email\" type=\"email\" value=\"ada@example.com\"></label>\n  <va-button type=\"submit\" name=\"intent\" value=\"subscribe\">Subscribe</va-button>\n  <va-button type=\"reset\" variant=\"secondary\">Reset</va-button>\n</form>"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VaButton",
+          "declaration": {
+            "name": "VaButton",
+            "module": "src/button/button.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

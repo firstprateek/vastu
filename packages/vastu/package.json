@@ -1,0 +1,32 @@
+{
+  "name": "@firstprateek/vastu",
+  "version": "0.0.0",
+  "description": "Vastu web components, built with Lit: accessible, themeable through tokens, and described in a manifest that agents can read",
+  "type": "module",
+  "exports": {
+    "./button": {
+      "types": "./dist/dev/button/index.d.ts",
+      "development": "./dist/dev/button/index.js",
+      "default": "./dist/prod/button/index.js"
+    },
+    "./custom-elements.json": "./custom-elements.json"
+  },
+  "customElements": "custom-elements.json",
+  "files": ["dist", "custom-elements.json", "README.md"],
+  "sideEffects": ["./dist/*/*/index.js"],
+  "scripts": {
+    "build": "node build.js",
+    "analyze": "cem analyze --config cem.config.js"
+  },
+  "repository": { "type": "git", "url": "git+https://github.com/firstprateek/vastu.git", "directory": "packages/vastu" },
+  "homepage": "https://firstprateek.github.io/vastu/",
+  "keywords": ["web components", "lit", "design system", "accessibility", "custom elements"],
+  "license": "ISC",
+  "dependencies": { "lit": "^3.3.3" },
+  "peerDependencies": { "@firstprateek/vastu-tokens": "workspace:^" },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.11.0",
+    "@firstprateek/vastu-tokens": "workspace:^",
+    "typescript": "~5.9.3"
+  }
+}
