@@ -60,9 +60,9 @@ export class VaButton extends LitElement {
     type: { reflect: true },
     disabled: { type: Boolean, reflect: true },
     loading: { type: Boolean, reflect: true },
-    name: { reflect: true },
-    value: { reflect: true },
-    label: { reflect: true },
+    name: {},
+    value: {},
+    label: {},
   };
 
   /** Visual emphasis. Use one `primary` button per view. */

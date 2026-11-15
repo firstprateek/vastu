@@ -1,0 +1,19 @@
+body {
+  margin: 0;
+  background: var(--va-color-surface-default);
+  color: var(--va-color-text-default);
+  font-family: var(--va-font-family-ui);
+}
+#stage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+#stage form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}

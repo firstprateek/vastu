@@ -195,8 +195,7 @@
               },
               "description": "Submitted with the form as `name=value` when this button submits it.",
               "default": "''",
-              "attribute": "name",
-              "reflects": true
+              "attribute": "name"
             },
             {
               "kind": "field",
@@ -207,8 +206,7 @@
               },
               "description": "Submitted with `name` when this button submits the form.",
               "default": "''",
-              "attribute": "value",
-              "reflects": true
+              "attribute": "value"
             },
             {
               "kind": "field",
@@ -219,8 +217,7 @@
               },
               "description": "Accessible name. Required when the button has no text, such as an icon-only button.",
               "default": "''",
-              "attribute": "label",
-              "reflects": true
+              "attribute": "label"
             },
             {
               "kind": "field",
