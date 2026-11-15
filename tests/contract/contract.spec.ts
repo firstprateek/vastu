@@ -188,6 +188,10 @@ for (const c of components) {
           name: prop.name,
           value: sentinel.set,
         });
+        if (state === 'focus' && light) {
+          await openSubject(page);
+          await page.locator('#subject').locator(light).first().focus();
+        }
         if (state === 'hover') {
           const box = await page.locator('#subject').evaluate((el, part) => {
             const target = el.shadowRoot!.querySelector(`[part~="${part}"]`)!;

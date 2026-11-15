@@ -19,6 +19,11 @@
       "development": "./dist/dev/dialog/index.js",
       "default": "./dist/prod/dialog/index.js"
     },
+    "./menu": {
+      "types": "./dist/dev/menu/index.d.ts",
+      "development": "./dist/dev/menu/index.js",
+      "default": "./dist/prod/menu/index.js"
+    },
     "./switch": {
       "types": "./dist/dev/switch/index.d.ts",
       "development": "./dist/dev/switch/index.js",

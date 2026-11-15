@@ -1430,6 +1430,272 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/menu/menu.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A button that opens a menu of actions, following the WAI-ARIA menu button pattern.",
+          "name": "VaMenu",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Background colour of the menu.",
+              "name": "--va-menu-bg",
+              "x-applies": {
+                "part": "menu",
+                "state": "open",
+                "property": "background-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Corner radius of the menu.",
+              "name": "--va-menu-radius",
+              "x-applies": {
+                "part": "menu",
+                "state": "open",
+                "property": "border-top-left-radius"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Background colour of the focused or hovered item.",
+              "name": "--va-menu-item-hover",
+              "x-applies": {
+                "light": "[role=\"menuitem\"]",
+                "state": "focus",
+                "property": "background-color"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The button that opens the menu.",
+              "name": "trigger"
+            },
+            {
+              "description": "The popup list.",
+              "name": "menu"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The menu items, as `<button value=\"…\">` elements.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "open",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the menu is open.",
+              "default": "false",
+              "attribute": "open",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "label",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "The button's text, and the menu's accessible name.",
+              "default": "''",
+              "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "variant",
+              "privacy": "public",
+              "type": {
+                "text": "'secondary' | 'ghost'"
+              },
+              "description": "The button's look, as for `va-button`.",
+              "default": "'secondary'",
+              "attribute": "variant",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "placement",
+              "privacy": "public",
+              "type": {
+                "text": "'bottom-start' | 'bottom-end'"
+              },
+              "description": "Which edge of the button the menu lines up with.",
+              "default": "'bottom-start'",
+              "attribute": "placement",
+              "reflects": true
+            }
+          ],
+          "events": [
+            {
+              "name": "va-select",
+              "type": {
+                "text": "CustomEvent"
+              },
+              "description": "When the user chooses an item. `event.detail.value` is the item's `value`; `event.detail.item` is the item.",
+              "x-trigger": {
+                "how": "press Enter",
+                "setup": "open"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the menu is open.",
+              "default": "false",
+              "fieldName": "open"
+            },
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The button's text, and the menu's accessible name.",
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "variant",
+              "type": {
+                "text": "'secondary' | 'ghost'"
+              },
+              "description": "The button's look, as for `va-button`.",
+              "default": "'secondary'",
+              "fieldName": "variant"
+            },
+            {
+              "name": "placement",
+              "type": {
+                "text": "'bottom-start' | 'bottom-end'"
+              },
+              "description": "Which edge of the button the menu lines up with.",
+              "default": "'bottom-start'",
+              "fieldName": "placement"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "va-menu",
+          "customElement": true,
+          "summary": "Opens a short list of actions from a button, such as Edit, Duplicate and Delete.",
+          "x-keyboard": [
+            {
+              "context": "host",
+              "key": "Enter",
+              "action": "opens",
+              "description": "Opens the menu and focuses the first item."
+            },
+            {
+              "context": "host",
+              "key": "Space",
+              "action": "opens",
+              "description": "Opens the menu and focuses the first item."
+            },
+            {
+              "context": "host",
+              "key": "ArrowDown",
+              "action": "opens",
+              "description": "Opens the menu and focuses the first item."
+            },
+            {
+              "context": "open",
+              "key": "ArrowDown",
+              "action": "next",
+              "description": "Moves to the next item, wrapping round."
+            },
+            {
+              "context": "open",
+              "key": "ArrowUp",
+              "action": "previous",
+              "description": "Moves to the previous item, wrapping round."
+            },
+            {
+              "context": "open",
+              "key": "Home",
+              "action": "first",
+              "description": "Moves to the first item."
+            },
+            {
+              "context": "open",
+              "key": "End",
+              "action": "last",
+              "description": "Moves to the last item."
+            },
+            {
+              "context": "open",
+              "key": "Enter",
+              "action": "selects",
+              "description": "Chooses the focused item and closes the menu."
+            },
+            {
+              "context": "open",
+              "key": "Escape",
+              "action": "closes",
+              "description": "Closes the menu and returns focus to the button."
+            }
+          ],
+          "x-keyboard-items": "[role=\"menuitem\"]",
+          "x-a11y": {
+            "notes": [
+              "The button has `aria-haspopup=\"menu\"` and `aria-expanded`. Items get `role=\"menuitem\"`.",
+              "Typing a letter moves to the next item that starts with it."
+            ],
+            "role": "menu",
+            "name": "The `label`, which is also the button's text."
+          },
+          "x-guidance": {
+            "use": "For a few actions on one thing, when there isn't room to show them as buttons.",
+            "avoid": "For navigation, for choosing a value in a form, or for one or two actions.",
+            "instead": "Links for navigation; a select or radio group for form values; plain buttons for one or two actions."
+          },
+          "x-examples": [
+            {
+              "title": "Actions on an item",
+              "description": "Items are buttons with a value. Choosing one fires va-select with that value.",
+              "path": "src/menu/examples/1-actions.html",
+              "code": "<va-menu label=\"Actions\">\n  <button value=\"edit\">Edit</button>\n  <button value=\"duplicate\">Duplicate</button>\n  <button value=\"move\">Move to folder</button>\n  <button value=\"delete\">Delete</button>\n</va-menu>"
+            },
+            {
+              "title": "Aligned to the end, ghost button",
+              "description": "placement=\"bottom-end\" lines the menu up with the button's right edge, for menus at the end of a row.",
+              "path": "src/menu/examples/2-end.html",
+              "code": "<va-menu label=\"More\" variant=\"ghost\" placement=\"bottom-end\">\n  <button value=\"share\">Share</button>\n  <button value=\"download\">Download</button>\n  <button value=\"report\">Report a problem</button>\n</va-menu>"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VaMenu",
+          "declaration": {
+            "name": "VaMenu",
+            "module": "src/menu/menu.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/switch/switch.ts",
       "declarations": [
         {
