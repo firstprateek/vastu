@@ -33,6 +33,27 @@ test.describe('va-toast', () => {
     await expect(message).toBeHidden({ timeout: 3000 });
   });
 
+  test('over an open modal dialog, messages stay clickable; the region returns when it closes', async ({ page, open }) => {
+    await open('c=toast&e=1-status');
+    await page.evaluate(() => {
+      const dialog = document.createElement('va-dialog');
+      dialog.id = 'modal';
+      dialog.setAttribute('heading', 'Edit profile');
+      dialog.append(Object.assign(document.createElement('p'), { textContent: 'Form goes here.' }));
+      document.querySelector('#stage')!.append(dialog);
+      (dialog as any).show();
+    });
+    await expect(page.getByRole('dialog', { name: 'Edit profile' })).toBeVisible();
+    await page.locator('va-toast').evaluate((el: any) => el.show('Draft saved'));
+    await expect(page.getByRole('status')).toContainText('Draft saved');
+    // Clickable despite the modal: the dismiss button responds.
+    await page.getByRole('button', { name: 'Dismiss' }).click();
+    await expect(page.getByRole('status')).not.toContainText('Draft saved');
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toBeHidden();
+    expect(await page.locator('va-toast').evaluate((el) => el.parentElement!.id)).toBe('stage');
+  });
+
   test('show() returns an id that dismiss() closes, with the reason in va-close', async ({ page, open }) => {
     await open('c=toast&e=1-status');
     const reasons = await page.locator('va-toast').evaluate(async (el: any) => {

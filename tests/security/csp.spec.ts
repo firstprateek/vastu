@@ -11,9 +11,8 @@ test('the harness is served with the strict CSP', async ({ page }) => {
 });
 
 test.describe('Trusted Types', () => {
-  test.use({ expectedErrors: [/TrustedHTML|CSP violation: require-trusted-types-for/] });
-  test('are enforced: a raw innerHTML assignment is blocked', async ({ page, browserName, open }) => {
-    test.skip(browserName !== 'chromium', 'Trusted Types are enforced in Chromium; other engines ignore the directive.');
+  test.use({ expectedErrors: [/TrustedHTML|Trusted|CSP violation: require-trusted-types-for/] });
+  test('are enforced: a raw innerHTML assignment is blocked', async ({ page, open }) => {
     await open('c=button');
     const blocked = await page.evaluate(() => {
       try {

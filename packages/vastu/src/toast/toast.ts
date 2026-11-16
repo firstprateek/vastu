@@ -46,6 +46,7 @@ let nextId = 1;
  * @a11y-name The `label` attribute, "Notifications" by default.
  * @a11y-note Info and success messages are announced politely; errors use `role="alert"` and are announced at once.
  * @a11y-note Messages pause their timer while hovered or focused, and errors stay until dismissed (WCAG 2.2.1).
+ * @a11y-note While a modal dialog is open, the region moves into it, so its messages stay clickable and announced; it moves back when the dialog closes.
  *
  * @guidance-use To confirm that something happened, such as "Changes saved" or "Link copied", or to report a background failure.
  * @guidance-avoid For anything the user must act on or read in full, or for form validation errors.
@@ -92,8 +93,33 @@ export class VaToast extends LitElement {
     return this._toasts.length > 0;
   }
 
+  #home: { parent: Node; next: Node | null } | null = null;
+  #dialogWatch: MutationObserver | null = null;
+
+  /**
+   * A modal dialog makes the rest of the page inert, so a toast outside it could be seen but not
+   * clicked or read by screen readers. While a modal is open, move into it; move back when it closes.
+   */
+  #followModal(): void {
+    const modal = document.querySelector<HTMLElement>('va-dialog[open], dialog:modal');
+    if (!modal || modal.contains(this)) return;
+    if (!this.#home) this.#home = { parent: this.parentNode!, next: this.nextSibling };
+    modal.append(this);
+    this.#dialogWatch?.disconnect();
+    this.#dialogWatch = new MutationObserver(() => {
+      if (modal.hasAttribute('open')) return;
+      this.#dialogWatch?.disconnect();
+      this.#dialogWatch = null;
+      const home = this.#home;
+      this.#home = null;
+      if (home?.parent.isConnected) home.parent.insertBefore(this, home.next?.parentNode === home.parent ? home.next : null);
+    });
+    this.#dialogWatch.observe(modal, { attributes: true, attributeFilter: ['open'] });
+  }
+
   /** Shows a message and returns its id. `variant` defaults to `info`; errors stay until dismissed. */
   show(message: string, options: { variant?: ToastVariant; duration?: number } = {}): number {
+    this.#followModal();
     const variant = options.variant ?? 'info';
     const duration = variant === 'error' ? 0 : (options.duration ?? this.duration);
     const toast: Toast = { id: nextId++, message, variant, duration, remaining: duration, started: 0 };

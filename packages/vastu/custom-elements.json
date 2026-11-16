@@ -2913,7 +2913,8 @@
           "x-a11y": {
             "notes": [
               "Info and success messages are announced politely; errors use `role=\"alert\"` and are announced at once.",
-              "Messages pause their timer while hovered or focused, and errors stay until dismissed (WCAG 2.2.1)."
+              "Messages pause their timer while hovered or focused, and errors stay until dismissed (WCAG 2.2.1).",
+              "While a modal dialog is open, the region moves into it, so its messages stay clickable and announced; it moves back when the dialog closes."
             ],
             "role": "status",
             "name": "The `label` attribute, \"Notifications\" by default."
