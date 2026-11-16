@@ -18,7 +18,8 @@
     "size": "size-limit",
     "check": "pnpm build && pnpm lint && pnpm typecheck && pnpm test:unit && pnpm test:browser && pnpm size",
     "eval": "node tests/eval/run.js",
-    "eval:dry": "node tests/eval/run.js --dry-run"
+    "eval:dry": "node tests/eval/run.js --dry-run",
+    "bench": "node tests/bench/render.js"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^1.8.0",
