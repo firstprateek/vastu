@@ -33,7 +33,7 @@ test.describe('va-switch', () => {
   test('a disabled switch does not flip', async ({ page, open }) => {
     await open('c=switch&e=1-settings');
     await page.locator('va-switch[disabled]').click({ force: true });
-    await expect(page.locator('va-switch[disabled]')).not.toHaveAttribute('checked', '');
+    expect(await page.locator('va-switch[disabled]').evaluate((el: any) => el.checked)).toBe(false);
   });
 
   test('submits name=value only while on, and resets with its form', async ({ page, open }) => {
@@ -63,12 +63,46 @@ test.describe('va-checkbox', () => {
     await expect(box).toHaveAccessibleDescription("We'll email it to the address on your account.");
   });
 
+  test('a disabled fieldset disables the control without changing its own disabled', async ({ page, open }) => {
+    await open('c=checkbox&e=2-form');
+    const result = await page.evaluate(async () => {
+      const form = document.querySelector('form')!;
+      const fieldset = document.createElement('fieldset');
+      const own = document.createElement('va-checkbox') as any;
+      own.textContent = 'Disabled by its author';
+      own.disabled = true;
+      fieldset.append(own, document.querySelector('va-checkbox')!);
+      form.prepend(fieldset);
+      fieldset.disabled = true;
+      await new Promise((r) => setTimeout(r, 50));
+      fieldset.disabled = false;
+      await new Promise((r) => setTimeout(r, 50));
+      return own.disabled;
+    });
+    expect(result).toBe(true);
+  });
+
+  test('the checked attribute is only the initial state: moving the element keeps the default', async ({ page, open }) => {
+    await open('c=checkbox&e=2-form');
+    const after = await page.evaluate(async () => {
+      const box = document.querySelector('va-checkbox') as any;
+      box.checked = true;
+      await box.updateComplete;
+      const hadAttribute = box.hasAttribute('checked');
+      document.querySelector('form')!.append(box); // reconnect
+      document.querySelector('form')!.reset();
+      await box.updateComplete;
+      return { hadAttribute, checkedAfterReset: box.checked, state: box.matches(':state(checked)') };
+    });
+    expect(after).toEqual({ hadAttribute: false, checkedAfterReset: false, state: false });
+  });
+
   test('toggling clears indeterminate', async ({ page, open }) => {
     await open('c=checkbox&e=1-options');
     const box = page.getByRole('checkbox', { name: 'Select all (some selected)' });
     await box.click();
     await expect(box).toBeChecked();
-    await expect(page.locator('va-checkbox[indeterminate]')).toHaveCount(0);
+    expect(await page.locator('va-checkbox').nth(2).evaluate((el: any) => el.indeterminate)).toBe(false);
   });
 
   test('required: blocks submit until checked, then submits name=value', async ({ page, open }) => {

@@ -15,11 +15,11 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  *
  * @cssprop {<color>} --va-menu-bg - Background colour of the menu.
  * @cssprop {<length>} --va-menu-radius - Corner radius of the menu.
- * @cssprop {<color>} --va-menu-item-hover - Background colour of the focused or hovered item.
+ * @cssprop {<color>} --va-menu-item-bg-hover - Background colour of the focused or hovered item.
  *
  * @cssprop-applies --va-menu-bg menu:open background-color
  * @cssprop-applies --va-menu-radius menu:open border-top-left-radius
- * @cssprop-applies --va-menu-item-hover light([role="menuitem"]):focus background-color
+ * @cssprop-applies --va-menu-item-bg-hover light([role="menuitem"]):focus background-color
  *
  * @keyboard-items [role="menuitem"]
  * @keyboard Enter | opens | Opens the menu and focuses the first item.
@@ -43,7 +43,7 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @guidance-avoid For navigation, for choosing a value in a form, or for one or two actions.
  * @guidance-instead Links for navigation; a select or radio group for form values; plain buttons for one or two actions.
  *
- * @fires va-select - When the user chooses an item. `event.detail.value` is the item's `value`; `event.detail.item` is the item.
+ * @fires {CustomEvent<{ value: string, item: HTMLElement }>} va-select - When the user chooses an item. `event.detail.value` is the item's `value`, or its text when it has none; `event.detail.item` is the item.
  * @event-trigger va-select | press Enter | open
  */
 export class VaMenu extends LitElement {
@@ -209,7 +209,8 @@ export class VaMenu extends LitElement {
     if (!item) return;
     this.dispatchEvent(
       new CustomEvent('va-select', {
-        detail: { value: (item as HTMLButtonElement).value ?? item.textContent?.trim(), item },
+        // An item without a value reports its text, so every choice can be told apart.
+        detail: { value: (item as HTMLButtonElement).value || item.textContent?.trim() || '', item },
         bubbles: true,
         composed: true,
       })
@@ -325,7 +326,7 @@ export class VaMenu extends LitElement {
       }
       ::slotted(button:hover),
       ::slotted(button:focus) {
-        background-color: var(--va-menu-item-hover, var(--va-color-surface-subtle));
+        background-color: var(--va-menu-item-bg-hover, var(--va-color-surface-subtle));
         outline: none;
       }
       ::slotted(button:focus-visible) {

@@ -13,7 +13,7 @@ describe('rules', () => {
     'missing-name': ['<va-text-field placeholder="Email"></va-text-field>', '<va-text-field label="Email"></va-text-field>'],
     'unknown-slot': ['<va-dialog heading="Hi"><va-button slot="actions">OK</va-button></va-dialog>', '<va-dialog heading="Hi"><va-button slot="footer">OK</va-button></va-dialog>'],
     'command-target': ['<va-button commandfor="d" command="--open">Open</va-button><va-dialog id="d" heading="Hi"></va-dialog>', '<va-button commandfor="d" command="--show">Open</va-button><va-dialog id="d" heading="Hi"></va-dialog>'],
-    'tabs-structure': ['<va-tabs label="T"><button slot="tab">A</button><div slot="panel">a</div><button slot="tab">B</button></va-tabs>', '<va-tabs label="T"><button slot="tab">A</button><div slot="panel">a</div></va-tabs>'],
+    'tabs-structure': ['<va-tabs accessible-label="T"><button slot="tab">A</button><div slot="panel">a</div><button slot="tab">B</button></va-tabs>', '<va-tabs accessible-label="T"><button slot="tab">A</button><div slot="panel">a</div></va-tabs>'],
     'unknown-token': ['<link rel="stylesheet" href="x.css"><style>p { color: var(--va-color-txt) }</style>', '<style>p { color: var(--va-color-text-muted) }</style>'],
     'native-instead': ['<button>Save</button>', '<va-menu label="Actions"><button value="save">Save</button></va-menu>'],
     'raw-color': ['<style>p { color: #333 }</style>', '<style>p { color: var(--va-color-text-default) }</style>'],
@@ -40,6 +40,13 @@ describe('rules', () => {
 test('a boolean attribute set to "false" is caught, with the fix to remove it', () => {
   const [p] = lint('<va-button disabled="false">Save</va-button>').problems;
   expect(p).toMatchObject({ rule: 'invalid-value', fix: 'Remove the disabled attribute to turn it off.' });
+});
+
+test('a toast variant sent with a command is checked against the allowed values', () => {
+  const html = '<va-button commandfor="t" command="--show" value="Saved" data-toast-variant="danger">Save</va-button><va-toast id="t"></va-toast>';
+  const [p] = lint(html).problems;
+  expect(p).toMatchObject({ rule: 'command-target' });
+  expect(p.message).toMatch(/data-toast-variant="danger" is not one of "info", "success", "error"/);
 });
 
 test('suggestions name the closest valid choice', () => {

@@ -54,11 +54,11 @@ test.describe('va-toast', () => {
     expect(await page.locator('va-toast').evaluate((el) => el.parentElement!.id)).toBe('stage');
   });
 
-  test('show() returns an id that dismiss() closes, with the reason in va-close', async ({ page, open }) => {
+  test('show() returns an id that dismiss() closes, with the id and reason in va-dismiss', async ({ page, open }) => {
     await open('c=toast&e=1-status');
     const reasons = await page.locator('va-toast').evaluate(async (el: any) => {
       const reasons: string[] = [];
-      el.addEventListener('va-close', (e: any) => reasons.push(e.detail.reason));
+      el.addEventListener('va-dismiss', (e: any) => reasons.push(e.detail.reason));
       const id = el.show('First');
       el.show('Second');
       el.dismiss(id);

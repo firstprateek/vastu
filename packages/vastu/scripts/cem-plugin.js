@@ -2,7 +2,7 @@
 //   x-keyboard   [{ key, action, description }]   from @keyboard Key | action | description
 //   x-a11y       { role, name, nameFrom[], notes[] } from @a11y-role, @a11y-name, @a11y-name-from, @a11y-note
 //   x-replaces   "css selector"                    from @replaces (native elements to use this instead of)
-//   x-commands   [{ name, description }]           from @command --name | description
+//   x-commands   [{ name, description, data? }]    from @command --name | description, @command-data --name | data-name | values
 //   x-guidance   { use, avoid, instead }          from @guidance-use, @guidance-avoid, @guidance-instead
 //   events[].x-trigger      "click" | "press Key"           from @event-trigger event | how
 //   cssProperties[].x-applies { part, state?, property } from @cssprop-applies --var part[:hover] property
@@ -58,7 +58,11 @@ export function vastuManifestPlugin() {
         // Native elements this component should be used instead of, as CSS selectors (for vastu-lint).
         else if (name === 'replaces') x.replaces = text;
         // Commands the element accepts from a commandfor/command button: "--name | description".
-        else if (name === 'command') {
+        else if (name === 'command-data') {
+          // "--command | data-name | value value …": data-* attributes the sending button may carry.
+          const [command, dataName, values] = text.split('|').map((t) => t.trim());
+          (x.commandData ??= []).push({ command, name: `data-${dataName}`, values: values.split(/\s+/) });
+        } else if (name === 'command') {
           const [command, description] = text.split('|').map((t) => t.trim());
           (x.commands ??= []).push({ name: command, description });
         }
@@ -92,6 +96,12 @@ export function vastuManifestPlugin() {
     packageLinkPhase({ customElementsManifest }) {
       // File listing order differs between macOS and Linux; sort so the manifest is deterministic.
       customElementsManifest.modules.sort((a, b) => a.path.localeCompare(b.path));
+      // The base class's generic _emit(type) makes the analyzer guess an event named "type".
+      for (const mod of customElementsManifest.modules) {
+        for (const decl of mod.declarations ?? []) {
+          if (decl.name === 'FormControl') decl.events = (decl.events ?? []).filter((e) => e.name !== 'type');
+        }
+      }
       for (const mod of customElementsManifest.modules) {
         for (const decl of mod.declarations ?? []) {
           if (!decl.customElement || !decl.tagName) continue; // base classes have no tag
@@ -113,7 +123,13 @@ export function vastuManifestPlugin() {
           decl['x-a11y'] = x.a11y;
           decl['x-guidance'] = x.guidance;
           if (x.replaces) decl['x-replaces'] = x.replaces;
-          if (x.commands) decl['x-commands'] = x.commands;
+          if (x.commands) {
+            for (const cmd of x.commands) {
+              const data = (x.commandData ?? []).filter((d) => d.command === cmd.name).map(({ name, values }) => ({ name, values }));
+              if (data.length) cmd.data = data;
+            }
+            decl['x-commands'] = x.commands;
+          }
           // An HTML boolean attribute can only turn something on, so a boolean that defaults to true
           // could never be turned off from markup (and dismissible="false" would still mean true).
           for (const attr of decl.attributes ?? []) {

@@ -66,7 +66,12 @@ These rules are what make the system predictable, for agents above all. A lint c
 - **Component events** that have no native equivalent are named `va-` plus a verb: `va-open`, `va-close`. They bubble and are composed. Events fired before something happens can be cancelled with `preventDefault()`: `va-close` on a dialog, for example.
 - **Content goes in slots.** Text and icons are slotted, not passed in attributes, apart from short labels such as `label` on a text field.
 - **Styling goes through component tokens and parts.** Each component documents its CSS custom properties (`--va-button-radius`) and CSS parts (`::part(control)`). Nothing else is a styling API.
-- **No global side effects** apart from defining the element. Defining an element twice is a no-op, not an error.
+- **No global side effects** apart from defining the element. Defining an element twice is a no-op, not an error. The one exception is `va-toast` moving itself into an open modal dialog, which is documented on the component.
+- **`label` is always visible text** (`va-text-field`, `va-menu`). A name that is never shown is `accessible-label`, used only when there is no visible text; dev builds warn when it would replace visible text (WCAG 2.5.3).
+- **Native names win.** Where a native element has the same idea, use its attribute and property names, even unhyphenated: `readonly` / `readOnly`, `minlength` / `minLength`. A `checked` attribute is the initial state only, as on a native checkbox, and doesn't reflect. Style live state with custom states: `:state(checked)`.
+- **Events:** `change` and `input` only on form controls, with native timing. Everything else is `va-` plus a verb with a typed `detail`: `va-select`, `va-open`, `va-close` (cancellable, before), `va-closed` (after, on every path), `va-dismiss`.
+- **CSS custom properties** are `--va-<component>[-<sub-part>]-<property>[-<state>]`, with `bg`, `fg`, `border`, `radius` and `size` as property words: `--va-button-bg-hover`, `--va-switch-track-bg-checked`, `--va-menu-item-bg-hover`.
+- **Parts and slots** use one name per idea across components: `help-text` for help text (attribute, slot and part), `close-button` for close buttons.
 
 ## 5. Tokens and theming
 
@@ -154,7 +159,7 @@ This is the showcase. Everything in it is generated from one source.
 - Native controls used where a Vastu one exists.
 - Raw colours where a token exists.
 
-Every message says what is wrong, why and the exact fix, for example: ``va-dialog has no accessible name. Add label="…" or aria-labelledby="<id of a heading>"``. The same messages appear in the browser console in development builds and are stripped from production builds, the way Lit's own dev mode works.
+Every message says what is wrong, why and the exact fix, for example: ``<va-dialog> has no accessible name. Add heading="…" (shown) or accessible-label="…" (not shown)``. The same messages appear in the browser console in development builds and are stripped from production builds, the way Lit's own dev mode works.
 
 ## 8. Testing
 
@@ -317,7 +322,7 @@ Choices made while building M0, and where they differ from the plan above:
 - **Commands, not scripts.** Examples must pass a strict CSP, so they can't contain scripts. `va-button` has `commandfor` and `command`, shaped like the native Invoker Commands API: `command="--show"` opens a `va-dialog` or shows a `va-toast` message. The plugin now rejects examples with inline styles, scripts or `on…=` handlers. Agents copy examples.
 - **Composite components use plain slotted elements:** `<button slot="tab">` for tabs, `<button value>` for menu items. The component adds roles, ids, relationships and roving tabindex, so authors write less and can't get the ARIA wrong.
 - **The menu positions itself with JavaScript (CSSOM writes)**, not CSS anchor positioning. It flips above the button near the bottom of the window and stays inside narrow windows. Anchor positioning can replace it once it's in all three engines.
-- **The toast is fixed-position, not in the top layer.** A toast shown while a modal dialog is open appears above it visually but is inert. Moving it into the top layer is a follow-up.
+- **The toast is fixed-position, not in the top layer.** A toast shown while a modal dialog is open appeared above it but was inert. The top layer alone doesn't help, because popovers outside a modal are inert in all three engines. M3 fixed it by moving the toast into the open modal (see section 17).
 - **`package.json` exports and `src/all.ts` are generated** from the component folders, and CI checks they're committed, so a new component can't be left out of the package.
 - **The `vastu` brand is sandstone and indigo** (the owner's choice, 2026-11-15). It has warm sandstone surfaces, indigo ink and accent, terracotta for danger, 6px control and 10px surface corners, and Inter throughout. It is now the default brand; `lekha` is the second. Tokens don't load fonts: the docs site self-hosts Inter, and an app without it falls back to the system sans.
 - **Brand selectors:** a brand applies where `data-va-brand` names it, and to a page that sets no `data-va-brand`. A mode applies on the brand's element or any element inside it. With several brand files loaded, set `data-va-brand`. Without it, the last file loaded wins.
@@ -331,4 +336,23 @@ Choices made while building M0, and where they differ from the plan above:
 - **vastu-mcp's `find_component` is deterministic.** It ranks components by keyword, with no model call, so it is free, fast and testable: eight plain-language intents map to the right component in the unit tests.
 - **The eval drives Claude Code itself** (`claude -p`) by default, not the Claude API, so it runs on a Claude subscription. Each run is isolated: an empty folder outside any project, project settings only, auto-memory off, and only Read, Write and Edit (plus the vastu MCP server). An isolation check before the first run confirmed the agent saw no machine-specific instructions. `--agent api` keeps a Claude API Tool Runner version.
 - **Results:** see [`tests/eval/FINDINGS.md`](../tests/eval/FINDINGS.md). Run 1 found three Vastu defects and a gap in the docs. After the fixes, both setups pass all 12 tasks on Opus 5.5. The next eval work is harder tasks, smaller models and repeats.
+
+## 17. Implementation notes from M3
+
+- **An API review before 1.0** by an agent that read the manifest cold, with no anchoring on the original choices, found twelve things that would be breaking changes later. All twelve were changed:
+  - `label` meant visible text on two components and a hidden name on six, so the hidden one became `accessible-label`.
+  - `va-tabs` fired `change`, which collided with form controls in its panels, so it became `va-select`. `selected` became `selected-index` and is clamped.
+  - `va-close` meant "about to close" on the dialog and "has closed" on the toast. The dialog now adds `va-closed`, and the toast fires `va-dismiss`.
+  - A disabled `<fieldset>` overwrote an author's own `disabled`.
+  - `checked` reflected, so reconnecting a checkbox changed its form-reset default. It doesn't reflect now, and live state is exposed as `:state(checked)`.
+  - The toast variant became `data-toast-variant`, validated in the component and by vastu-lint.
+  - The toast's read-only `open` became `hasMessages`.
+  - The CSS custom property names now follow one pattern.
+  - Help text became `help-text` everywhere, and close buttons became `close-button`.
+  - `readonly` became the `readOnly` property, as on a native input.
+  - A menu item without a value reports its text.
+  - Guessed events were removed from the manifest.
+- **Toasts over modal dialogs:** `va-toast` moves itself into an open modal (`va-dialog[open]` or `dialog:modal`) and back when it closes, so its messages stay clickable and announced.
+- **The render benchmark** uses Playwright, not Tachometer, because the tests already run on it: 1,000 instances per component in Chromium, median of 7, compared with a committed baseline. It isn't in CI, because timings depend on the machine.
+- **Releases** use Changesets, with the four packages on one version, and a manual Release workflow that publishes with npm trusted publishing (OIDC, provenance). `pnpm pack` resolves `workspace:` ranges, and `npm publish` uploads the tarball.
 

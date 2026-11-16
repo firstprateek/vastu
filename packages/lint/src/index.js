@@ -212,8 +212,15 @@ export function lint(html, options = {}) {
       continue;
     }
     const accepted = components.get(target.name)?.['x-commands'];
-    if (accepted && !accepted.some((cmd) => cmd.name === el.attribs.command)) {
-      report('command-target', el, `<${target.name}> doesn't accept command="${el.attribs.command ?? ''}".`, `Use one of: ${accepted.map((cmd) => `command="${cmd.name}" (${cmd.description})`).join('; ')}.`);
+    const cmd = accepted?.find((c) => c.name === el.attribs.command);
+    if (accepted && !cmd) {
+      report('command-target', el, `<${target.name}> doesn't accept command="${el.attribs.command ?? ''}".`, `Use one of: ${accepted.map((c) => `command="${c.name}" (${c.description})`).join('; ')}.`);
+    }
+    for (const data of cmd?.data ?? []) {
+      const value = el.attribs[data.name];
+      if (value !== undefined && !data.values.includes(value)) {
+        report('command-target', el, `${data.name}="${value}" is not one of ${data.values.map((v) => `"${v}"`).join(', ')}, so <${target.name}> ignores it.`, `Use ${data.name}="${data.values.find((v) => v.startsWith(value[0])) ?? data.values[0]}".`);
+      }
     }
   }
 

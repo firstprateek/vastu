@@ -52,6 +52,24 @@ test.describe('va-dialog', () => {
     await expect(page.getByRole('dialog', { name: 'Delete this project?' })).toBeVisible();
   });
 
+  test('va-closed fires after every close, including setting open to false', async ({ page, open }) => {
+    await open('c=dialog&e=1-confirm');
+    await page.evaluate(() => {
+      (window as any).__closed = [];
+      document.querySelector('va-dialog')!.addEventListener('va-closed', (e: any) => (window as any).__closed.push(e.detail.reason));
+    });
+    const opener = page.getByRole('button', { name: 'Delete project' }).first();
+    await opener.click();
+    await page.keyboard.press('Escape');
+    await opener.click();
+    await page.locator('va-dialog').evaluate(async (el: any) => {
+      el.open = false;
+      await el.updateComplete;
+    });
+    expect(await page.evaluate(() => (window as any).__closed)).toEqual(['escape', 'property']);
+    await expect(page.getByRole('dialog')).toBeHidden();
+  });
+
   test('va-close reports why it closed', async ({ page, open }) => {
     await open('c=dialog&e=1-confirm');
     await page.evaluate(() => {

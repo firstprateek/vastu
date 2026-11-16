@@ -58,7 +58,7 @@ export const tasks = [
     prompt:
       'Build a settings page with three tabs: Profile, Notifications and Privacy. The Notifications tab contains two on/off settings that apply immediately: "Email updates" and "Push notifications".',
     reference: {
-      html: `<va-tabs label="Settings">
+      html: `<va-tabs accessible-label="Settings">
   <button slot="tab">Profile</button>
   <button slot="tab">Notifications</button>
   <button slot="tab">Privacy</button>
@@ -128,7 +128,7 @@ export const tasks = [
     id: 'save-toast',
     prompt: 'Build a "Save changes" button that, when clicked, shows a short "Changes saved" success message that does not block the page.',
     reference: {
-      html: `<va-button commandfor="toaster" command="--show" value="Changes saved" data-variant="success">Save changes</va-button>
+      html: `<va-button commandfor="toaster" command="--show" value="Changes saved" data-toast-variant="success">Save changes</va-button>
 <va-toast id="toaster"></va-toast>`,
     },
     async check(page) {
@@ -206,9 +206,9 @@ toggle.addEventListener('change', () => {
     prompt: 'Build a text-formatting toolbar with three icon-only buttons, Bold, Italic and Underline, each showing a small inline SVG icon and no visible text.',
     reference: {
       html: `<div class="toolbar">
-  <va-button variant="ghost" label="Bold"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 5h6a3 3 0 0 1 0 6H7zM7 11h7a3 3 0 0 1 0 6H7z"/></svg></va-button>
-  <va-button variant="ghost" label="Italic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 5h-4M14 19h-4M13 5l-2 14"/></svg></va-button>
-  <va-button variant="ghost" label="Underline"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 5v6a5 5 0 0 0 10 0V5M6 20h12"/></svg></va-button>
+  <va-button variant="ghost" accessible-label="Bold"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 5h6a3 3 0 0 1 0 6H7zM7 11h7a3 3 0 0 1 0 6H7z"/></svg></va-button>
+  <va-button variant="ghost" accessible-label="Italic"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 5h-4M14 19h-4M13 5l-2 14"/></svg></va-button>
+  <va-button variant="ghost" accessible-label="Underline"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 5v6a5 5 0 0 0 10 0V5M6 20h12"/></svg></va-button>
 </div>`,
       css: '.toolbar { display: flex; gap: var(--va-space-gap-sm); }',
     },

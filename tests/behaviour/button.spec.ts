@@ -84,7 +84,7 @@ test.describe('va-button behaviour', () => {
       await open('c=button');
       const warning = page.waitForEvent('console', (m) => m.type() === 'warning');
       await mount(page, 'va-button', '');
-      expect((await warning).text()).toMatch(/^<va-button>: This button has no accessible name.*Fix: .*label="…"/);
+      expect((await warning).text()).toMatch(/^<va-button>: This button has no accessible name.*Fix: .*accessible-label="…"/);
     });
   });
 

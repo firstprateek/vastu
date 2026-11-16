@@ -25,7 +25,7 @@ export const SETUP = {
   components: "Import each component you use once, e.g. import '@firstprateek/vastu/button'; or import '@firstprateek/vastu/all' for every component.",
   modes: 'Set data-va-mode="light|dark|high-contrast" on <html> (or any element) to choose a mode; without it the mode follows the user\'s system.',
   rules: [
-    'Give every component an accessible name (text, label or heading; see each component).',
+    'Give every component an accessible name: its text, or label (text fields, menus) or heading (dialogs). Use accessible-label only where nothing visible names it, such as an icon-only button.',
     'Use commandfor/command on va-button to open dialogs and show toasts; no inline scripts or styles (strict CSP).',
     'Style with tokens (var(--va-…)) and component properties, never hard-coded colours.',
     'Run validate_markup on your HTML and fix every problem before finishing.',

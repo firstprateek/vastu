@@ -13,6 +13,7 @@ export class FormControl extends LitElement {
     name: {},
     disabled: { type: Boolean, reflect: true },
     required: { type: Boolean, reflect: true },
+    _fieldsetDisabled: { state: true },
   };
 
   /** Submitted with the form as `name=value`. */
@@ -25,11 +26,15 @@ export class FormControl extends LitElement {
   /** @internal */
   protected readonly _internals: ElementInternals;
 
+  /** Set while a disabled `<fieldset>` around the control disables it. Kept apart from `disabled`. */
+  declare protected _fieldsetDisabled: boolean;
+
   constructor() {
     super();
     this.name = '';
     this.disabled = false;
     this.required = false;
+    this._fieldsetDisabled = false;
     this._internals = this.attachInternals();
   }
 
@@ -58,9 +63,28 @@ export class FormControl extends LitElement {
     return this._internals.reportValidity();
   }
 
-  /** @internal Called by the browser when a `<fieldset disabled>` around the control changes. */
+  /**
+   * @internal Called by the browser when a `<fieldset disabled>` around the control changes.
+   * Like a native control, the author's own `disabled` is left alone: re-enabling the fieldset
+   * doesn't enable a control the author disabled.
+   */
   formDisabledCallback(disabled: boolean): void {
-    this.disabled = disabled;
+    this._fieldsetDisabled = disabled;
+  }
+
+  /** Whether the control is disabled, by its own `disabled` or by a disabled fieldset. */
+  protected get _isDisabled(): boolean {
+    return this.disabled || this._fieldsetDisabled;
+  }
+
+  /** Sets or clears a custom state, for authors' :state(…) selectors. */
+  protected _setState(name: string, on: boolean): void {
+    try {
+      if (on) this._internals.states.add(name);
+      else this._internals.states.delete(name);
+    } catch {
+      // Browsers without CustomStateSet: the state is only for authors' styling.
+    }
   }
 
   /** @internal Called by the browser when the form resets. Subclasses restore their default. */

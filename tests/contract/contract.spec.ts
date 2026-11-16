@@ -132,12 +132,13 @@ for (const c of components) {
     for (const slot of c.slots ?? []) {
       const label = slot.name ? `slot "${slot.name}"` : 'default slot';
       test(`${label} renders its content`, async ({ page }) => {
-        const hasLabel = (c.attributes ?? []).some((a: any) => a.name === 'label');
+        // Name the fresh element so it doesn't warn: with label (visible) or accessible-label.
+        const nameAttr = (c.attributes ?? []).find((a: any) => a.name === 'label' || a.name === 'accessible-label')?.name;
         const assigned = await page.evaluate(
-          async ({ tag, name, hasLabel }) => {
+          async ({ tag, name, nameAttr }) => {
             // Build a fresh element with its content before connecting it, as markup would.
             const el = document.createElement(tag) as any;
-            if (hasLabel) el.setAttribute('label', 'Contract');
+            if (nameAttr) el.setAttribute(nameAttr, 'Contract');
             const child = document.createElement('span');
             child.textContent = 'slotted';
             if (name) {
@@ -150,7 +151,7 @@ for (const c of components) {
             const slotEl = el.shadowRoot.querySelector(name ? `slot[name="${name}"]` : 'slot:not([name])');
             return !!slotEl && slotEl.assignedNodes({ flatten: true }).includes(child);
           },
-          { tag, name: slot.name, hasLabel }
+          { tag, name: slot.name, nameAttr }
         );
         expect(assigned).toBe(true);
       });
@@ -161,7 +162,7 @@ for (const c of components) {
       test(`part ${part.name} exists`, async ({ page }) => {
         const partCount = () => page.locator('#subject').evaluate((el, name) => el.shadowRoot!.querySelectorAll(`[part~="${name}"]`).length, part.name);
         // Some parts (a toast's messages) only exist while the component is open.
-        if ((await partCount()) === 0 && (await page.locator('#subject').evaluate((el: any) => 'open' in el))) await openSubject(page);
+        if ((await partCount()) === 0 && (await page.locator('#subject').evaluate((el: any) => 'open' in el || 'hasMessages' in el))) await openSubject(page);
         const count = await page.locator('#subject').evaluate(
           (el, name) => el.shadowRoot!.querySelectorAll(`[part~="${name}"]`).length,
           part.name
@@ -256,7 +257,8 @@ for (const c of components) {
 
         const before = items ? await focusedItemIndex(page, items) : -1;
         const count = items ? await page.locator('#subject').locator(items).count() : 0;
-        const state = await page.locator('#subject').evaluate((el: any) => ({ checked: el.checked, open: el.open }));
+        // A component's "open" state is open, or hasMessages for va-toast.
+        const state = await page.locator('#subject').evaluate((el: any) => ({ checked: el.checked, open: 'open' in el ? el.open : el.hasMessages }));
         const focusedBefore = await page.evaluate(() => document.activeElement?.id || document.activeElement?.localName);
 
         await page.keyboard.press(row.key);
@@ -271,10 +273,10 @@ for (const c of components) {
             break;
           case 'opens':
             expect(state.open).toBe(false);
-            expect(await page.locator('#subject').evaluate((el: any) => el.open)).toBe(true);
+            expect(await page.locator('#subject').evaluate((el: any) => ('open' in el ? el.open : el.hasMessages))).toBe(true);
             break;
           case 'closes':
-            expect(await page.locator('#subject').evaluate((el: any) => el.open)).toBe(false);
+            expect(await page.locator('#subject').evaluate((el: any) => ('open' in el ? el.open : el.hasMessages))).toBe(false);
             break;
           case 'selects':
             expect(await page.evaluate(() => (window as any).__selects)).toBe(1);

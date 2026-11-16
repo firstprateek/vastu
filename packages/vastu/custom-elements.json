@@ -113,7 +113,7 @@
           ],
           "slots": [
             {
-              "description": "The button's text. This is its accessible name unless `label` is set.",
+              "description": "The button's text. This is its accessible name.",
               "name": ""
             },
             {
@@ -210,14 +210,14 @@
             },
             {
               "kind": "field",
-              "name": "label",
+              "name": "accessibleLabel",
               "privacy": "public",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name. Required when the button has no text, such as an icon-only button.",
+              "description": "Accessible name for a button with no text, such as an icon-only button. Not shown.",
               "default": "''",
-              "attribute": "label"
+              "attribute": "accessible-label"
             },
             {
               "kind": "field",
@@ -325,13 +325,13 @@
               "fieldName": "value"
             },
             {
-              "name": "label",
+              "name": "accessible-label",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name. Required when the button has no text, such as an icon-only button.",
+              "description": "Accessible name for a button with no text, such as an icon-only button. Not shown.",
               "default": "''",
-              "fieldName": "label"
+              "fieldName": "accessibleLabel"
             },
             {
               "name": "commandfor",
@@ -386,9 +386,9 @@
             "role": "button",
             "nameFrom": [
               "text",
-              "label"
+              "accessible-label"
             ],
-            "name": "The slotted text, or the `label` attribute. A button with only an icon must have `label`."
+            "name": "The slotted text. A button with only an icon must have `accessible-label`."
           },
           "x-guidance": {
             "use": "For an action on the current page (Save, Delete, Open dialog) or to submit a form.",
@@ -417,9 +417,9 @@
             },
             {
               "title": "With icons",
-              "description": "Decorative icons are aria-hidden. An icon-only button needs label.",
+              "description": "Decorative icons are aria-hidden. An icon-only button needs accessible-label.",
               "path": "src/button/examples/4-icons.html",
-              "code": "<va-button variant=\"secondary\">\n  <svg slot=\"start\" aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 5v14M5 12h14\"/></svg>\n  New article\n</va-button>\n<va-button variant=\"ghost\" label=\"Close\">\n  <svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M6 6l12 12M18 6L6 18\"/></svg>\n</va-button>"
+              "code": "<va-button variant=\"secondary\">\n  <svg slot=\"start\" aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 5v14M5 12h14\"/></svg>\n  New article\n</va-button>\n<va-button variant=\"ghost\" accessible-label=\"Close\">\n  <svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M6 6l12 12M18 6L6 18\"/></svg>\n</va-button>"
             },
             {
               "title": "In a form",
@@ -454,7 +454,7 @@
               "type": {
                 "text": "<color>"
               },
-              "description": "Border colour of the box.",
+              "description": "Border colour of the box when unchecked.",
               "name": "--va-checkbox-border",
               "x-applies": {
                 "part": "control",
@@ -466,8 +466,8 @@
               "type": {
                 "text": "<color>"
               },
-              "description": "Fill colour when checked or indeterminate.",
-              "name": "--va-checkbox-checked",
+              "description": "Fill and border colour when checked or indeterminate.",
+              "name": "--va-checkbox-bg-checked",
               "x-applies": {
                 "part": "control",
                 "state": "checked",
@@ -479,7 +479,7 @@
                 "text": "<color>"
               },
               "description": "Colour of the tick or dash.",
-              "name": "--va-checkbox-mark",
+              "name": "--va-checkbox-mark-fg",
               "x-applies": {
                 "part": "control",
                 "state": "checked",
@@ -506,6 +506,10 @@
             {
               "description": "The label text.",
               "name": "label"
+            },
+            {
+              "description": "The help text.",
+              "name": "help-text"
             }
           ],
           "slots": [
@@ -514,8 +518,8 @@
               "name": ""
             },
             {
-              "description": "Optional help text under the label.",
-              "name": "description"
+              "description": "Optional help text under the label. It becomes the checkbox's description.",
+              "name": "help-text"
             }
           ],
           "members": [
@@ -526,10 +530,9 @@
               "type": {
                 "text": "boolean"
               },
-              "description": "Whether the box is checked.",
+              "description": "Whether the box is checked. The `checked` attribute sets the initial state, as on a native checkbox.",
               "default": "false",
-              "attribute": "checked",
-              "reflects": true
+              "attribute": "checked"
             },
             {
               "kind": "field",
@@ -540,8 +543,7 @@
               },
               "description": "Shows a dash for a partly selected group. Cleared when the user toggles the box.",
               "default": "false",
-              "attribute": "indeterminate",
-              "reflects": true
+              "attribute": "indeterminate"
             },
             {
               "kind": "field",
@@ -556,14 +558,14 @@
             },
             {
               "kind": "field",
-              "name": "label",
+              "name": "accessibleLabel",
               "privacy": "public",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name, when there is no visible label text.",
+              "description": "Accessible name for a checkbox with no visible label, such as one selecting a table row.",
               "default": "''",
-              "attribute": "label"
+              "attribute": "accessible-label"
             },
             {
               "kind": "field",
@@ -702,7 +704,7 @@
               "type": {
                 "text": "boolean"
               },
-              "description": "Whether the box is checked.",
+              "description": "Whether the box is checked. The `checked` attribute sets the initial state, as on a native checkbox.",
               "default": "false",
               "fieldName": "checked"
             },
@@ -725,13 +727,13 @@
               "fieldName": "value"
             },
             {
-              "name": "label",
+              "name": "accessible-label",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name, when there is no visible label text.",
+              "description": "Accessible name for a checkbox with no visible label, such as one selecting a table row.",
               "default": "''",
-              "fieldName": "label"
+              "fieldName": "accessibleLabel"
             },
             {
               "name": "name",
@@ -796,14 +798,15 @@
           ],
           "x-a11y": {
             "notes": [
-              "`indeterminate` is announced as \"mixed\", for a box that stands for a partly selected group."
+              "`indeterminate` is announced as \"mixed\", for a box that stands for a partly selected group.",
+              "Style states with `va-checkbox:state(checked)` and `:state(indeterminate)`; the `checked` attribute is the initial state only, as on a native checkbox."
             ],
             "role": "checkbox",
             "nameFrom": [
               "text",
-              "label"
+              "accessible-label"
             ],
-            "name": "The slotted label text, or the `label` attribute when there is no visible label."
+            "name": "The slotted label text. Use `accessible-label` only when there is no visible label."
           },
           "x-guidance": {
             "use": "For an option submitted with a form, for agreeing to terms, or to select items in a list.",
@@ -814,9 +817,9 @@
           "x-examples": [
             {
               "title": "Options",
-              "description": "A checkbox's label is its slotted text; help text goes in the description slot.",
+              "description": "A checkbox's label is its slotted text; help text goes in the help-text slot.",
               "path": "src/checkbox/examples/1-options.html",
-              "code": "<va-checkbox checked>Include archived projects</va-checkbox>\n<va-checkbox>\n  Send me a copy\n  <span slot=\"description\">We'll email it to the address on your account.</span>\n</va-checkbox>\n<va-checkbox indeterminate>Select all (some selected)</va-checkbox>\n<va-checkbox disabled>Not available on your plan</va-checkbox>"
+              "code": "<va-checkbox checked>Include archived projects</va-checkbox>\n<va-checkbox>\n  Send me a copy\n  <span slot=\"help-text\">We'll email it to the address on your account.</span>\n</va-checkbox>\n<va-checkbox indeterminate>Select all (some selected)</va-checkbox>\n<va-checkbox disabled>Not available on your plan</va-checkbox>"
             },
             {
               "title": "Required, in a form",
@@ -884,6 +887,17 @@
             },
             {
               "kind": "field",
+              "name": "_fieldsetDisabled",
+              "privacy": "protected",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Set while a disabled `<fieldset>` around the control disables it. Kept apart from `disabled`.",
+              "default": "false",
+              "attribute": "_fieldsetDisabled"
+            },
+            {
+              "kind": "field",
               "name": "form",
               "type": {
                 "text": "HTMLFormElement | null"
@@ -930,6 +944,41 @@
               "description": "Like `checkValidity()`, but also shows the browser's message to the user."
             },
             {
+              "kind": "field",
+              "name": "_isDisabled",
+              "type": {
+                "text": "boolean"
+              },
+              "privacy": "protected",
+              "description": "Whether the control is disabled, by its own `disabled` or by a disabled fieldset.",
+              "readonly": true
+            },
+            {
+              "kind": "method",
+              "name": "_setState",
+              "privacy": "protected",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "on",
+                  "type": {
+                    "text": "boolean"
+                  }
+                }
+              ],
+              "description": "Sets or clears a custom state, for authors' :state(…) selectors."
+            },
+            {
               "kind": "method",
               "name": "_emit",
               "privacy": "protected",
@@ -953,14 +1002,7 @@
               "name": "_internals"
             }
           ],
-          "events": [
-            {
-              "name": "type",
-              "type": {
-                "text": "Event"
-              }
-            }
-          ],
+          "events": [],
           "attributes": [
             {
               "name": "name",
@@ -988,6 +1030,15 @@
               "description": "The control must have a value before its form can be submitted.",
               "default": "false",
               "fieldName": "required"
+            },
+            {
+              "name": "_fieldsetDisabled",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Set while a disabled `<fieldset>` around the control disables it. Kept apart from `disabled`.",
+              "default": "false",
+              "fieldName": "_fieldsetDisabled"
             }
           ],
           "superclass": {
@@ -1069,7 +1120,7 @@
             },
             {
               "description": "The close button.",
-              "name": "close"
+              "name": "close-button"
             },
             {
               "description": "The wrapper around the content.",
@@ -1116,14 +1167,14 @@
             },
             {
               "kind": "field",
-              "name": "label",
+              "name": "accessibleLabel",
               "privacy": "public",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name, when there is no visible heading.",
+              "description": "Accessible name, when there is no visible heading. Not shown.",
               "default": "''",
-              "attribute": "label"
+              "attribute": "accessible-label"
             },
             {
               "kind": "field",
@@ -1164,13 +1215,27 @@
               "type": {
                 "text": "Event"
               },
-              "description": "After the dialog opens.",
+              "description": "After the dialog has opened.",
               "x-trigger": {
                 "how": "call show"
               }
             },
             {
-              "description": "Before the dialog closes. Cancel it with `preventDefault()` to keep the dialog open. `event.detail.reason` is `escape`, `close-button`, `command` or `method`.",
+              "name": "va-closed",
+              "type": {
+                "text": "CustomEvent<{ reason: 'escape' | 'close-button' | 'command' | 'method' | 'property' }>"
+              },
+              "description": "After the dialog has closed, however it closed (`property` when `open` was set to false). Focus is back on the element that opened it.",
+              "x-trigger": {
+                "how": "press Escape",
+                "setup": "open"
+              }
+            },
+            {
+              "type": {
+                "text": "CustomEvent<{ reason: 'escape' | 'close-button' | 'command' | 'method' }>"
+              },
+              "description": "Before the dialog closes, when the user or close() asks it to. Cancel it with `preventDefault()` to keep the dialog open.",
               "name": "va-close",
               "x-trigger": {
                 "how": "press Escape",
@@ -1198,13 +1263,13 @@
               "fieldName": "heading"
             },
             {
-              "name": "label",
+              "name": "accessible-label",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name, when there is no visible heading.",
+              "description": "Accessible name, when there is no visible heading. Not shown.",
               "default": "''",
-              "fieldName": "label"
+              "fieldName": "accessibleLabel"
             },
             {
               "name": "hide-close-button",
@@ -1239,9 +1304,9 @@
             "role": "dialog",
             "nameFrom": [
               "heading",
-              "label"
+              "accessible-label"
             ],
-            "name": "The `heading`, or `label` when there is no visible heading."
+            "name": "The `heading`, or `accessible-label` when there is no visible heading."
           },
           "x-guidance": {
             "use": "For a decision the user must make before going on, such as confirming a deletion, or a short focused task.",
@@ -1324,7 +1389,7 @@
                 "text": "<color>"
               },
               "description": "Background colour of the focused or hovered item.",
-              "name": "--va-menu-item-hover",
+              "name": "--va-menu-item-bg-hover",
               "x-applies": {
                 "light": "[role=\"menuitem\"]",
                 "state": "focus",
@@ -1401,9 +1466,9 @@
             {
               "name": "va-select",
               "type": {
-                "text": "CustomEvent"
+                "text": "CustomEvent<{ value: string, item: HTMLElement }>"
               },
-              "description": "When the user chooses an item. `event.detail.value` is the item's `value`; `event.detail.item` is the item.",
+              "description": "When the user chooses an item. `event.detail.value` is the item's `value`, or its text when it has none; `event.detail.item` is the item.",
               "x-trigger": {
                 "how": "press Enter",
                 "setup": "open"
@@ -1570,7 +1635,7 @@
                 "text": "<color>"
               },
               "description": "Track colour when off.",
-              "name": "--va-switch-track",
+              "name": "--va-switch-track-bg",
               "x-applies": {
                 "part": "control",
                 "state": "unchecked",
@@ -1582,7 +1647,7 @@
                 "text": "<color>"
               },
               "description": "Track colour when on.",
-              "name": "--va-switch-track-on",
+              "name": "--va-switch-track-bg-checked",
               "x-applies": {
                 "part": "control",
                 "state": "checked",
@@ -1594,7 +1659,7 @@
                 "text": "<color>"
               },
               "description": "Thumb colour.",
-              "name": "--va-switch-thumb",
+              "name": "--va-switch-thumb-bg",
               "x-applies": {
                 "part": "thumb",
                 "property": "background-color"
@@ -1613,6 +1678,10 @@
             {
               "description": "The label text.",
               "name": "label"
+            },
+            {
+              "description": "The help text.",
+              "name": "help-text"
             }
           ],
           "slots": [
@@ -1621,8 +1690,8 @@
               "name": ""
             },
             {
-              "description": "Optional help text under the label.",
-              "name": "description"
+              "description": "Optional help text under the label. It becomes the switch's description.",
+              "name": "help-text"
             }
           ],
           "members": [
@@ -1635,8 +1704,7 @@
               },
               "description": "Whether the switch is on.",
               "default": "false",
-              "attribute": "checked",
-              "reflects": true
+              "attribute": "checked"
             },
             {
               "kind": "field",
@@ -1651,14 +1719,14 @@
             },
             {
               "kind": "field",
-              "name": "label",
+              "name": "accessibleLabel",
               "privacy": "public",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name, when there is no visible label text.",
+              "description": "Accessible name for a switch with no visible label.",
               "default": "''",
-              "attribute": "label"
+              "attribute": "accessible-label"
             },
             {
               "kind": "field",
@@ -1811,13 +1879,13 @@
               "fieldName": "value"
             },
             {
-              "name": "label",
+              "name": "accessible-label",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name, when there is no visible label text.",
+              "description": "Accessible name for a switch with no visible label.",
               "default": "''",
-              "fieldName": "label"
+              "fieldName": "accessibleLabel"
             },
             {
               "name": "name",
@@ -1888,14 +1956,15 @@
           ],
           "x-a11y": {
             "notes": [
-              "The state is announced as on or off, not checked or unchecked."
+              "The state is announced as on or off, not checked or unchecked.",
+              "Style the on state with `va-switch:state(checked)`; the `checked` attribute is the initial state only, as on a native checkbox."
             ],
             "role": "switch",
             "nameFrom": [
               "text",
-              "label"
+              "accessible-label"
             ],
-            "name": "The slotted label text, or the `label` attribute when there is no visible label."
+            "name": "The slotted label text. Use `accessible-label` only when there is no visible label."
           },
           "x-guidance": {
             "use": "For a setting that applies as soon as it changes, such as \"Dark theme\" or \"Email notifications\".",
@@ -1908,7 +1977,7 @@
               "title": "Settings",
               "description": "Each switch applies its setting straight away.",
               "path": "src/switch/examples/1-settings.html",
-              "code": "<va-switch checked>Email notifications</va-switch>\n<va-switch>\n  Dark theme\n  <span slot=\"description\">Uses darker colours for this page.</span>\n</va-switch>\n<va-switch disabled>Sync (needs an account)</va-switch>"
+              "code": "<va-switch checked>Email notifications</va-switch>\n<va-switch>\n  Dark theme\n  <span slot=\"help-text\">Uses darker colours for this page.</span>\n</va-switch>\n<va-switch disabled>Sync (needs an account)</va-switch>"
             },
             {
               "title": "In a form",
@@ -1955,7 +2024,7 @@
                 "text": "<color>"
               },
               "description": "Colour of the selected tab's underline.",
-              "name": "--va-tabs-indicator",
+              "name": "--va-tabs-indicator-border",
               "x-applies": {
                 "light": "[aria-selected=\"true\"]",
                 "property": "border-bottom-color"
@@ -1966,7 +2035,7 @@
                 "text": "<color>"
               },
               "description": "Text colour of tabs that aren't selected.",
-              "name": "--va-tabs-text",
+              "name": "--va-tabs-fg",
               "x-applies": {
                 "light": "[aria-selected=\"false\"]",
                 "property": "color"
@@ -1996,14 +2065,14 @@
           "members": [
             {
               "kind": "field",
-              "name": "selected",
+              "name": "selectedIndex",
               "privacy": "public",
               "type": {
                 "text": "number"
               },
-              "description": "The index of the selected tab, from 0.",
+              "description": "The index of the selected tab, from 0. Kept within the tabs that exist.",
               "default": "0",
-              "attribute": "selected",
+              "attribute": "selected-index",
               "reflects": true
             },
             {
@@ -2020,23 +2089,23 @@
             },
             {
               "kind": "field",
-              "name": "label",
+              "name": "accessibleLabel",
               "privacy": "public",
               "type": {
                 "text": "string"
               },
               "description": "Accessible name of the row of tabs.",
               "default": "''",
-              "attribute": "label"
+              "attribute": "accessible-label"
             }
           ],
           "events": [
             {
-              "name": "change",
+              "name": "va-select",
               "type": {
-                "text": "Event"
+                "text": "CustomEvent<{ index: number, tab: HTMLElement }>"
               },
-              "description": "When the user selects a different tab. Read `event.target.selected`.",
+              "description": "When the user selects a different tab. `event.detail.index` is its index; `event.detail.tab` is the tab.",
               "x-trigger": {
                 "how": "click-item 2"
               }
@@ -2044,13 +2113,13 @@
           ],
           "attributes": [
             {
-              "name": "selected",
+              "name": "selected-index",
               "type": {
                 "text": "number"
               },
-              "description": "The index of the selected tab, from 0.",
+              "description": "The index of the selected tab, from 0. Kept within the tabs that exist.",
               "default": "0",
-              "fieldName": "selected"
+              "fieldName": "selectedIndex"
             },
             {
               "name": "activation",
@@ -2062,13 +2131,13 @@
               "fieldName": "activation"
             },
             {
-              "name": "label",
+              "name": "accessible-label",
               "type": {
                 "text": "string"
               },
               "description": "Accessible name of the row of tabs.",
               "default": "''",
-              "fieldName": "label"
+              "fieldName": "accessibleLabel"
             }
           ],
           "superclass": {
@@ -2124,9 +2193,9 @@
             ],
             "role": "tablist",
             "nameFrom": [
-              "label"
+              "accessible-label"
             ],
-            "name": "The `label` attribute, such as \"Account settings\"."
+            "name": "The `accessible-label` attribute, such as \"Account settings\" (not shown)."
           },
           "x-guidance": {
             "use": "To switch between a few views of related content in one place, such as sections of a settings page.",
@@ -2139,13 +2208,13 @@
               "title": "Settings sections",
               "description": "Tabs are buttons in the tab slot; panels follow in the same order. Arrow keys move between tabs.",
               "path": "src/tabs/examples/1-settings.html",
-              "code": "<va-tabs label=\"Account settings\">\n  <button slot=\"tab\">Profile</button>\n  <button slot=\"tab\">Notifications</button>\n  <button slot=\"tab\">Billing</button>\n  <div slot=\"panel\"><p>Your name, photo and bio.</p></div>\n  <div slot=\"panel\"><p>Choose what we email you about.</p></div>\n  <div slot=\"panel\"><p>Plan, invoices and payment method.</p></div>\n</va-tabs>"
+              "code": "<va-tabs accessible-label=\"Account settings\">\n  <button slot=\"tab\">Profile</button>\n  <button slot=\"tab\">Notifications</button>\n  <button slot=\"tab\">Billing</button>\n  <div slot=\"panel\"><p>Your name, photo and bio.</p></div>\n  <div slot=\"panel\"><p>Choose what we email you about.</p></div>\n  <div slot=\"panel\"><p>Plan, invoices and payment method.</p></div>\n</va-tabs>"
             },
             {
               "title": "Manual activation",
               "description": "With activation=\"manual\", arrow keys only move focus; Enter or Space selects. Use it when showing a panel is slow.",
               "path": "src/tabs/examples/2-manual.html",
-              "code": "<va-tabs label=\"Reports\" activation=\"manual\" selected=\"1\">\n  <button slot=\"tab\">Daily</button>\n  <button slot=\"tab\">Weekly</button>\n  <button slot=\"tab\">Monthly</button>\n  <div slot=\"panel\"><p>Today's numbers.</p></div>\n  <div slot=\"panel\"><p>This week's numbers.</p></div>\n  <div slot=\"panel\"><p>This month's numbers.</p></div>\n</va-tabs>"
+              "code": "<va-tabs accessible-label=\"Reports\" activation=\"manual\" selected-index=\"1\">\n  <button slot=\"tab\">Daily</button>\n  <button slot=\"tab\">Weekly</button>\n  <button slot=\"tab\">Monthly</button>\n  <div slot=\"panel\"><p>Today's numbers.</p></div>\n  <div slot=\"panel\"><p>This week's numbers.</p></div>\n  <div slot=\"panel\"><p>This month's numbers.</p></div>\n</va-tabs>"
             }
           ]
         }
@@ -2242,7 +2311,7 @@
             },
             {
               "description": "The help text.",
-              "name": "help"
+              "name": "help-text"
             },
             {
               "description": "The error message.",
@@ -2328,7 +2397,7 @@
             },
             {
               "kind": "field",
-              "name": "readonly",
+              "name": "readOnly",
               "privacy": "public",
               "type": {
                 "text": "boolean"
@@ -2583,7 +2652,7 @@
               },
               "description": "The text can be selected and submitted, but not changed.",
               "default": "false",
-              "fieldName": "readonly"
+              "fieldName": "readOnly"
             },
             {
               "name": "minlength",
@@ -2780,8 +2849,8 @@
               "name": "toast"
             },
             {
-              "description": "Each message's dismiss button.",
-              "name": "dismiss"
+              "description": "Each message's close button.",
+              "name": "close-button"
             }
           ],
           "members": [
@@ -2798,18 +2867,18 @@
             },
             {
               "kind": "field",
-              "name": "label",
+              "name": "accessibleLabel",
               "privacy": "public",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name of the region.",
+              "description": "Accessible name of the region. Not shown.",
               "default": "'Notifications'",
-              "attribute": "label"
+              "attribute": "accessible-label"
             },
             {
               "kind": "field",
-              "name": "open",
+              "name": "hasMessages",
               "type": {
                 "text": "boolean"
               },
@@ -2835,7 +2904,7 @@
                   "name": "options",
                   "default": "{}",
                   "type": {
-                    "text": "{ variant?: ToastVariant; duration?: number }"
+                    "text": "{ variant?: 'info' | 'success' | 'error'; duration?: number }"
                   }
                 }
               ],
@@ -2863,11 +2932,11 @@
           ],
           "events": [
             {
-              "name": "va-close",
+              "name": "va-dismiss",
               "type": {
-                "text": "CustomEvent"
+                "text": "CustomEvent<{ id: number, reason: 'timeout' | 'close-button' | 'escape' | 'method' }>"
               },
-              "description": "When a message closes. `event.detail.reason` is `timeout`, `dismiss`, `escape` or `method`.",
+              "description": "After a message has closed. `event.detail.id` is the id `show()` returned.",
               "x-trigger": {
                 "how": "press Escape",
                 "setup": "open"
@@ -2885,13 +2954,13 @@
               "fieldName": "duration"
             },
             {
-              "name": "label",
+              "name": "accessible-label",
               "type": {
                 "text": "string"
               },
-              "description": "Accessible name of the region.",
+              "description": "Accessible name of the region. Not shown.",
               "default": "'Notifications'",
-              "fieldName": "label"
+              "fieldName": "accessibleLabel"
             }
           ],
           "superclass": {
@@ -2909,15 +2978,15 @@
               "description": "Dismisses the message that has focus."
             }
           ],
-          "x-keyboard-items": "[part~=\"dismiss\"]",
+          "x-keyboard-items": "[part~=\"close-button\"]",
           "x-a11y": {
             "notes": [
               "Info and success messages are announced politely; errors use `role=\"alert\"` and are announced at once.",
               "Messages pause their timer while hovered or focused, and errors stay until dismissed (WCAG 2.2.1).",
-              "While a modal dialog is open, the region moves into it, so its messages stay clickable and announced; it moves back when the dialog closes."
+              "While a modal dialog is open, the element moves itself into that dialog (a light-DOM move, so its messages stay clickable and announced) and back to its place when the dialog closes. Don't render it from a framework that would fight the move; place it once, outside framework-managed DOM."
             ],
             "role": "status",
-            "name": "The `label` attribute, \"Notifications\" by default."
+            "name": "The `accessible-label` attribute, \"Notifications\" by default (not shown)."
           },
           "x-guidance": {
             "use": "To confirm that something happened, such as \"Changes saved\" or \"Link copied\", or to report a background failure.",
@@ -2927,15 +2996,25 @@
           "x-commands": [
             {
               "name": "--show",
-              "description": "Shows the sending button's `value` as a message; its `data-variant` sets the look."
+              "description": "Shows the sending button's `value` as a message. Its `data-toast-variant` sets the look: `info` (default), `success` or `error`.",
+              "data": [
+                {
+                  "name": "data-toast-variant",
+                  "values": [
+                    "info",
+                    "success",
+                    "error"
+                  ]
+                }
+              ]
             }
           ],
           "x-examples": [
             {
               "title": "Status messages",
-              "description": "Place one va-toast per page. A va-button with commandfor and command=\"--show\" sends its value as the message; data-variant sets the look.",
+              "description": "Place one va-toast per page. A va-button with commandfor and command=\"--show\" sends its value as the message; data-toast-variant sets the look (info, success or error).",
               "path": "src/toast/examples/1-status.html",
-              "code": "<va-button commandfor=\"toaster\" command=\"--show\" value=\"Changes saved\" data-variant=\"success\">Save</va-button>\n<va-button variant=\"secondary\" commandfor=\"toaster\" command=\"--show\" value=\"Link copied\">Copy link</va-button>\n<va-button variant=\"danger\" commandfor=\"toaster\" command=\"--show\" value=\"Couldn't sync. Check your connection.\" data-variant=\"error\">Simulate an error</va-button>\n<va-toast id=\"toaster\"></va-toast>"
+              "code": "<va-button commandfor=\"toaster\" command=\"--show\" value=\"Changes saved\" data-toast-variant=\"success\">Save</va-button>\n<va-button variant=\"secondary\" commandfor=\"toaster\" command=\"--show\" value=\"Link copied\">Copy link</va-button>\n<va-button variant=\"danger\" commandfor=\"toaster\" command=\"--show\" value=\"Couldn't sync. Check your connection.\" data-toast-variant=\"error\">Simulate an error</va-button>\n<va-toast id=\"toaster\"></va-toast>"
             }
           ]
         },

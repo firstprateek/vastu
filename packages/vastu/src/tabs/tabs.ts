@@ -16,12 +16,12 @@ let nextId = 0;
  * @csspart panels - The wrapper around the panels.
  *
  * @cssprop {<color>} --va-tabs-border - Colour of the line under the row of tabs.
- * @cssprop {<color>} --va-tabs-indicator - Colour of the selected tab's underline.
- * @cssprop {<color>} --va-tabs-text - Text colour of tabs that aren't selected.
+ * @cssprop {<color>} --va-tabs-indicator-border - Colour of the selected tab's underline.
+ * @cssprop {<color>} --va-tabs-fg - Text colour of tabs that aren't selected.
  *
  * @cssprop-applies --va-tabs-border tablist border-bottom-color
- * @cssprop-applies --va-tabs-indicator light([aria-selected="true"]) border-bottom-color
- * @cssprop-applies --va-tabs-text light([aria-selected="false"]) color
+ * @cssprop-applies --va-tabs-indicator-border light([aria-selected="true"]) border-bottom-color
+ * @cssprop-applies --va-tabs-fg light([aria-selected="false"]) color
  *
  * @keyboard-items [slot="tab"]
  * @keyboard items: ArrowRight | next | Moves to the next tab, wrapping round. Selects it unless `activation="manual"`.
@@ -32,9 +32,9 @@ let nextId = 0;
  * @keyboard items: Tab | focus-next | Moves focus from the tabs into the selected panel.
  *
  * @a11y-role tablist
- * @a11y-name-from label
+ * @a11y-name-from accessible-label
  * @replaces [role="tablist"]
- * @a11y-name The `label` attribute, such as "Account settings".
+ * @a11y-name The `accessible-label` attribute, such as "Account settings" (not shown).
  * @a11y-note Each tab gets `role="tab"`, `aria-selected` and `aria-controls`; each panel gets `role="tabpanel"` and `aria-labelledby`.
  * @a11y-note Only the selected tab is in the Tab order (roving tabindex); arrow keys move between tabs.
  *
@@ -42,30 +42,30 @@ let nextId = 0;
  * @guidance-avoid For navigation between pages, for steps in a sequence, or for more than about 6 tabs.
  * @guidance-instead Links for navigation; a stepper for sequences; a list or menu for many options.
  *
- * @fires change - When the user selects a different tab. Read `event.target.selected`.
- * @event-trigger change | click-item 2
+ * @fires {CustomEvent<{ index: number, tab: HTMLElement }>} va-select - When the user selects a different tab. `event.detail.index` is its index; `event.detail.tab` is the tab.
+ * @event-trigger va-select | click-item 2
  */
 export class VaTabs extends LitElement {
   static override properties: PropertyDeclarations = {
-    selected: { type: Number, reflect: true },
+    selectedIndex: { type: Number, reflect: true, attribute: 'selected-index' },
     activation: { reflect: true },
-    label: {},
+    accessibleLabel: { attribute: 'accessible-label' },
   };
 
-  /** The index of the selected tab, from 0. */
-  declare selected: number;
+  /** The index of the selected tab, from 0. Kept within the tabs that exist. */
+  declare selectedIndex: number;
   /** `automatic` selects a tab as soon as it gets focus; `manual` waits for Enter or Space. */
   declare activation: 'automatic' | 'manual';
   /** Accessible name of the row of tabs. */
-  declare label: string;
+  declare accessibleLabel: string;
 
   #id = `va-tabs-${nextId++}`;
 
   constructor() {
     super();
-    this.selected = 0;
+    this.selectedIndex = 0;
     this.activation = 'automatic';
-    this.label = '';
+    this.accessibleLabel = '';
   }
 
   override connectedCallback(): void {
@@ -82,7 +82,7 @@ export class VaTabs extends LitElement {
   }
 
   override updated(changed: PropertyValues): void {
-    if (changed.has('selected') || changed.has('label')) this.#sync();
+    if (changed.has('selectedIndex') || changed.has('accessibleLabel')) this.#sync();
   }
 
   #sync = (): void => {
@@ -94,10 +94,12 @@ export class VaTabs extends LitElement {
     if (tabs.some((t) => t.localName !== 'button')) {
       devWarn('va-tabs', 'A tab is not a <button>, so it may not be keyboard accessible.', 'Use <button slot="tab">Label</button> for each tab.');
     }
-    if (tabs.length && !this.label) {
-      devWarn('va-tabs', 'The tabs have no accessible name.', 'Add label="…" that names the group (e.g. label="Account settings").');
+    if (tabs.length && !this.accessibleLabel) {
+      devWarn('va-tabs', 'The tabs have no accessible name.', 'Add accessible-label="…" that names the group (e.g. accessible-label="Account settings").');
     }
-    const selected = Math.min(Math.max(this.selected, 0), Math.max(tabs.length - 1, 0));
+    const selected = Math.min(Math.max(this.selectedIndex, 0), Math.max(tabs.length - 1, 0));
+    // Keep the property honest: selected-index="5" with three tabs selects, and reads, 2.
+    if (tabs.length && selected !== this.selectedIndex) this.selectedIndex = selected;
     tabs.forEach((tab, i) => {
       tab.id ||= `${this.#id}-tab-${i}`;
       tab.setAttribute('role', 'tab');
@@ -122,9 +124,9 @@ export class VaTabs extends LitElement {
     if (!tabs.length) return;
     const next = (index + tabs.length) % tabs.length;
     if (focus) tabs[next].focus();
-    if (next !== this.selected) {
-      this.selected = next;
-      this.dispatchEvent(new Event('change', { bubbles: true }));
+    if (next !== this.selectedIndex) {
+      this.selectedIndex = next;
+      this.dispatchEvent(new CustomEvent('va-select', { detail: { index: next, tab: tabs[next] }, bubbles: true, composed: true }));
     }
   }
 
@@ -157,7 +159,7 @@ export class VaTabs extends LitElement {
 
   override render() {
     return html`
-      <div part="tablist" class="tablist" role="tablist" aria-label=${this.label || nothing} @keydown=${this.#onKeydown} @click=${this.#onClick}>
+      <div part="tablist" class="tablist" role="tablist" aria-label=${this.accessibleLabel || nothing} @keydown=${this.#onKeydown} @click=${this.#onClick}>
         <slot name="tab" @slotchange=${this.#sync}></slot>
       </div>
       <div part="panels" class="panels">
@@ -189,7 +191,7 @@ export class VaTabs extends LitElement {
       border: none;
       border-bottom: 2px solid transparent;
       background: none;
-      color: var(--va-tabs-text, var(--va-color-text-muted));
+      color: var(--va-tabs-fg, var(--va-color-text-muted));
       font: inherit;
       font-size: var(--va-font-size-md);
       cursor: pointer;
@@ -198,7 +200,7 @@ export class VaTabs extends LitElement {
       color: var(--va-color-text-default);
     }
     ::slotted([aria-selected='true']) {
-      border-bottom-color: var(--va-tabs-indicator, var(--va-color-accent-default));
+      border-bottom-color: var(--va-tabs-indicator-border, var(--va-color-accent-default));
       color: var(--va-color-text-default);
       font-weight: var(--va-font-weight-medium);
     }

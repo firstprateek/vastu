@@ -23,7 +23,7 @@ if (typeof document !== 'undefined') {
  * @csspart label - The visible label.
  * @csspart field - The box around the input and its icons.
  * @csspart input - The native input.
- * @csspart help - The help text.
+ * @csspart help-text - The help text.
  * @csspart error - The error message.
  *
  * @cssprop {<color>} --va-text-field-bg - Background colour of the field.
@@ -66,7 +66,7 @@ export class VaTextField extends FormControl {
     placeholder: {},
     helpText: { attribute: 'help-text' },
     error: {},
-    readonly: { type: Boolean, reflect: true },
+    readOnly: { type: Boolean, reflect: true, attribute: 'readonly' },
     minLength: { type: Number, attribute: 'minlength' },
     maxLength: { type: Number, attribute: 'maxlength' },
     pattern: {},
@@ -87,7 +87,7 @@ export class VaTextField extends FormControl {
   /** A custom error message. While set, the field is invalid and shows it. */
   declare error: string;
   /** The text can be selected and submitted, but not changed. */
-  declare readonly: boolean;
+  declare readOnly: boolean;
   /** The minimum number of characters. */
   declare minLength: number;
   /** The maximum number of characters. */
@@ -108,7 +108,7 @@ export class VaTextField extends FormControl {
     this.placeholder = '';
     this.helpText = '';
     this.error = '';
-    this.readonly = false;
+    this.readOnly = false;
     this.pattern = '';
     this.autocomplete = '';
     this._showError = false;
@@ -175,10 +175,10 @@ export class VaTextField extends FormControl {
     const input = this.#input;
     const invalid = this._showError && !!(this.error || (input && !input.validity.valid));
     const message = this.error || (invalid ? input?.validationMessage : '');
-    const describedBy = [this.helpText ? 'help' : '', invalid ? 'error' : ''].filter(Boolean).join(' ');
+    const describedBy = [this.helpText ? 'help-text' : '', invalid ? 'error' : ''].filter(Boolean).join(' ');
     return html`
-      <label part="label" class="label" for="input">${this.label}${this.required ? html`<span class="required" aria-hidden="true"> *</span>` : nothing}</label>
-      <div part="field" class="field ${invalid ? 'invalid' : ''}">
+      <label part="label" class="label ${this._isDisabled ? 'disabled' : ''}" for="input">${this.label}${this.required ? html`<span class="required" aria-hidden="true"> *</span>` : nothing}</label>
+      <div part="field" class="field ${invalid ? 'invalid' : ''} ${this._isDisabled ? 'disabled' : ''}">
         <slot name="start"></slot>
         <input
           part="input"
@@ -186,8 +186,8 @@ export class VaTextField extends FormControl {
           .value=${this.value}
           type=${this.type}
           placeholder=${this.placeholder || nothing}
-          ?disabled=${this.disabled}
-          ?readonly=${this.readonly}
+          ?disabled=${this._isDisabled}
+          ?readonly=${this.readOnly}
           ?required=${this.required}
           minlength=${this.minLength ?? nothing}
           maxlength=${this.maxLength ?? nothing}
@@ -201,7 +201,7 @@ export class VaTextField extends FormControl {
         />
         <slot name="end"></slot>
       </div>
-      <div part="help" id="help" class="help" ?hidden=${!this.helpText}>${this.helpText}</div>
+      <div part="help-text" id="help-text" class="help-text" ?hidden=${!this.helpText}>${this.helpText}</div>
       <div part="error" id="error" class="error" ?hidden=${!invalid}>${message}</div>
     `;
   }
@@ -266,16 +266,16 @@ export class VaTextField extends FormControl {
       color: var(--va-color-text-muted);
     }
     /* Only the box fades: the label and help text (often saying why it's disabled) stay readable. */
-    :host([disabled]) .field {
+    .field.disabled {
       opacity: 0.5;
     }
-    :host([disabled]) .label {
+    .label.disabled {
       color: var(--va-color-text-muted);
     }
     :host([readonly]) .field {
       background-color: var(--va-color-surface-subtle);
     }
-    .help {
+    .help-text {
       color: var(--va-color-text-muted);
       font-size: var(--va-font-size-sm);
     }
@@ -283,7 +283,7 @@ export class VaTextField extends FormControl {
       color: var(--va-color-danger-default);
       font-size: var(--va-font-size-sm);
     }
-    .help[hidden],
+    .help-text[hidden],
     .error[hidden] {
       display: none;
     }

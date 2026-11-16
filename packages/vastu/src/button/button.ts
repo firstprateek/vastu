@@ -8,7 +8,7 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @tag va-button
  * @summary Starts an action, or submits or resets the form it is in.
  *
- * @slot - The button's text. This is its accessible name unless `label` is set.
+ * @slot - The button's text. This is its accessible name.
  * @slot start - An icon before the text. Mark decorative icons `aria-hidden="true"`.
  * @slot end - An icon after the text.
  *
@@ -38,9 +38,9 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @keyboard Tab | focus-next | Moves focus to the next control. A disabled button is skipped.
  *
  * @a11y-role button
- * @a11y-name-from text, label
+ * @a11y-name-from text, accessible-label
  * @replaces button
- * @a11y-name The slotted text, or the `label` attribute. A button with only an icon must have `label`.
+ * @a11y-name The slotted text. A button with only an icon must have `accessible-label`.
  * @a11y-note `loading` keeps the button focusable, sets `aria-disabled` and `aria-busy`, and adds "Loading" to its name.
  *
  * @guidance-use For an action on the current page (Save, Delete, Open dialog) or to submit a form.
@@ -64,7 +64,7 @@ export class VaButton extends LitElement {
     loading: { type: Boolean, reflect: true },
     name: {},
     value: {},
-    label: {},
+    accessibleLabel: { attribute: 'accessible-label' },
     commandfor: {},
     command: {},
   };
@@ -86,8 +86,8 @@ export class VaButton extends LitElement {
   declare name: string;
   /** Submitted with `name` when this button submits the form. */
   declare value: string;
-  /** Accessible name. Required when the button has no text, such as an icon-only button. */
-  declare label: string;
+  /** Accessible name for a button with no text, such as an icon-only button. Not shown. */
+  declare accessibleLabel: string;
   /**
    * The id of the element this button sends `command` to, as with the native Invoker Commands API.
    * For example `commandfor="confirm" command="--show"` opens `<va-dialog id="confirm">`.
@@ -107,7 +107,7 @@ export class VaButton extends LitElement {
     this.loading = false;
     this.name = '';
     this.value = '';
-    this.label = '';
+    this.accessibleLabel = '';
     this.commandfor = '';
     this.command = '';
     this.#internals = this.attachInternals();
@@ -163,20 +163,26 @@ export class VaButton extends LitElement {
 
   #checkName = (): void => {
     const text = this.textContent?.trim() ?? '';
-    if (!text && !this.label) {
+    if (!text && !this.accessibleLabel) {
       devWarn(
         'va-button',
-        'This button has no accessible name: it has no text and no label.',
-        'Put text inside it, or add label="…" that says what it does (e.g. label="Close").'
+        'This button has no accessible name: it has no text and no accessible-label.',
+        'Put text inside it, or add accessible-label="…" that says what it does (e.g. accessible-label="Close").'
+      );
+    } else if (text && this.accessibleLabel && !this.accessibleLabel.toLowerCase().includes(text.toLowerCase())) {
+      devWarn(
+        'va-button',
+        `accessible-label="${this.accessibleLabel}" replaces the visible text "${text}" for screen readers, so voice users can't say what they see (WCAG 2.5.3).`,
+        'Remove accessible-label, or make it start with the visible text.'
       );
     }
   };
 
-  /** While loading, the name gains ", loading"; otherwise only an explicit label overrides the text. */
+  /** While loading, the name gains ", loading"; otherwise only accessible-label overrides the text. */
   #ariaLabel(): string | undefined {
-    const name = this.label || this.textContent?.trim() || '';
+    const name = this.accessibleLabel || this.textContent?.trim() || '';
     if (this.loading) return name ? `${name}, loading` : 'Loading';
-    return this.label || undefined;
+    return this.accessibleLabel || undefined;
   }
 
   override render() {

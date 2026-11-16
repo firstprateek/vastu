@@ -3,7 +3,7 @@ import { focusRing } from '../core/focus-ring.js';
 import { checkTokensLoaded, devWarn } from '../core/warn.js';
 
 /** Why a dialog is closing, in the `va-close` event's `detail.reason`. */
-export type DialogCloseReason = 'escape' | 'close-button' | 'command' | 'method';
+export type DialogCloseReason = 'escape' | 'close-button' | 'command' | 'method' | 'property';
 
 /**
  * A modal dialog built on the native `<dialog>`: it sits in the top layer, makes the page behind it
@@ -18,7 +18,7 @@ export type DialogCloseReason = 'escape' | 'close-button' | 'command' | 'method'
  * @csspart dialog - The native dialog element.
  * @csspart header - The row with the heading and the close button.
  * @csspart heading - The heading.
- * @csspart close - The close button.
+ * @csspart close-button - The close button.
  * @csspart body - The wrapper around the content.
  * @csspart footer - The wrapper around the actions.
  *
@@ -33,9 +33,9 @@ export type DialogCloseReason = 'escape' | 'close-button' | 'command' | 'method'
  * @keyboard open: Escape | closes | Closes the dialog and returns focus to the element that opened it.
  *
  * @a11y-role dialog
- * @a11y-name-from heading, label
+ * @a11y-name-from heading, accessible-label
  * @replaces dialog
- * @a11y-name The `heading`, or `label` when there is no visible heading.
+ * @a11y-name The `heading`, or `accessible-label` when there is no visible heading.
  * @a11y-note The page behind is inert while the dialog is open, so focus and screen readers stay inside it.
  * @a11y-note On open, focus goes to the first element with `autofocus`, else the first focusable control in the content, else the close button.
  *
@@ -45,16 +45,18 @@ export type DialogCloseReason = 'escape' | 'close-button' | 'command' | 'method'
  *
  * @command --show | Opens the dialog.
  * @command --close | Closes the dialog (fires `va-close` first).
- * @fires va-open - After the dialog opens.
- * @fires va-close - Before the dialog closes. Cancel it with `preventDefault()` to keep the dialog open. `event.detail.reason` is `escape`, `close-button`, `command` or `method`.
+ * @fires va-open - After the dialog has opened.
+ * @fires {CustomEvent<{ reason: 'escape' | 'close-button' | 'command' | 'method' }>} va-close - Before the dialog closes, when the user or close() asks it to. Cancel it with `preventDefault()` to keep the dialog open.
+ * @fires {CustomEvent<{ reason: 'escape' | 'close-button' | 'command' | 'method' | 'property' }>} va-closed - After the dialog has closed, however it closed (`property` when `open` was set to false). Focus is back on the element that opened it.
  * @event-trigger va-open | call show
  * @event-trigger va-close | press Escape | open
+ * @event-trigger va-closed | press Escape | open
  */
 export class VaDialog extends LitElement {
   static override properties: PropertyDeclarations = {
     open: { type: Boolean, reflect: true },
     heading: {},
-    label: {},
+    accessibleLabel: { attribute: 'accessible-label' },
     hideCloseButton: { type: Boolean, reflect: true, attribute: 'hide-close-button' },
   };
 
@@ -62,18 +64,20 @@ export class VaDialog extends LitElement {
   declare open: boolean;
   /** The visible heading. It is also the dialog's accessible name. */
   declare heading: string;
-  /** Accessible name, when there is no visible heading. */
-  declare label: string;
+  /** Accessible name, when there is no visible heading. Not shown. */
+  declare accessibleLabel: string;
   /** Hides the close button in the header, for a dialog that needs an explicit choice. Escape still closes it. */
   declare hideCloseButton: boolean;
 
   #returnFocus: HTMLElement | null = null;
+  #shown = false;
+  #closeReason: DialogCloseReason | null = null;
 
   constructor() {
     super();
     this.open = false;
     this.heading = '';
-    this.label = '';
+    this.accessibleLabel = '';
     this.hideCloseButton = false;
     this.addEventListener('command', this.#onCommand as EventListener);
   }
@@ -101,6 +105,7 @@ export class VaDialog extends LitElement {
     if (!this.open) return;
     const event = new CustomEvent('va-close', { detail: { reason }, bubbles: true, composed: true, cancelable: true });
     if (!this.dispatchEvent(event)) return;
+    this.#closeReason = reason;
     this.open = false;
   }
 
@@ -123,16 +128,21 @@ export class VaDialog extends LitElement {
         while (active?.shadowRoot?.activeElement) active = active.shadowRoot.activeElement as HTMLElement;
         this.#returnFocus = active;
       }
-      if (!this.heading && !this.label) {
-        devWarn('va-dialog', 'This dialog has no accessible name.', 'Add heading="…" (shown) or label="…" (not shown) that says what the dialog is for.');
+      if (!this.heading && !this.accessibleLabel) {
+        devWarn('va-dialog', 'This dialog has no accessible name.', 'Add heading="…" (shown) or accessible-label="…" (not shown) that says what the dialog is for.');
       }
       dialog.showModal();
+      this.#shown = true;
       this.#focusInitial();
       this.dispatchEvent(new Event('va-open', { bubbles: true, composed: true }));
-    } else if (!this.open && dialog.open) {
-      dialog.close();
+    } else if (!this.open && this.#shown) {
+      if (dialog.open) dialog.close();
+      this.#shown = false;
       this.#returnFocus?.focus();
       this.#returnFocus = null;
+      const reason = this.#closeReason ?? 'property';
+      this.#closeReason = null;
+      this.dispatchEvent(new CustomEvent('va-closed', { detail: { reason }, bubbles: true, composed: true }));
     }
   }
 
@@ -152,7 +162,10 @@ export class VaDialog extends LitElement {
 
   #onNativeClose(): void {
     // The browser closed the dialog itself (a repeated Escape, for example): keep `open` in step.
-    if (this.open) this.open = false;
+    if (this.open) {
+      this.#closeReason = 'escape';
+      this.open = false;
+    }
   }
 
   override render() {
@@ -160,14 +173,14 @@ export class VaDialog extends LitElement {
       <dialog
         part="dialog"
         aria-labelledby=${this.heading ? 'heading' : nothing}
-        aria-label=${!this.heading && this.label ? this.label : nothing}
+        aria-label=${!this.heading && this.accessibleLabel ? this.accessibleLabel : nothing}
         @cancel=${this.#onCancel}
         @close=${this.#onNativeClose}
       >
         <div part="header" class="header">
           ${this.heading ? html`<h2 part="heading" id="heading" class="heading">${this.heading}</h2>` : html`<span part="heading" class="heading"></span>`}
           ${!this.hideCloseButton
-            ? html`<button part="close" class="close" type="button" aria-label="Close" @click=${() => this.#requestClose('close-button')}>
+            ? html`<button part="close-button" class="close" type="button" aria-label="Close" @click=${() => this.#requestClose('close-button')}>
                 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" /></svg>
               </button>`
             : nothing}

@@ -1,12 +1,13 @@
 import { LitElement, css, html, nothing, type PropertyDeclarations } from 'lit';
 import { repeat } from 'lit/directives/repeat.js';
 import { focusRing } from '../core/focus-ring.js';
-import { checkTokensLoaded } from '../core/warn.js';
+import { checkTokensLoaded, devWarn } from '../core/warn.js';
 
 /** How a toast looks and how urgently it is announced. */
 export type ToastVariant = 'info' | 'success' | 'error';
-/** Why a toast closed, in the `va-close` event's `detail.reason`. */
-export type ToastCloseReason = 'timeout' | 'dismiss' | 'escape' | 'method';
+/** Why a message closed, in the `va-dismiss` event's `detail.reason`. */
+export type ToastDismissReason = 'timeout' | 'close-button' | 'escape' | 'method';
+const VARIANTS: readonly ToastVariant[] = ['info', 'success', 'error'];
 
 interface Toast {
   id: number;
@@ -29,7 +30,7 @@ let nextId = 1;
  *
  * @csspart region - The fixed area the toasts appear in.
  * @csspart toast - Each message.
- * @csspart dismiss - Each message's dismiss button.
+ * @csspart close-button - Each message's close button.
  *
  * @cssprop {<color>} --va-toast-bg - Background colour of a message.
  * @cssprop {<color>} --va-toast-fg - Text colour of a message.
@@ -39,41 +40,42 @@ let nextId = 1;
  * @cssprop-applies --va-toast-fg toast:open color
  * @cssprop-applies --va-toast-radius toast:open border-top-left-radius
  *
- * @keyboard-items [part~="dismiss"]
+ * @keyboard-items [part~="close-button"]
  * @keyboard open: Escape | closes | Dismisses the message that has focus.
  *
  * @a11y-role status
- * @a11y-name The `label` attribute, "Notifications" by default.
+ * @a11y-name The `accessible-label` attribute, "Notifications" by default (not shown).
  * @a11y-note Info and success messages are announced politely; errors use `role="alert"` and are announced at once.
  * @a11y-note Messages pause their timer while hovered or focused, and errors stay until dismissed (WCAG 2.2.1).
- * @a11y-note While a modal dialog is open, the region moves into it, so its messages stay clickable and announced; it moves back when the dialog closes.
+ * @a11y-note While a modal dialog is open, the element moves itself into that dialog (a light-DOM move, so its messages stay clickable and announced) and back to its place when the dialog closes. Don't render it from a framework that would fight the move; place it once, outside framework-managed DOM.
  *
  * @guidance-use To confirm that something happened, such as "Changes saved" or "Link copied", or to report a background failure.
  * @guidance-avoid For anything the user must act on or read in full, or for form validation errors.
  * @guidance-instead `va-dialog` for decisions; `va-text-field`'s `error` for field errors.
  *
- * @command --show | Shows the sending button's `value` as a message; its `data-variant` sets the look.
- * @fires va-close - When a message closes. `event.detail.reason` is `timeout`, `dismiss`, `escape` or `method`.
- * @event-trigger va-close | press Escape | open
+ * @command --show | Shows the sending button's `value` as a message. Its `data-toast-variant` sets the look: `info` (default), `success` or `error`.
+ * @command-data --show | toast-variant | info success error
+ * @fires {CustomEvent<{ id: number, reason: 'timeout' | 'close-button' | 'escape' | 'method' }>} va-dismiss - After a message has closed. `event.detail.id` is the id `show()` returned.
+ * @event-trigger va-dismiss | press Escape | open
  */
 export class VaToast extends LitElement {
   static override properties: PropertyDeclarations = {
     duration: { type: Number },
-    label: {},
+    accessibleLabel: { attribute: 'accessible-label' },
     _toasts: { state: true },
   };
 
   /** Milliseconds before an info or success message closes by itself. Errors stay until dismissed. */
   declare duration: number;
-  /** Accessible name of the region. */
-  declare label: string;
+  /** Accessible name of the region. Not shown. */
+  declare accessibleLabel: string;
 
   declare private _toasts: Toast[];
 
   constructor() {
     super();
     this.duration = 5000;
-    this.label = 'Notifications';
+    this.accessibleLabel = 'Notifications';
     this._toasts = [];
     this.addEventListener('command', this.#onCommand as EventListener);
   }
@@ -89,7 +91,7 @@ export class VaToast extends LitElement {
   }
 
   /** True while at least one message is showing. */
-  get open(): boolean {
+  get hasMessages(): boolean {
     return this._toasts.length > 0;
   }
 
@@ -118,7 +120,7 @@ export class VaToast extends LitElement {
   }
 
   /** Shows a message and returns its id. `variant` defaults to `info`; errors stay until dismissed. */
-  show(message: string, options: { variant?: ToastVariant; duration?: number } = {}): number {
+  show(message: string, options: { variant?: 'info' | 'success' | 'error'; duration?: number } = {}): number {
     this.#followModal();
     const variant = options.variant ?? 'info';
     const duration = variant === 'error' ? 0 : (options.duration ?? this.duration);
@@ -137,7 +139,12 @@ export class VaToast extends LitElement {
     if (event.command !== '--show') return;
     const source = event.source as (Element & { value?: string }) | null;
     const message = source?.value || source?.textContent?.trim() || '';
-    const variant = (source?.getAttribute('data-variant') as ToastVariant | null) ?? undefined;
+    const asked = source?.getAttribute('data-toast-variant');
+    let variant: ToastVariant | undefined;
+    if (asked && VARIANTS.includes(asked as ToastVariant)) variant = asked as ToastVariant;
+    else if (asked) {
+      devWarn('va-toast', `data-toast-variant="${asked}" is not a toast variant, so the message shows as info.`, `Use one of: ${VARIANTS.join(', ')}${asked === 'danger' ? ' (error is the toast for failures)' : ''}.`);
+    }
     if (message) this.show(message, { variant });
   };
 
@@ -160,12 +167,12 @@ export class VaToast extends LitElement {
     if (!toast.timer) this.#start(toast);
   }
 
-  #close(toast: Toast, reason: ToastCloseReason): void {
+  #close(toast: Toast, reason: ToastDismissReason): void {
     if (!this._toasts.includes(toast)) return;
     clearTimeout(toast.timer);
     const hadFocus = !!this.shadowRoot?.activeElement;
     this._toasts = this._toasts.filter((t) => t !== toast);
-    this.dispatchEvent(new CustomEvent('va-close', { detail: { id: toast.id, reason }, bubbles: true, composed: true }));
+    this.dispatchEvent(new CustomEvent('va-dismiss', { detail: { id: toast.id, reason }, bubbles: true, composed: true }));
     if (hadFocus) {
       // Don't strand focus: move it to the next message, or let it go back to the page.
       this.updateComplete.then(() => this.shadowRoot?.querySelector<HTMLElement>('.dismiss')?.focus());
@@ -174,7 +181,7 @@ export class VaToast extends LitElement {
 
   override render() {
     return html`
-      <section part="region" class="region" aria-label=${this.label}>
+      <section part="region" class="region" aria-label=${this.accessibleLabel}>
         <ol class="list" role="status" aria-live="polite">
           ${repeat(
             this._toasts,
@@ -191,7 +198,7 @@ export class VaToast extends LitElement {
                 @keydown=${(e: KeyboardEvent) => e.key === 'Escape' && this.#close(t, 'escape')}
               >
                 <span class="message">${t.message}</span>
-                <button part="dismiss" class="dismiss" type="button" aria-label="Dismiss" @click=${() => this.#close(t, 'dismiss')}>
+                <button part="close-button" class="dismiss" type="button" aria-label="Dismiss" @click=${() => this.#close(t, 'close-button')}>
                   <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18" /></svg>
                 </button>
               </li>

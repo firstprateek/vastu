@@ -19,7 +19,7 @@ import '@firstprateek/vastu/all';              // or one component: '@firstprate
 
 Rules that keep pages correct:
 
-- Give every component an accessible name: text, \`label\` or \`heading\`, as each component says.
+- Give every component an accessible name: its text, or \`label\` (text fields, menus) or \`heading\` (dialogs). Use \`accessible-label\` only where nothing visible names it, such as an icon-only button.
 - Open dialogs and show toasts with \`commandfor\`/\`command\` on a \`va-button\`. Don't use inline scripts, styles or \`on…=\` handlers: Vastu pages run under a strict Content Security Policy.
 - Style with tokens (\`var(--va-…)\`) and component custom properties, never hard-coded colours.
 - Set \`data-va-mode="light|dark|high-contrast"\` on \`<html>\` to choose a mode; without it the mode follows the system.
