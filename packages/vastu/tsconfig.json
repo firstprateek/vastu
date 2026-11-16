@@ -3,7 +3,11 @@
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "bundler",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -13,8 +17,13 @@
     "noUnusedLocals": true,
     "noImplicitOverride": true,
     "useDefineForClassFields": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "inlineSources": true
   },
-  "include": ["src"],
-  "exclude": ["src/**/examples"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "src/**/examples"
+  ]
 }

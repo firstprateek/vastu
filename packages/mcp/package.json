@@ -3,11 +3,27 @@
   "version": "0.0.0",
   "description": "MCP server for Vastu: lets agents find the right component, read its API and tokens, and validate their markup",
   "type": "module",
-  "exports": { ".": "./src/server.js" },
-  "bin": { "vastu-mcp": "./bin/vastu-mcp.js" },
-  "files": ["src", "bin", "data"],
-  "scripts": { "build": "node scripts/copy-data.js" },
-  "repository": { "type": "git", "url": "git+https://github.com/firstprateek/vastu.git", "directory": "packages/mcp" },
+  "exports": {
+    ".": "./src/server.js"
+  },
+  "bin": {
+    "vastu-mcp": "./bin/vastu-mcp.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "data",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/copy-data.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firstprateek/vastu.git",
+    "directory": "packages/mcp"
+  },
   "license": "ISC",
   "dependencies": {
     "@firstprateek/vastu-lint": "workspace:^",
@@ -17,5 +33,16 @@
   "devDependencies": {
     "@firstprateek/vastu": "workspace:*",
     "@firstprateek/vastu-tokens": "workspace:*"
-  }
+  },
+  "homepage": "https://firstprateek.github.io/vastu/",
+  "bugs": {
+    "url": "https://github.com/firstprateek/vastu/issues"
+  },
+  "author": "firstprateek",
+  "keywords": [
+    "vastu",
+    "design system",
+    "web components",
+    "lit"
+  ]
 }

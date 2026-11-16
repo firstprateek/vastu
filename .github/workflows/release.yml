@@ -1,0 +1,35 @@
+name: Release
+
+# Run by hand after `pnpm changeset version` is merged. Publishes every package whose version
+# is not on npm yet, with npm trusted publishing (OIDC): no npm token is stored anywhere, and
+# each package gets a provenance attestation linking it to this workflow run.
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Pack and check without publishing
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+      - name: npm with trusted publishing support
+        run: npm install -g npm@latest
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm lint && pnpm typecheck && pnpm test:unit && pnpm size
+      - run: node scripts/publish.js ${{ inputs.dry-run && '--dry-run' || '' }}

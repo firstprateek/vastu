@@ -55,7 +55,8 @@
   "files": [
     "dist",
     "custom-elements.json",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "sideEffects": [
     "./dist/*/*/index.js",
@@ -89,5 +90,9 @@
     "@custom-elements-manifest/analyzer": "^0.11.0",
     "@firstprateek/vastu-tokens": "workspace:^",
     "typescript": "~5.9.3"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/firstprateek/vastu/issues"
+  },
+  "author": "firstprateek"
 }

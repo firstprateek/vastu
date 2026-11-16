@@ -9,12 +9,41 @@
     "./lekha.css": "./dist/lekha.css",
     "./lekha.json": "./dist/lekha.json",
     "./tokens.json": "./dist/tokens.json",
-    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
-  "files": ["dist", "src"],
-  "sideEffects": ["*.css"],
-  "scripts": { "build": "node build.js" },
-  "repository": { "type": "git", "url": "git+https://github.com/firstprateek/vastu.git", "directory": "packages/tokens" },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "node build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firstprateek/vastu.git",
+    "directory": "packages/tokens"
+  },
   "license": "ISC",
-  "devDependencies": { "style-dictionary": "^5.8.0" }
+  "devDependencies": {
+    "style-dictionary": "^5.8.0"
+  },
+  "homepage": "https://firstprateek.github.io/vastu/",
+  "bugs": {
+    "url": "https://github.com/firstprateek/vastu/issues"
+  },
+  "author": "firstprateek",
+  "keywords": [
+    "vastu",
+    "design system",
+    "web components",
+    "lit"
+  ]
 }
