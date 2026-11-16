@@ -1,6 +1,6 @@
 {
   "name": "@firstprateek/vastu",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Vastu web components, built with Lit: accessible, themeable through tokens, and described in a manifest that agents can read",
   "type": "module",
   "exports": {

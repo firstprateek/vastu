@@ -24,7 +24,9 @@ for (const dir of PACKAGES) {
   }
   execFileSync('pnpm', ['pack', '--pack-destination', out], { cwd: dir, stdio: 'inherit' });
   const tarball = fs.readdirSync(out).find((f) => f.startsWith(name.replace('@', '').replace('/', '-') + '-' + version));
-  const args = ['publish', path.join(out, tarball), '--access', 'public', '--provenance'];
+  const args = ['publish', path.join(out, tarball), '--access', 'public'];
+  // Provenance needs the OIDC identity of a CI run; a first publish from a laptop goes without it.
+  if (process.env.GITHUB_ACTIONS) args.push('--provenance');
   if (dryRun) args.push('--dry-run');
   console.log(`Publishing ${name}@${version}${dryRun ? ' (dry run)' : ''}`);
   execFileSync('npm', args, { stdio: 'inherit' });

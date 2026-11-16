@@ -34,12 +34,22 @@ const base = import.meta.env.BASE_URL;
     }
   </ul>
 
-  <h2>Status</h2>
+  <h2>Install</h2>
+  <p><code>npm install @firstprateek/vastu @firstprateek/vastu-tokens</code>, then import a brand stylesheet and the components you use. Each component page shows how.</p>
+
+  <h2>For agents</h2>
   <p>
-    Milestone M1: eight components, each checked on every change by contract tests generated from the manifest,
-    behaviour tests, axe accessibility checks in every mode, visual regression at phone and desktop widths, size budgets,
-    and a strict Content Security Policy with Trusted Types, in Chromium, Firefox and WebKit. Next is the agent layer: a
-    markup validator, an MCP server and an eval. Read the
+    <a href="llms.txt">llms.txt</a> and <a href="llms-full.txt">llms-full.txt</a> describe every component and token.
+    <code>npx -y @firstprateek/vastu-mcp</code> is an MCP server that finds components, explains their APIs and validates
+    markup, and <code>npx @firstprateek/vastu-lint</code> checks a page from the command line.
+    <a href="https://github.com/firstprateek/vastu/blob/main/tests/eval/FINDINGS.md">What an agent eval found</a>.
+  </p>
+
+  <h2>How it's checked</h2>
+  <p>
+    Every change runs contract tests generated from the manifest, behaviour tests, axe accessibility checks in every
+    brand and mode, visual regression at phone and desktop widths, size budgets, and a strict Content Security Policy
+    with Trusted Types, in Chromium, Firefox and WebKit. Read the
     <a href="https://github.com/firstprateek/vastu/blob/main/docs/design.md">design document</a>.
   </p>
 </Base>
