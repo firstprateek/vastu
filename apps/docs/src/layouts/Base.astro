@@ -4,6 +4,7 @@ import '@fontsource-variable/inter';
 import '@firstprateek/vastu-tokens/vastu.css';
 import '@firstprateek/vastu-tokens/lekha.css';
 import { components, slug, title as nameOf } from '../lib/manifest';
+import pkg from '../../../../packages/vastu/package.json';
 
 interface Props {
   title: string;
@@ -67,7 +68,7 @@ const path = Astro.url.pathname;
       <slot />
     </main>
     <footer>
-      Vastu 1.0. <a href="https://github.com/firstprateek/vastu/blob/main/docs/design.md">Design document</a>.
+      Vastu {pkg.version}. <a href="https://github.com/firstprateek/vastu/blob/main/docs/design.md">Design document</a>.
     </footer>
   </body>
 </html>

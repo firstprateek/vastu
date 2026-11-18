@@ -1,6 +1,6 @@
 {
   "name": "@firstprateek/vastu-lint",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Checks HTML that uses Vastu components against the component manifest, with a fix for every problem",
   "type": "module",
   "exports": {

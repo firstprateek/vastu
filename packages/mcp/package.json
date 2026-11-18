@@ -1,6 +1,6 @@
 {
   "name": "@firstprateek/vastu-mcp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "MCP server for Vastu: lets agents find the right component, read its API and tokens, and validate their markup",
   "type": "module",
   "exports": {

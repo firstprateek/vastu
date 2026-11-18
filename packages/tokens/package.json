@@ -1,6 +1,6 @@
 {
   "name": "@firstprateek/vastu-tokens",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Design tokens for Vastu: DTCG sources and built CSS, JSON and TypeScript, per brand and mode",
   "type": "module",
   "exports": {
