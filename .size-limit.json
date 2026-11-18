@@ -1,5 +1,13 @@
 [
   {
+    "name": "va-bar-chart (on top of Lit)",
+    "path": "packages/vastu/dist/prod/bar-chart/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
     "name": "va-button (on top of Lit)",
     "path": "packages/vastu/dist/prod/button/index.js",
     "ignore": [
@@ -26,6 +34,22 @@
   {
     "name": "va-menu (on top of Lit)",
     "path": "packages/vastu/dist/prod/menu/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
+    "name": "va-navbar (on top of Lit)",
+    "path": "packages/vastu/dist/prod/navbar/index.js",
+    "ignore": [
+      "lit"
+    ],
+    "limit": "3 kB"
+  },
+  {
+    "name": "va-poll (on top of Lit)",
+    "path": "packages/vastu/dist/prod/poll/index.js",
     "ignore": [
       "lit"
     ],
@@ -69,11 +93,11 @@
     "ignore": [
       "lit"
     ],
-    "limit": "10 kB"
+    "limit": "14 kB"
   },
   {
     "name": "all components with Lit",
     "path": "packages/vastu/dist/prod/all.js",
-    "limit": "16 kB"
+    "limit": "20 kB"
   }
 ]

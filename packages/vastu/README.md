@@ -5,7 +5,8 @@ manifest that drives their docs, their tests and the tools agents use.
 
 **[Docs and live examples](https://firstprateek.github.io/vastu/)** · [Source](https://github.com/firstprateek/vastu)
 
-Components: `va-button`, `va-checkbox`, `va-switch`, `va-text-field`, `va-tabs`, `va-dialog`, `va-menu`, `va-toast`.
+Components: `va-button`, `va-checkbox`, `va-switch`, `va-text-field`, `va-tabs`, `va-dialog`, `va-menu`, `va-toast`,
+`va-navbar`, `va-poll`, `va-bar-chart`.
 
 ## Install
 

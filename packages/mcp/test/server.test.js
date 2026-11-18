@@ -40,6 +40,9 @@ describe('find_component', () => {
     ['agree to the terms of service', 'va-checkbox'],
     ['switch between sections of settings', 'va-tabs'],
     ['submit the form', 'va-button'],
+    ['the main navigation links at the top of my site', 'va-navbar'],
+    ['ask visitors to vote on a question', 'va-poll'],
+    ['a chart comparing sales per region', 'va-bar-chart'],
   ])('%s → %s', (intent, tag) => {
     expect(top(intent)).toBe(tag);
   });

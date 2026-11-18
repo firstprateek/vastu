@@ -4,6 +4,201 @@
   "modules": [
     {
       "kind": "javascript-module",
+      "path": "src/bar-chart/bar-chart.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A bar chart that compares values across a few categories. The data is plain markup, and the\nbars animate when it changes, so it can follow live values.",
+          "name": "VaBarChart",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Colour of the bars.",
+              "name": "--va-bar-chart-bar-bg",
+              "x-applies": {
+                "part": "bar",
+                "property": "background-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Corner radius of the bars' outer end.",
+              "name": "--va-bar-chart-bar-radius",
+              "x-applies": {
+                "part": "bar",
+                "property": "border-top-left-radius"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Height of the plot area.",
+              "name": "--va-bar-chart-size",
+              "x-applies": {
+                "part": "plot",
+                "property": "height"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The chart's title.",
+              "name": "label"
+            },
+            {
+              "description": "The area the bars are drawn in.",
+              "name": "plot"
+            },
+            {
+              "description": "Each bar.",
+              "name": "bar"
+            },
+            {
+              "description": "The value labels along the left edge.",
+              "name": "axis"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The data, as `<data value=\"N\">Category</data>` elements, in order. Change them and the bars animate to the new values.",
+              "name": ""
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "The chart's title, shown above it.",
+              "default": "''",
+              "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "max",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "description": "The top of the value axis. 0 (the default) fits the axis to the data; set it to keep the scale steady while live values change.",
+              "default": "0",
+              "attribute": "max"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The chart's title, shown above it.",
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "max",
+              "type": {
+                "text": "number"
+              },
+              "description": "The top of the value axis. 0 (the default) fits the axis to the data; set it to keep the scale steady while live values change.",
+              "default": "0",
+              "fieldName": "max"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "va-bar-chart",
+          "customElement": true,
+          "summary": "Compares a number across a few categories, one bar per category.",
+          "x-keyboard": [
+            {
+              "context": "items",
+              "key": "ArrowRight",
+              "action": "next",
+              "description": "Moves to the next bar, wrapping round."
+            },
+            {
+              "context": "items",
+              "key": "ArrowLeft",
+              "action": "previous",
+              "description": "Moves to the previous bar, wrapping round."
+            },
+            {
+              "context": "items",
+              "key": "Home",
+              "action": "first",
+              "description": "Moves to the first bar."
+            },
+            {
+              "context": "items",
+              "key": "End",
+              "action": "last",
+              "description": "Moves to the last bar."
+            }
+          ],
+          "x-keyboard-items": "data",
+          "x-a11y": {
+            "notes": [
+              "Each `<data>` element is in the Tab order once (roving tabindex) and is announced as \"Category: value\". Arrow keys move between bars.",
+              "The value axis is hidden from assistive technology, because every bar announces its own value."
+            ],
+            "role": "figure",
+            "nameFrom": [
+              "label"
+            ],
+            "name": "The `label`, which is the chart's visible title."
+          },
+          "x-guidance": {
+            "use": "To compare one number across a few categories (up to about 12), such as visitors per day or sales per region.",
+            "avoid": "For trends over many points in time, for parts of a whole, or when readers need to look up exact values.",
+            "instead": "A line chart for trends; a table when exact values matter."
+          },
+          "events": [],
+          "x-examples": [
+            {
+              "title": "Visitors per day",
+              "description": "Each bar is a <data> element: value is the number and the text is the category. Change the elements and the bars animate to the new values.",
+              "path": "src/bar-chart/examples/1-per-day.html",
+              "code": "<va-bar-chart label=\"Visitors per day\">\n  <data value=\"120\">Mon</data>\n  <data value=\"98\">Tue</data>\n  <data value=\"143\">Wed</data>\n  <data value=\"87\">Thu</data>\n  <data value=\"164\">Fri</data>\n  <data value=\"61\">Sat</data>\n  <data value=\"45\">Sun</data>\n</va-bar-chart>"
+            },
+            {
+              "title": "A fixed scale",
+              "description": "max fixes the top of the axis, so the scale stays steady while live values change. Here every value is a percentage.",
+              "path": "src/bar-chart/examples/2-fixed-scale.html",
+              "code": "<va-bar-chart label=\"Build success rate (%)\" max=\"100\">\n  <data value=\"97\">Web</data>\n  <data value=\"88\">iOS</data>\n  <data value=\"91\">Android</data>\n  <data value=\"99\">API</data>\n</va-bar-chart>"
+            },
+            {
+              "title": "Gains and losses",
+              "description": "Negative values hang below the zero line.",
+              "path": "src/bar-chart/examples/3-negative.html",
+              "code": "<va-bar-chart label=\"Change in sign-ups from last month\">\n  <data value=\"42\">North</data>\n  <data value=\"-18\">South</data>\n  <data value=\"7\">East</data>\n  <data value=\"-5\">West</data>\n</va-bar-chart>"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VaBarChart",
+          "declaration": {
+            "name": "VaBarChart",
+            "module": "src/bar-chart/bar-chart.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/button/button.ts",
       "declarations": [
         {
@@ -843,6 +1038,26 @@
     },
     {
       "kind": "javascript-module",
+      "path": "src/core/cssom.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "cssom"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "cssom",
+          "declaration": {
+            "name": "cssom",
+            "module": "src/core/cssom.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
       "path": "src/core/form-control.ts",
       "declarations": [
         {
@@ -1617,6 +1832,475 @@
           "declaration": {
             "name": "VaMenu",
             "module": "src/menu/menu.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/navbar/navbar.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A site's main navigation bar: a brand link and links to pages. On narrow screens the links fold\nbehind a Menu button, following the WAI-ARIA disclosure navigation pattern.",
+          "name": "VaNavbar",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Background colour of the bar and of the open panel.",
+              "name": "--va-navbar-bg",
+              "x-applies": {
+                "part": "bar",
+                "property": "background-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Colour of the line under the bar.",
+              "name": "--va-navbar-border",
+              "x-applies": {
+                "part": "bar",
+                "property": "border-bottom-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Minimum height of the bar.",
+              "name": "--va-navbar-size",
+              "x-applies": {
+                "part": "bar",
+                "property": "min-height"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Text colour of the links.",
+              "name": "--va-navbar-link-fg",
+              "x-applies": {
+                "light": "a:not([slot]):not([aria-current])",
+                "property": "color"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Colour of the line that marks the current page's link.",
+              "name": "--va-navbar-indicator-border",
+              "x-applies": {
+                "light": "[aria-current=\"page\"]",
+                "property": "border-bottom-color"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The bar, which is the `<nav>` element.",
+              "name": "bar"
+            },
+            {
+              "description": "The Menu button shown on narrow screens.",
+              "name": "toggle"
+            },
+            {
+              "description": "The wrapper around the links. On narrow screens it is the panel that opens.",
+              "name": "links"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The links, as `<a href=\"…\">` elements. Mark the current page's link with `aria-current=\"page\"`.",
+              "name": ""
+            },
+            {
+              "description": "The site's name or logo, as an `<a href=\"…\">` to the home page.",
+              "name": "brand"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "open",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the panel of links is open. It only shows while the navbar is folded.",
+              "default": "false",
+              "attribute": "open",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "collapseBelow",
+              "privacy": "public",
+              "type": {
+                "text": "number"
+              },
+              "description": "Width in pixels below which the links fold behind the Menu button. It is the navbar's own width, not the window's.",
+              "default": "600",
+              "attribute": "collapse-below"
+            },
+            {
+              "kind": "field",
+              "name": "toggleLabel",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Visible text of the Menu button.",
+              "default": "'Menu'",
+              "attribute": "toggle-label"
+            },
+            {
+              "kind": "field",
+              "name": "accessibleLabel",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name of the navigation landmark.",
+              "default": "''",
+              "attribute": "accessible-label"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "open",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Whether the panel of links is open. It only shows while the navbar is folded.",
+              "default": "false",
+              "fieldName": "open"
+            },
+            {
+              "name": "collapse-below",
+              "type": {
+                "text": "number"
+              },
+              "description": "Width in pixels below which the links fold behind the Menu button. It is the navbar's own width, not the window's.",
+              "default": "600",
+              "fieldName": "collapseBelow"
+            },
+            {
+              "name": "toggle-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Visible text of the Menu button.",
+              "default": "'Menu'",
+              "fieldName": "toggleLabel"
+            },
+            {
+              "name": "accessible-label",
+              "type": {
+                "text": "string"
+              },
+              "description": "Accessible name of the navigation landmark.",
+              "default": "''",
+              "fieldName": "accessibleLabel"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "va-navbar",
+          "customElement": true,
+          "summary": "Shows a site's brand and main links in a bar that folds behind a Menu button on narrow screens.",
+          "x-keyboard": [
+            {
+              "context": "open",
+              "key": "Escape",
+              "action": "closes",
+              "description": "Closes the open panel of links and returns focus to the Menu button."
+            }
+          ],
+          "x-a11y": {
+            "notes": [
+              "The bar is a `<nav>` landmark. The links keep their own names; mark the current page with `aria-current=\"page\"`.",
+              "On narrow screens the Menu button has a visible label, `aria-expanded` and `aria-controls`. Escape, a click outside or moving focus away closes the panel."
+            ],
+            "role": "navigation",
+            "nameFrom": [
+              "accessible-label"
+            ],
+            "name": "The `accessible-label` attribute, such as \"Main\" (not shown). Needed when a page has more than one navigation landmark."
+          },
+          "x-guidance": {
+            "use": "For a site's or app's main navigation: a brand link and up to about seven links to pages.",
+            "avoid": "For actions that do something on the page, for switching views in one place, or for deep hierarchies of pages.",
+            "instead": "`va-menu` for actions; `va-tabs` for views in one place; nested lists in a sidebar for deep navigation."
+          },
+          "events": [],
+          "x-examples": [
+            {
+              "title": "Site navigation",
+              "description": "A brand link, then links to pages. The current page's link has aria-current=\"page\". When the navbar is narrower than 600px, the links fold behind a Menu button.",
+              "path": "src/navbar/examples/1-site.html",
+              "code": "<va-navbar accessible-label=\"Main\">\n  <a slot=\"brand\" href=\"#\">Acme</a>\n  <a href=\"#\" aria-current=\"page\">Home</a>\n  <a href=\"#work\">Work</a>\n  <a href=\"#about\">About</a>\n  <a href=\"#contact\">Contact</a>\n</va-navbar>"
+            },
+            {
+              "title": "Folding earlier",
+              "description": "collapse-below sets the width at which the links fold. With many links, fold earlier so they never wrap. toggle-label changes the Menu button's text.",
+              "path": "src/navbar/examples/2-fold-earlier.html",
+              "code": "<va-navbar accessible-label=\"Main\" collapse-below=\"900\" toggle-label=\"Pages\">\n  <a slot=\"brand\" href=\"#\">Northwind Studio</a>\n  <a href=\"#\">Projects</a>\n  <a href=\"#services\" aria-current=\"page\">Services</a>\n  <a href=\"#team\">Team</a>\n  <a href=\"#journal\">Journal</a>\n  <a href=\"#careers\">Careers</a>\n  <a href=\"#contact\">Contact</a>\n</va-navbar>"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VaNavbar",
+          "declaration": {
+            "name": "VaNavbar",
+            "module": "src/navbar/navbar.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/poll/poll.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "A one-question poll. The user votes with one click, and the poll shows the results.",
+          "name": "VaPoll",
+          "cssProperties": [
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Border colour of each answer's row.",
+              "name": "--va-poll-border",
+              "x-applies": {
+                "part": "option",
+                "property": "border-top-color"
+              }
+            },
+            {
+              "type": {
+                "text": "<length>"
+              },
+              "description": "Corner radius of each answer's row.",
+              "name": "--va-poll-radius",
+              "x-applies": {
+                "part": "option",
+                "property": "border-top-left-radius"
+              }
+            },
+            {
+              "type": {
+                "text": "<color>"
+              },
+              "description": "Colour of the result bars.",
+              "name": "--va-poll-bar-bg",
+              "x-applies": {
+                "part": "bar",
+                "property": "background-color"
+              }
+            }
+          ],
+          "cssParts": [
+            {
+              "description": "The question.",
+              "name": "label"
+            },
+            {
+              "description": "The row around each answer.",
+              "name": "option"
+            },
+            {
+              "description": "The bar behind each answer that shows its share of the votes.",
+              "name": "bar"
+            },
+            {
+              "description": "The share of the votes, shown after voting.",
+              "name": "result"
+            },
+            {
+              "description": "The help text and the vote count.",
+              "name": "help-text"
+            }
+          ],
+          "slots": [
+            {
+              "description": "The answers, as `<button value=\"…\" data-votes=\"N\">` elements. `data-votes` is the number of votes so far.",
+              "name": ""
+            },
+            {
+              "description": "Optional text under the poll, such as when it closes. Overrides the `help-text` attribute.",
+              "name": "help-text"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "label",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "The question, shown above the answers.",
+              "default": "''",
+              "attribute": "label"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the answer the user voted for, or an empty string before a vote. Setting it shows the results with that answer marked, for a user who has already voted.",
+              "default": "''",
+              "attribute": "value"
+            },
+            {
+              "kind": "field",
+              "name": "showResults",
+              "privacy": "public",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Shows the results without a vote, such as for a closed poll.",
+              "default": "false",
+              "attribute": "show-results",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "helpText",
+              "privacy": "public",
+              "type": {
+                "text": "string"
+              },
+              "description": "Text under the poll, such as when it closes.",
+              "default": "''",
+              "attribute": "help-text"
+            }
+          ],
+          "events": [
+            {
+              "type": {
+                "text": "CustomEvent<{ value: string, item: HTMLElement }>"
+              },
+              "description": "When the user votes. `event.detail.value` is the answer's `value`, or its text when it has none; `event.detail.item` is the answer. Send the vote to your server here.",
+              "name": "va-select",
+              "x-trigger": {
+                "how": "click-item 2"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "label",
+              "type": {
+                "text": "string"
+              },
+              "description": "The question, shown above the answers.",
+              "default": "''",
+              "fieldName": "label"
+            },
+            {
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "description": "The value of the answer the user voted for, or an empty string before a vote. Setting it shows the results with that answer marked, for a user who has already voted.",
+              "default": "''",
+              "fieldName": "value"
+            },
+            {
+              "name": "show-results",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Shows the results without a vote, such as for a closed poll.",
+              "default": "false",
+              "fieldName": "showResults"
+            },
+            {
+              "name": "help-text",
+              "type": {
+                "text": "string"
+              },
+              "description": "Text under the poll, such as when it closes.",
+              "default": "''",
+              "fieldName": "helpText"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "va-poll",
+          "customElement": true,
+          "summary": "A poll: asks one question with a few answers. Visitors vote with one click and see everyone's results.",
+          "x-keyboard": [
+            {
+              "context": "items",
+              "key": "Enter",
+              "action": "activates",
+              "description": "Votes for the focused answer."
+            },
+            {
+              "context": "items",
+              "key": "Space",
+              "action": "activates",
+              "description": "Votes for the focused answer."
+            }
+          ],
+          "x-keyboard-items": "button",
+          "x-a11y": {
+            "notes": [
+              "After a vote the answers stay focusable but get `aria-disabled=\"true\"`, and each is followed by its share of the votes. A polite live region announces that the vote was counted."
+            ],
+            "role": "group",
+            "nameFrom": [
+              "label"
+            ],
+            "name": "The `label`, which is the question shown above the answers."
+          },
+          "x-guidance": {
+            "use": "For a quick, one-click opinion poll on a page, with two to six answers.",
+            "avoid": "For choices that are submitted with a form, for surveys with several questions, or where users need to review their answer before sending it.",
+            "instead": "A radio group in a form, with a submit `va-button`."
+          },
+          "x-examples": [
+            {
+              "title": "A quick poll",
+              "description": "Each answer is a button with a value and its votes so far in data-votes. One click counts the vote, fires va-select and shows the results.",
+              "path": "src/poll/examples/1-quick-poll.html",
+              "code": "<va-poll label=\"Tabs or spaces?\">\n  <button value=\"tabs\" data-votes=\"12\">Tabs</button>\n  <button value=\"spaces\" data-votes=\"30\">Spaces</button>\n  <button value=\"formatter\" data-votes=\"9\">Whatever the formatter does</button>\n</va-poll>"
+            },
+            {
+              "title": "After a vote",
+              "description": "Set value to the answer the user chose before, and the poll shows the results with that answer marked. help-text adds a note under the vote count.",
+              "path": "src/poll/examples/2-already-voted.html",
+              "code": "<va-poll label=\"Which view library do you use most?\" value=\"lit\" help-text=\"The poll closes on Friday.\">\n  <button value=\"lit\" data-votes=\"48\">Lit</button>\n  <button value=\"react\" data-votes=\"61\">React</button>\n  <button value=\"vue\" data-votes=\"27\">Vue</button>\n  <button value=\"none\" data-votes=\"14\">None, plain DOM</button>\n</va-poll>"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "VaPoll",
+          "declaration": {
+            "name": "VaPoll",
+            "module": "src/poll/poll.ts"
           }
         }
       ]
