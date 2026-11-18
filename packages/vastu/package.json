@@ -4,6 +4,11 @@
   "description": "Vastu web components, built with Lit: accessible, themeable through tokens, and described in a manifest that agents can read",
   "type": "module",
   "exports": {
+    "./bar-chart": {
+      "types": "./dist/dev/bar-chart/index.d.ts",
+      "development": "./dist/dev/bar-chart/index.js",
+      "default": "./dist/prod/bar-chart/index.js"
+    },
     "./button": {
       "types": "./dist/dev/button/index.d.ts",
       "development": "./dist/dev/button/index.js",
@@ -23,6 +28,16 @@
       "types": "./dist/dev/menu/index.d.ts",
       "development": "./dist/dev/menu/index.js",
       "default": "./dist/prod/menu/index.js"
+    },
+    "./navbar": {
+      "types": "./dist/dev/navbar/index.d.ts",
+      "development": "./dist/dev/navbar/index.js",
+      "default": "./dist/prod/navbar/index.js"
+    },
+    "./poll": {
+      "types": "./dist/dev/poll/index.d.ts",
+      "development": "./dist/dev/poll/index.js",
+      "default": "./dist/prod/poll/index.js"
     },
     "./switch": {
       "types": "./dist/dev/switch/index.d.ts",

@@ -8,7 +8,7 @@ Every promise a component makes is written once, in a machine-readable manifest:
 
 **[Docs and live examples](https://firstprateek.github.io/vastu/)** · **[Design document](docs/design.md)**
 
-> **1.0.** Eight components (button, checkbox, switch, text field, tabs, dialog, menu, toast) in two brands, plus the agent layer: a markup validator, an MCP server, `llms.txt`, and an eval in which Claude Code builds pages with Vastu.
+> **1.1.** Eleven components (button, checkbox, switch, text field, tabs, dialog, menu, toast, navbar, poll, bar chart) in two brands, plus the agent layer: a markup validator, an MCP server, `llms.txt`, and an eval in which Claude Code builds pages with Vastu.
 >
 > ```bash
 > npm install @firstprateek/vastu @firstprateek/vastu-tokens
@@ -26,7 +26,7 @@ Every promise a component makes is written once, in a machine-readable manifest:
 | Strict CSP with Trusted Types | Every browser test runs under it; any violation fails the test |
 | Visual regression | Every example × brand × mode × 390 and 1280 px widths |
 | Token contrast | Every text and UI colour pair meets its WCAG minimum in both brands and every mode |
-| Size budgets | Each component is 1.3 to 2.1 kB on top of Lit (budget 3 kB); all eight with Lit are 14.3 kB (budget 16 kB) |
+| Size budgets | Each component is 1.3 to 2.4 kB on top of Lit (budget 3 kB); all eleven with Lit are 17.7 kB (budget 20 kB) |
 | ESLint security rules | No `innerHTML`, `unsafeHTML`, `unsafeStatic` or `eval` in components |
 
 Browser tests run in Chromium, Firefox and WebKit.

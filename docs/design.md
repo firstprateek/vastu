@@ -267,12 +267,12 @@ What happens to each:
 | 2023 widget | Becomes | Note |
 | --- | --- | --- |
 | `switch` | `va-switch` | Already in phase 1 (section 3) |
-| `hamburger-btn` | Part of `va-menu` and `va-navbar` | A menu trigger, not a component of its own |
+| `hamburger-btn` | The Menu button inside `va-navbar` | A menu trigger, not a component of its own |
 | `minimal-navbar` | `va-navbar` | |
 | `poll-widget` | `va-poll` | |
-| `bar-chart` | `va-bar-chart` | Keeps D3; budgeted separately because of its size |
+| `bar-chart` | `va-bar-chart` | Drawn with CSS, not D3 (section 18) |
 
-**History is kept.** Each widget's history is imported into its folder with `git subtree add`, so the original commits stay reachable in Vastu. Then the code is rewritten on Vastu's base. After the new component ships:
+**History is kept.** Each widget's history is imported into its folder (section 18 has how), so the original commits stay reachable in Vastu. Then the code is rewritten on Vastu's base. After the new component ships:
 
 - **npm:** `npm deprecate` is run on each old package with a one-line pointer: "Moved to @firstprateek/vastu/navbar: <docs link>". Old versions keep installing, so nothing that depends on them breaks.
 - **GitHub:** each old repo gets a README pointer, and then it is archived. The demo URLs keep working while the personal site still links them, and the site's project page is updated to point to Vastu.
@@ -356,4 +356,17 @@ Choices made while building M0, and where they differ from the plan above:
 - **The render benchmark** uses Playwright, not Tachometer, because the tests already run on it: 1,000 instances per component in Chromium, median of 7, compared with a committed baseline. It isn't in CI, because timings depend on the machine.
 - **Releases** use Changesets, with the four packages on one version, and a manual Release workflow that publishes with npm trusted publishing (OIDC, provenance). `pnpm pack` resolves `workspace:` ranges, and `npm publish` uploads the tarball.
 - **1.0.0 was published on 2026-11-16** from the owner's machine, with browser approval, because npm only lets a package get a trusted publisher once it exists. Each package's trusted publisher is GitHub Actions, `firstprateek/vastu`, `release.yml`, environment `npm`. `npm trust github` (npm 11.12) returned "400 Bad Request" with no reason, so they were set in the npm web form instead. A dry run of the Release workflow passes. The first OIDC publish, with provenance, will be the next release.
+
+## 18. Implementation notes from M4
+
+- **History import.** The old commits were authored with a personal address and a machine name, which this public repo must not contain (`AGENTS.md`). So each widget repo was rewritten with `git filter-repo` before it was merged: authors mapped to the noreply address, only `src/`, `demo/`, the README, LICENSE, `index.js`, `package.json` and `.gitignore` kept (the old repos had committed `node_modules`, about 13 MB each), personal strings removed from file contents, and each message given a line naming the original repo and commit. Then `git merge --allow-unrelated-histories` into `packages/vastu/src/<name>/` (the owner chose this over skipping the history or importing it unchanged, 2026-11-17). The next commit deletes the old files; `git log -- packages/vastu/src/<name>` reaches the history. `hamburger-btn` went into `navbar/hamburger-btn/` and `switch` into `switch/`. The older `hamburger-button` repo, the predecessor of `hamburger-btn`, was not imported.
+- **Content is markup, as in the other composites.** Poll answers are `<button value data-votes>`; chart data is `<data value>Category</data>`, the native element for a machine-readable value. No JSON attributes. Agents already know both elements, the markup lints, and it renders as plain text without script.
+- **Components don't fetch.** The 2023 poll and chart loaded and posted data themselves (`requestapi`, `voteapi`, `dataapi`, `autoupdate`). Vastu's don't: the poll fires `va-select` and the app sends the vote; the app changes `data-votes` or `<data value>` and the component redraws (a MutationObserver). That keeps network policy, auth and errors in the app, keeps `connect-src` out of the CSP story, and leaves nothing to mock in tests.
+- **No D3.** Section 11 planned to keep D3 for the chart. Its jobs here are a linear scale, nice ticks and transitions, which take about 30 lines plus CSS transitions. Without it `va-bar-chart` is 2.2 kB on top of Lit, inside the normal 3 kB budget, with no new runtime dependencies. A future chart that needs real D3 features can still add it.
+- **Manual slot assignment.** The poll and the chart render shadow content next to each slotted item (a result bar, a value label), so they use `slotAssignment: 'manual'` and assign each item to its own slot. Supported in all three engines.
+- **`cssom()` instead of `styleMap`.** Lit's `styleMap` writes a `style` attribute on first render, which the strict CSP blocks (the tests caught it). `core/cssom.ts` is a small element directive that sets the same styles through `element.style`.
+- **Accessibility choices.** The navbar follows the APG disclosure navigation pattern: a `<nav>` landmark, a Menu button with a visible label (not icon-only), and Escape, an outside click or focus leaving to close. The current page is the author's `aria-current="page"`, not tracked by the component. After a vote the poll keeps the answers focusable with `aria-disabled`, puts each share in text after its button, and announces the count in a polite live region; focus never moves. Each chart point is a focusable `role="img"` named "Category: value", with arrow keys between points (roving tabindex); the axis is hidden from assistive technology.
+- **Folding by the navbar's own width** (`collapse-below`, ResizeObserver), not the window's, so it works in a sidebar layout. The navbar, poll and chart are `width: 100%`, since in a flex container they would otherwise shrink to their content and fold or truncate.
+- **Dropped from the 2023 API:** the navbar's `brandplacement` and `activeLinkChanged` (routers set `aria-current`), the poll's `width`, `height` and time-ago footer (`help-text` covers the note), and the chart's fixed pixel `width` and `height` (it fills its container; `--va-bar-chart-size` sets the plot height).
+- **Known limit:** page styles such as `a { color: … }` beat the navbar's `::slotted(a)` styles, as for any slotted content. Style the links with the navbar's custom properties, or exclude `va-navbar a` from global link rules.
 
