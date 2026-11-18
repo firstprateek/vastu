@@ -63,19 +63,43 @@ test.describe('va-navbar', () => {
     await expect(navbar).not.toHaveAttribute('open', '');
   });
 
-  test('it folds by its own width, and unfolding closes the panel', async ({ page, open }) => {
-    await page.setViewportSize({ width: 800, height: 700 });
-    await open('c=navbar&e=2-fold-earlier');
-    const toggle = page.getByRole('button', { name: 'Pages' });
-    await expect(toggle).toBeVisible();
-    await toggle.click();
-    await page.locator('va-navbar').evaluate(async (el: any) => {
-      el.collapseBelow = 500;
-      await el.updateComplete;
+  test('it folds by its own width, not the window, and unfolding closes the panel', async ({ page, open }) => {
+    await page.setViewportSize({ width: 1280, height: 700 });
+    await open('c=navbar&e=1-site');
+    // A 400px sidebar in a wide window: the navbar folds.
+    await page.locator('va-navbar').evaluate((el) => {
+      const box = document.createElement('div');
+      box.id = 'box';
+      box.style.width = '400px';
+      el.before(box);
+      box.append(el);
     });
+    const toggle = page.getByRole('button', { name: 'Menu' });
+    await expect(toggle).toBeVisible();
+    expect(await page.locator('va-navbar').evaluate((el) => el.matches(':state(collapsed)'))).toBe(true);
+    await toggle.click();
+    await page.locator('#box').evaluate((box) => (box.style.width = '900px'));
     await expect(toggle).toBeHidden();
     await expect(page.locator('va-navbar')).not.toHaveAttribute('open', '');
     expect(await page.locator('va-navbar').evaluate((el) => el.matches(':state(collapsed)'))).toBe(false);
+  });
+
+  test('moved while open, Escape and an outside click still close it', async ({ page, open }) => {
+    await page.setViewportSize({ width: 390, height: 700 });
+    await open('c=navbar&e=1-site');
+    const navbar = page.locator('va-navbar');
+    await page.getByRole('button', { name: 'Menu' }).click();
+    await navbar.evaluate((el) => {
+      const wrapper = document.createElement('div');
+      el.before(wrapper);
+      wrapper.append(el);
+    });
+    await page.keyboard.press('Escape');
+    await expect(navbar).not.toHaveAttribute('open', '');
+    await page.getByRole('button', { name: 'Menu' }).click();
+    await navbar.evaluate((el) => el.parentElement!.append(el));
+    await page.mouse.click(200, 650);
+    await expect(navbar).not.toHaveAttribute('open', '');
   });
 
   test.describe('warnings', () => {

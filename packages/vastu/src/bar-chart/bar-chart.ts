@@ -82,6 +82,8 @@ export class VaBarChart extends LitElement {
     super.connectedCallback();
     checkTokensLoaded(this);
     this.#observer.observe(this, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['value'] });
+    // Children may have changed while the chart was detached and unobserved.
+    if (this.hasUpdated) this._revision++;
   }
 
   override disconnectedCallback(): void {
@@ -160,7 +162,10 @@ export class VaBarChart extends LitElement {
     lo = Math.floor(lo / step) * step;
     if (!(this.max > 0)) hi = Math.ceil(hi / step) * step;
     const ticks: number[] = [];
-    for (let t = lo; t <= hi + step / 1e6; t += step) ticks.push(Number(t.toPrecision(12)));
+    // Count steps instead of adding them up, and round to the step's decimals, so float error
+    // never gives a "-0" label or a missing zero line.
+    const decimals = Math.max(0, -Math.floor(Math.log10(step)));
+    for (let i = 0; lo + i * step <= hi + step / 1e6; i++) ticks.push(Number((lo + i * step).toFixed(decimals)) + 0);
     const pos = (v: number) => ((Math.min(Math.max(v, lo), hi) - lo) / (hi - lo)) * 100;
 
     return html`

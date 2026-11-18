@@ -2010,6 +2010,12 @@
               "fieldName": "accessibleLabel"
             }
           ],
+          "cssStates": [
+            {
+              "description": "The links are folded behind the Menu button.",
+              "name": "collapsed"
+            }
+          ],
           "superclass": {
             "name": "LitElement",
             "package": "lit"
@@ -2028,6 +2034,7 @@
           "x-a11y": {
             "notes": [
               "The bar is a `<nav>` landmark. The links keep their own names; mark the current page with `aria-current=\"page\"`.",
+              "Style the folded layout with `va-navbar:state(collapsed)`.",
               "On narrow screens the Menu button has a visible label, `aria-expanded` and `aria-controls`. Escape, a click outside or moving focus away closes the panel."
             ],
             "role": "navigation",
@@ -2265,7 +2272,7 @@
           "x-keyboard-items": "button",
           "x-a11y": {
             "notes": [
-              "After a vote the answers stay focusable but get `aria-disabled=\"true\"`, and each is followed by its share of the votes. A polite live region announces that the vote was counted."
+              "After a vote the answers stay focusable but get `aria-disabled=\"true\"` and an `aria-description` with their share of the votes. A polite live region announces that the vote was counted."
             ],
             "role": "group",
             "nameFrom": [

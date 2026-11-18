@@ -33,7 +33,7 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @a11y-role group
  * @a11y-name-from label
  * @a11y-name The `label`, which is the question shown above the answers.
- * @a11y-note After a vote the answers stay focusable but get `aria-disabled="true"`, and each is followed by its share of the votes. A polite live region announces that the vote was counted.
+ * @a11y-note After a vote the answers stay focusable but get `aria-disabled="true"` and an `aria-description` with their share of the votes. A polite live region announces that the vote was counted.
  *
  * @guidance-use For a quick, one-click opinion poll on a page, with two to six answers.
  * @guidance-avoid For choices that are submitted with a form, for surveys with several questions, or where users need to review their answer before sending it.
@@ -80,6 +80,8 @@ export class VaPoll extends LitElement {
     super.connectedCallback();
     checkTokensLoaded(this);
     this.#observer.observe(this, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['data-votes', 'value', 'slot'] });
+    // Children may have changed while the poll was detached and unobserved.
+    if (this.hasUpdated) this._revision++;
   }
 
   override disconnectedCallback(): void {
@@ -115,10 +117,21 @@ export class VaPoll extends LitElement {
     this.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="help-text"]')!.assign(...this.querySelectorAll(':scope > [slot="help-text"]'));
 
     const showing = this.#showing;
+    const total = items.reduce((sum, i) => sum + this.#votesOf(i), 0);
     for (const item of items) {
       if (item.localName === 'button') (item as HTMLButtonElement).type = 'button';
-      if (showing) item.setAttribute('aria-disabled', 'true');
-      else item.removeAttribute('aria-disabled');
+      if (showing) {
+        // The share is shadow text after the button, which aria-describedby can't reach: describe it
+        // on the button itself, so tabbing through the answers reads the results.
+        const votes = this.#votesOf(item);
+        const share = total ? Math.round((votes / total) * 100) : 0;
+        const chosen = this.value !== '' && this.#valueOf(item) === this.value;
+        item.setAttribute('aria-disabled', 'true');
+        item.setAttribute('aria-description', `${share}%, ${votes} ${votes === 1 ? 'vote' : 'votes'}${chosen ? ', your vote' : ''}`);
+      } else {
+        item.removeAttribute('aria-disabled');
+        item.removeAttribute('aria-description');
+      }
       if (item.dataset.votes !== undefined && !(Number(item.dataset.votes) >= 0)) {
         devWarn('va-poll', `data-votes="${item.dataset.votes}" on "${item.textContent?.trim()}" is not a number of votes.`, 'Set data-votes to a whole number of 0 or more (e.g. data-votes="12").');
       }

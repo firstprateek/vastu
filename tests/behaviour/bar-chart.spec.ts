@@ -56,6 +56,27 @@ test.describe('va-bar-chart', () => {
     expect(geometry[1].below).toBeGreaterThan(0);
   });
 
+  test('fractional data around zero gets a clean zero tick and zero line', async ({ page, open }) => {
+    await open('c=bar-chart&e=3-negative');
+    await page.locator('va-bar-chart').evaluate((el) => {
+      [0.3, -0.5, 0.1, -0.1].forEach((v, i) => el.children[i].setAttribute('value', String(v)));
+    });
+    await expect.poll(() => ticks(page)).toEqual(['-0.6', '-0.4', '-0.2', '0', '0.2', '0.4']);
+    await expect(page.locator('va-bar-chart').locator('.grid.zero')).toHaveCount(1);
+  });
+
+  test('changes made while detached show after it is put back', async ({ page, open }) => {
+    await open('c=bar-chart&e=1-per-day');
+    await page.locator('va-bar-chart').evaluate((el) => {
+      const parent = el.parentElement!;
+      el.remove();
+      el.querySelector('data')!.setAttribute('value', '500');
+      parent.append(el);
+    });
+    await expect(page.getByRole('img', { name: 'Mon: 500' })).toBeAttached();
+    await expect.poll(() => ticks(page)).toEqual(['0', '100', '200', '300', '400', '500']);
+  });
+
   test('changing a <data> value redraws the bar and its name', async ({ page, open }) => {
     await open('c=bar-chart&e=2-fixed-scale');
     await page.locator('va-bar-chart data').first().evaluate((d) => d.setAttribute('value', '50'));

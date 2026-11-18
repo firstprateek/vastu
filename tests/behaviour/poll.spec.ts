@@ -41,6 +41,27 @@ test.describe('va-poll', () => {
     }
   });
 
+  test('after a vote, each answer describes its share, for tabbing screen-reader users', async ({ page, open }) => {
+    await open('c=poll&e=1-quick-poll');
+    await expect(page.getByRole('button', { name: 'Tabs' })).not.toHaveAttribute('aria-description', /./);
+    await page.getByRole('button', { name: 'Spaces' }).click();
+    await expect(page.getByRole('button', { name: 'Spaces' })).toHaveAttribute('aria-description', '60%, 31 votes, your vote');
+    await expect(page.getByRole('button', { name: 'Tabs' })).toHaveAttribute('aria-description', '23%, 12 votes');
+  });
+
+  test('changes made while detached show after it is put back', async ({ page, open }) => {
+    await open('c=poll&e=2-already-voted');
+    await page.locator('va-poll').evaluate((el) => {
+      const parent = el.parentElement!;
+      el.remove();
+      (el.querySelector('button') as HTMLElement).dataset.votes = '1000';
+      el.append(Object.assign(document.createElement('button'), { value: 'svelte', textContent: 'Svelte' }));
+      parent.append(el);
+    });
+    await expect.poll(() => shares(page)).toEqual(['91%', '6%', '2%', '1%', '0%']);
+    await expect(page.getByRole('button', { name: 'Svelte' })).toBeVisible();
+  });
+
   test('the keyboard votes too, and focus stays on the answer', async ({ page, open }) => {
     await open('c=poll&e=1-quick-poll');
     await page.getByRole('button', { name: 'Tabs' }).focus();

@@ -12,6 +12,8 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @slot - The links, as `<a href="…">` elements. Mark the current page's link with `aria-current="page"`.
  * @slot brand - The site's name or logo, as an `<a href="…">` to the home page.
  *
+ * @cssstate collapsed - The links are folded behind the Menu button.
+ *
  * @csspart bar - The bar, which is the `<nav>` element.
  * @csspart toggle - The Menu button shown on narrow screens.
  * @csspart links - The wrapper around the links. On narrow screens it is the panel that opens.
@@ -34,6 +36,7 @@ import { checkTokensLoaded, devWarn } from '../core/warn.js';
  * @a11y-name-from accessible-label
  * @a11y-name The `accessible-label` attribute, such as "Main" (not shown). Needed when a page has more than one navigation landmark.
  * @a11y-note The bar is a `<nav>` landmark. The links keep their own names; mark the current page with `aria-current="page"`.
+ * @a11y-note Style the folded layout with `va-navbar:state(collapsed)`.
  * @a11y-note On narrow screens the Menu button has a visible label, `aria-expanded` and `aria-controls`. Escape, a click outside or moving focus away closes the panel.
  *
  * @guidance-use For a site's or app's main navigation: a brand link and up to about seven links to pages.
@@ -81,6 +84,8 @@ export class VaNavbar extends LitElement {
     super.connectedCallback();
     checkTokensLoaded(this);
     this.#resize.observe(this);
+    // Moved while open: disconnectedCallback removed the document listeners, and open hasn't changed.
+    if (this.open) this.#listen(true);
   }
 
   override disconnectedCallback(): void {
